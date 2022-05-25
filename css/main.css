@@ -130,16 +130,16 @@ p{
   padding: 12px;
 }
 
-.red{background: #800000}
-.orange{background: #f99443}
-.yellow{background: #c9a403}
-.brown{background: #8B4513}
-.black{background: #000}
-.blue{background: #4394f9}
-.grey{background: #aaa}
-.green{background: #88ff88f8}
-.pink{background: #f75399}
-.white{background: #fff}
+#color-red{background: #800000}
+#color-orange{background: #f99443}
+#color-yellow{background: #c9a403}
+#color-brown{background: #8B4513}
+#color-black{background: #000}
+#color-blue{background: #4394f9}
+#color-grey{background: #aaa}
+#color-green{background: #88ff88}
+#color-pink{background: #f75399}
+#color-white{background: #fff}
 
 .color-column{
   margin: 0 20px ;

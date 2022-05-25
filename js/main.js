@@ -1,5 +1,6 @@
 var explainer = false;
 var selectedColor = 0;
+var selectedColorElement;
 var coloring = '';
 
 function shuffleCards() {
@@ -51,14 +52,14 @@ function readFigureCard() {
 }
 
 function switchStage(cardNumber) {
-  newfunction();
   console.log('switch')
-  var selectCard = document.getElementById("card-" + cardNumber.toString());
-  var selectFigure = selectCard.children[0];
-  selectFigure.setAttribute("onclick","colorObject(this)");
+  var selectedCard = document.getElementById("card-" + cardNumber.toString());
+  var selectedCardElements = selectedCard.children;
   var colorCard = document.getElementById("big-color-card");
-  colorCard.appendChild(selectFigure);
-  console.log(selectFigure);
+  for (let i = 0; i <= selectedCardElements.length; i++) {
+    selectedCardElements[0].setAttribute("onclick","colorObject(this)");
+    colorCard.appendChild(selectedCardElements[0]);
+  }
   var stage1 = document.getElementById("stage-1");
   var stage2 = document.getElementById("stage-2");
 
@@ -78,9 +79,17 @@ function lockCharacter() {
   var stage2 = document.getElementById("stage-2");
   var stage3 = document.getElementById("stage-3");
   var colorCard = document.getElementById("big-color-card");
-  var selectFigure =  colorCard.children[0]
+  var selectedCardElements = colorCard.children;
+  console.log('selectedCardElements')
+  console.log(selectedCardElements[0])
+  console.log(selectedCardElements[1])
+  console.log(selectedCardElements[2])
   var saveCard = document.getElementById("big-save-card");
-  saveCard.appendChild(selectFigure);
+  for (let i = 0; i <= selectedCardElements.length; i++) {
+    console.log('lock element: ' + i)
+    console.log(selectedCardElements[i])
+    saveCard.appendChild(selectedCardElements[0]);
+  }
   stage2.style.display = "none";
   stage3.style.display = "inline-block";
 }
@@ -89,35 +98,38 @@ function restartGame(){
   location.reload();
 }
 
-function selectColor(color){
+function selectColor(color, colorElement){
   selectedColor = color
+  selectedColorElement = colorElement;
   console.log(color);
 }
 
   function colorObject(object) {
   svgimage = object.children[0];
+  object.removeAttribute('onclick');
+  console.log(object);
     switch (selectedColor) {
       case 1:
         console.log('colorObject')
         console.log(object)
         coloring = 'grey';
-        svgimage.style.fill='grey'
+        svgimage.style.fill='#aaa'
         break;
       case 2:
         coloring = 'orange';
-        svgimage.style.fill='orange'
+        svgimage.style.fill='#f99443'
         break;
       case 3:
         coloring = 'green';
-        svgimage.style.fill='green'
+        svgimage.style.fill='#88ff88'
         break;
       case 4:
         coloring = 'pink';
-        svgimage.style.fill='pink'
+        svgimage.style.fill='#f75399'
         break;
       case 5:
         coloring = 'blue';
-        svgimage.style.fill='blue'
+        svgimage.style.fill='#4394f9'
         break;
       case 6:
         coloring = 'black';
@@ -125,11 +137,11 @@ function selectColor(color){
         break;
       case 7:
         coloring = 'red';
-        svgimage.style.fill='red'
+        svgimage.style.fill='#800000'
         break;
       case 8:
         coloring = 'brown';
-        svgimage.style.fill='brown'
+        svgimage.style.fill='#8B4513'
         break;
       case 9:
         coloring = 'white';
@@ -137,15 +149,11 @@ function selectColor(color){
         break;
       case 10:
         coloring = 'yellow';
-        svgimage.style.fill='yellow'
+        svgimage.style.fill='#c9a403'
         break;
       default:
         break;
     }
     selectedColor = 0;
+    selectedColorElement.style.display = 'none';
   }
-
-function newfunction(){
-  var newElement = document.getElementById("test-object").children;
-  console.log(newElement[1]);
-}

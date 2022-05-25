@@ -25,146 +25,151 @@
 
 <body>
 <!-- Add your site or application content here -->
-  <div class="container">
-    <h1>Colors & Clothing</h1>
-    <div class="inner-container">
-      <div id="start" class="game-window">
-        <h2>Twins - Dress & Describe - minimum 2 Players</h2>
-        <p>For a party, schoolmates decide to dress alike to look like identical twins.
-          Choose a role you want to play.<br>
-          <br>
-          <span class="bolded">The Dresser:</span> Choose a figure and paint its clothes. Describe the coloured
-          character to the Copycat by using the right vocabulary.<br>
-          <span class="bolded">The Copycat:</span> While listening to the description of the Dresser, you try to match
-          the figures' clothes and colours.<br>
-          In the end, the Dresser's and Copycat's characters should look the same.<br><br>
-          Rules:
-          <ul>
-            <li>Don’t share your screen - only you should see it.</li>
-            <li>Use the vocabulary learned in the lecture.</li>
-          </ul>
-        </p>
-        <p class="explain-text">Choose your role:</p>
-        <!--- Buttons -->
-        <div class="cc-container">
-          <button onclick="startGame()" class="cc-button role2-button">
-            <p class="buttontext" onclick="saveRole('dresser')">Dresser</p>
-            <i class="material-icons" style="font-size: 7vw">checkroom</i>
-          </button>
-          <button onclick="startGame()" class="cc-button role1-button">
+<div class="container">
+  <h1>Colors & Clothing</h1>
+  <div class="inner-container">
+    <div id="start" class="game-window">
+      <h2>Twins - Dress & Describe - minimum 2 Players</h2>
+      <p>For a party, schoolmates decide to dress alike to look like identical twins.
+        Choose a role you want to play.<br>
+        <br>
+        <span class="bolded">The Dresser:</span> Choose a figure and paint its clothes. Describe the coloured
+        character to the Copycat by using the right vocabulary.<br>
+        <span class="bolded">The Copycat:</span> While listening to the description of the Dresser, you try to match
+        the figures' clothes and colours.<br>
+        In the end, the Dresser's and Copycat's characters should look the same.<br><br>
+        Rules:
+      <ul>
+        <li>Don’t share your screen - only you should see it.</li>
+        <li>Use the vocabulary learned in the lecture.</li>
+      </ul>
+      </p>
+      <p class="explain-text">Choose your role:</p>
+      <!--- Buttons -->
+      <div class="cc-container">
+        <button onclick="startGame()" class="cc-button role2-button">
+          <p class="buttontext" onclick="saveRole('dresser')">Dresser</p>
+          <i class="material-icons" style="font-size: 7vw">checkroom</i>
+        </button>
+        <button onclick="startGame()" class="cc-button role1-button">
           <p class="buttontext" onclick="saveRole('copycat')">Copycat</p>
           <i class="material-icons" style="font-size: 7vw">content_copy</i>
         </button>
-        </div>
       </div>
-      <!-- stage-1 -->
-      <div id="stage-1" class="game-window" style="display: none">
-        <!-- Show different text depending on the role -->
-        <p  id="explain-text-stage-1" class="explain-text"> </p>
-        <script>
-          let role = localStorage.getItem('role_id');
-          let text;
-          if(role === "dresser"){
-              text = "Pick a figure:";
-          }
-          else{
-              text = "Pick the figure that the Dresser describes to you:";
-          }
-          document.getElementById("explain-text-stage-1").innerHTML = text;
-        </script>
-        <!-- CARDS -->
-        <div class="cc-container" id="card-list-1">
-          <div onclick="switchStage(1)" class="cc-card character-card" id="card-1">1
-            <object data="img/Figure_shape3.svg" width="90%" height="90%" id="test-object"> </object>
-          </div>
-          <div onclick="switchStage(2)" class="cc-card character-card" id="card-2">2
-            <object data="img/Figure_shape3_2.svg" width="90%" height="90%"> </object>
-          </div>
-          <div onclick="switchStage(3)" class="cc-card character-card" id="card-3">
-            <img src="skirt.svg" style="height: 20%">
-          </div>
-          <div onclick="switchStage(4)" class="cc-card character-card" id="card-4">
-            <svg id="svg1" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 1in">
-              <circle id="circle1" r="30" cx="34" cy="34"
-                      style="fill: red; stroke: blue; stroke-width: 2"/>
-            </svg>
-          </div>
-          <div onclick="switchStage(5)" class="cc-card character-card" id="card-5">5</div>
-        </div>
-        <div class="cc-container" id="card-list-2">
-          <div onclick="switchStage(6)" class="cc-card character-card" id="card-6">6</div>
-          <div onclick="switchStage(7)" class="cc-card character-card" id="card-7">7</div>
-          <div onclick="switchStage(8)" class="cc-card character-card" id="card-8">8</div>
-          <div onclick="switchStage(9)" class="cc-card character-card" id="card-9">9</div>
-          <div onclick="switchStage(10)" class="cc-card character-card" id="card-10">10</div>
-        </div>
-      </div>
-      <!-- stage-2 -->
-      <div id="stage-2" class="game-window" style="display: none">
-        <!-- Show different text depending on the role -->
-        <p  id="explain-text-stage-2" class="explain-text"> </p>
-        <script>
-            if(role === 'dresser'){
-                text = "Click on a colour and a piece of clothing to paint it:";
-            }
-            else{
-                text = "Click on a colour and a piece of clothing to paint it. Follow the Dressers' description.";
-            }
-            document.getElementById("explain-text-stage-2").innerHTML = text;
-        </script>
-        <div class="cc-container">
-          <div class="color-column" id="color-column-1">
-            <div onclick="selectColor(1)" class="color-card color-card grey"></div>
-            <div onclick="selectColor(2)"class="color-card color-card orange"></div>
-            <div onclick="selectColor(3)"class="color-card color-card green"></div>
-            <div onclick="selectColor(4)"class="color-card color-card pink"></div>
-            <div onclick="selectColor(5)"class="color-card color-card blue"></div>
-          </div>
-          <div style="display: inline-block">
-            <div class="big-character-card" id="big-color-card">1
-              <!--<object data="img/Figure_shape3.svg" width="90%" height="90%"> </object>-->
-
-            </div>
-          </div>
-          <div class="color-column" id="color-column-2" style="display: inline-block">
-            <div onclick="selectColor(6)" class="color-card color-card black"></div>
-            <div onclick="selectColor(7)" class="color-card color-card red"></div>
-            <div onclick="selectColor(8)" class="color-card color-card brown"></div>
-            <div onclick="selectColor(9)" class="color-card color-card white"></div>
-            <div onclick="selectColor(10)" class="color-card color-card yellow"></div>
-          </div>
-        </div>
-
-        <div class="cc-container">
-          <button onclick="lockCharacter()" class="cc-button selection-button">Save</button>
-        </div>
-      </div>
-      <div id="stage-3" class="game-window" style="display: none">
-        <p class="explain-text">This is your character!</p>
-        <div class="cc-container">
-          <div class="big-character-card" id="big-save-card">
-
-          </div>
-        </div>
-        <div class="cc-container">
-          <button onclick="restartGame()" class="cc-button selection-button">
-            <p class="buttontext" onclick="localStorage.clear()">New Game</p>
-          </button>
-        </div>
-      </div>
-      <script src="js/vendor/modernizr-3.11.2.min.js"></script>
-      <script src="js/plugins.js"></script>
-      <script src="js/main.js"></script>
-
-      <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-      <script>
-          window.addEventListener("DOMContentLoaded", function () {
-              shuffleCards();
-              shuffleColors();
-          }, false);
-      </script>
     </div>
+    <!-- stage-1 -->
+    <div id="stage-1" class="game-window" style="display: none">
+      <!-- Show different text depending on the role -->
+      <p id="explain-text-stage-1" class="explain-text"></p>
+      <script>
+        let role = localStorage.getItem('role_id');
+        let text;
+        if (role === "dresser") {
+          text = "Pick a figure:";
+        } else {
+          text = "Pick the figure that the Dresser describes to you:";
+        }
+        document.getElementById("explain-text-stage-1").innerHTML = text;
+      </script>
+      <!-- CARDS -->
+      <div class="cc-container" id="card-list-1">
+        <div onclick="switchStage(1)" class="cc-card character-card" id="card-1">
+          <object data="img/Figure_shape3.svg" width="90%" height="90%"></object>
+        </div>
+        <div onclick="switchStage(2)" class="cc-card character-card" id="card-2">
+          <object data="img/Figure_shape3_2.svg" width="90%" height="90%"></object>
+        </div>
+        <div onclick="switchStage(3)" class="cc-card character-card" id="card-3">
+          <img src="skirt.svg" style="height: 20%">
+        </div>
+        <div onclick="switchStage(4)" class="cc-card character-card" id="card-4">
+          <svg id="svg1" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
+            <circle id="circle1" r="30" cx="34" cy="34"
+                    style="fill: white; stroke: black; stroke-width: 2"/>
+          </svg>
+          <!--<svg id="svg2" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
+            <rect width="60" height="60" style="fill:white;stroke-width:2;stroke:black"/>
+          </svg>-->
+          <svg id="svg3" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
+            <circle id="circle2" r="30" cx="34" cy="34"
+                    style="fill: white; stroke: black; stroke-width: 2"/>
+          </svg>
+        </div>
+        <div onclick="switchStage(5)" class="cc-card character-card" id="card-5"></div>
+      </div>
+      <div class="cc-container" id="card-list-2">
+        <div onclick="switchStage(6)" class="cc-card character-card" id="card-6"></div>
+        <div onclick="switchStage(7)" class="cc-card character-card" id="card-7"></div>
+        <div onclick="switchStage(8)" class="cc-card character-card" id="card-8"></div>
+        <div onclick="switchStage(9)" class="cc-card character-card" id="card-9"></div>
+        <div onclick="switchStage(10)" class="cc-card character-card" id="card-10"></div>
+      </div>
+    </div>
+    <!-- stage-2 -->
+    <div id="stage-2" class="game-window" style="display: none">
+      <!-- Show different text depending on the role -->
+      <p id="explain-text-stage-2" class="explain-text"></p>
+      <script>
+        if (role === 'dresser') {
+          text = "Click on a colour and a piece of clothing to paint it:";
+        } else {
+          text = "Click on a colour and a piece of clothing to paint it. Follow the Dressers' description.";
+        }
+        document.getElementById("explain-text-stage-2").innerHTML = text;
+      </script>
+      <div class="cc-container">
+        <div class="color-column" id="color-column-1">
+          <div onclick="selectColor(1, this)" class="color-card color-card" id="color-grey"></div>
+          <div onclick="selectColor(2, this)" class="color-card color-card" id="color-orange"></div>
+          <div onclick="selectColor(3, this)" class="color-card color-card" id="color-green"></div>
+          <div onclick="selectColor(4, this)" class="color-card color-card" id="color-pink"></div>
+          <div onclick="selectColor(5, this)" class="color-card color-card" id="color-blue"></div>
+        </div>
+        <div style="display: inline-block">
+          <div class="big-character-card" id="big-color-card">
+            <!--<object data="img/Figure_shape3.svg" width="90%" height="90%"> </object>-->
+
+          </div>
+        </div>
+        <div class="color-column" id="color-column-2" style="display: inline-block">
+          <div onclick="selectColor(6, this)" class="color-card color-card" id="color-black"></div>
+          <div onclick="selectColor(7, this)" class="color-card color-card" id="color-red"></div>
+          <div onclick="selectColor(8, this)" class="color-card color-card" id="color-brown"></div>
+          <div onclick="selectColor(9, this)" class="color-card color-card" id="color-white"></div>
+          <div onclick="selectColor(10, this)" class="color-card color-card" id="color-yellow"></div>
+        </div>
+      </div>
+
+      <div class="cc-container">
+        <button onclick="lockCharacter()" class="cc-button selection-button">Save</button>
+      </div>
+    </div>
+    <div id="stage-3" class="game-window" style="display: none">
+      <p class="explain-text">This is your character!</p>
+      <div class="cc-container">
+        <div class="big-character-card" id="big-save-card">
+
+        </div>
+      </div>
+      <div class="cc-container">
+        <button onclick="restartGame()" class="cc-button selection-button">
+          <p class="buttontext" onclick="localStorage.clear()">New Game</p>
+        </button>
+      </div>
+    </div>
+    <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        shuffleCards();
+        shuffleColors();
+      }, false);
+    </script>
   </div>
+</div>
 </body>
 
 </html>
