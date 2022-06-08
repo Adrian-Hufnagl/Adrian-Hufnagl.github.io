@@ -40,83 +40,79 @@
         In the end, the Dresser's and Copycat's characters should look the same.<br><br>
         Rules:
       <ul>
-        <li>Don’t share your screen - only you should see it.</li>
+        <li>Do not share your screen - only you should see it.</li>
         <li>Use the vocabulary learned in the lecture.</li>
       </ul>
       </p>
       <p class="explain-text">Choose your role:</p>
-      <!--- Buttons -->
+      <!--- Buttons-->
       <div class="cc-container">
-        <button onclick="startGame()" class="cc-button role2-button">
-          <p class="buttontext" onclick="saveRole('dresser')">Dresser</p>
+        <button onclick="startGame('dresser')" class="cc-button role2-button">
+          <p class="buttontext">Dresser</p>
           <i class="material-icons" style="font-size: 7vw">checkroom</i>
         </button>
-        <button onclick="startGame()" class="cc-button role1-button">
-          <p class="buttontext" onclick="saveRole('copycat')">Copycat</p>
+        <button onclick="startGame('copycat')" class="cc-button role1-button">
+          <p class="buttontext">Copycat</p>
           <i class="material-icons" style="font-size: 7vw">content_copy</i>
         </button>
       </div>
     </div>
     <!-- stage-1 -->
     <div id="stage-1" class="game-window" style="display: none">
-      <!-- Show different text depending on the role -->
       <p id="explain-text-stage-1" class="explain-text"></p>
-      <script>
-        let role = localStorage.getItem('role_id');
-        let text;
-        if (role === "dresser") {
-          text = "Pick a figure:";
-        } else {
-          text = "Pick the figure that the Dresser describes to you:";
-        }
-        document.getElementById("explain-text-stage-1").innerHTML = text;
-      </script>
       <!-- CARDS -->
       <div class="cc-container" id="card-list-1">
         <div onclick="switchStage(1)" class="cc-card character-card" id="card-1">
-          <object data="img/Figure_shape3.svg" width="90%" height="90%"></object>
+          <object data="img\mannequin_cap_dress_socks_trainers.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(2)" class="cc-card character-card" id="card-2">
-          <object data="img/Figure_shape3_2.svg" width="90%" height="90%"></object>
+          <object data="img\mannequin_cap_pullover_skirt_socks_shoes.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(3)" class="cc-card character-card" id="card-3">
-          <img src="skirt.svg" style="height: 20%">
+          <object data="img\mannequin_cap_tshirt_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(4)" class="cc-card character-card" id="card-4">
-          <svg id="svg1" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
+          <object data="img\mannequin_cap_tshirt_trousers_socks_slippers.svg" width="100%" height="100%"> </object>
+          <!--<svg id="svg1" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
             <circle id="circle1" r="30" cx="34" cy="34"
                     style="fill: white; stroke: black; stroke-width: 2"/>
           </svg>
+        -->
           <!--<svg id="svg2" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
             <rect width="60" height="60" style="fill:white;stroke-width:2;stroke:black"/>
-          </svg>-->
+          </svg>
           <svg id="svg3" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
             <circle id="circle2" r="30" cx="34" cy="34"
                     style="fill: white; stroke: black; stroke-width: 2"/>
-          </svg>
+          </svg>-->
         </div>
-        <div onclick="switchStage(5)" class="cc-card character-card" id="card-5"></div>
+        <div onclick="switchStage(5)" class="cc-card character-card" id="card-5">
+          <object data="img\mannequin_hat_blouse_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
+        </div>
       </div>
       <div class="cc-container" id="card-list-2">
-        <div onclick="switchStage(6)" class="cc-card character-card" id="card-6"></div>
-        <div onclick="switchStage(7)" class="cc-card character-card" id="card-7"></div>
-        <div onclick="switchStage(8)" class="cc-card character-card" id="card-8"></div>
-        <div onclick="switchStage(9)" class="cc-card character-card" id="card-9"></div>
-        <div onclick="switchStage(10)" class="cc-card character-card" id="card-10"></div>
+        <div onclick="switchStage(6)" class="cc-card character-card" id="card-6">
+          <object data="img\mannequin_hat_blouse_trousers_shoes.svg" width="100%" height="100%"> </object>
+        </div>
+        <div onclick="switchStage(7)" class="cc-card character-card" id="card-7">
+          <object data="img\mannequin_hat_dress_socks_shoes.svg" width="100%" height="100%"> </object>
+        </div>
+        <div onclick="switchStage(8)" class="cc-card character-card" id="card-8">
+          <object data="img\mannequin_hat_jacket_dress_trainers.svg" width="100%" height="100%"> </object>
+        </div>
+        <div onclick="switchStage(9)" class="cc-card character-card" id="card-9">
+          <object data="img\mannequin_hat_jacket_pullover_trousers_trainers.svg" width="100%" height="100%"> </object>
+        </div>
+        <div onclick="switchStage(10)" class="cc-card character-card" id="card-10">
+          <object data="img\mannequin_hat_pullover_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
+        </div>
       </div>
     </div>
     <!-- stage-2 -->
     <div id="stage-2" class="game-window" style="display: none">
       <!-- Show different text depending on the role -->
       <p id="explain-text-stage-2" class="explain-text"></p>
-      <script>
-        if (role === 'dresser') {
-          text = "Click on a colour and a piece of clothing to paint it:";
-        } else {
-          text = "Click on a colour and a piece of clothing to paint it. Follow the Dressers' description.";
-        }
-        document.getElementById("explain-text-stage-2").innerHTML = text;
-      </script>
+     
       <div class="cc-container">
         <div class="color-column" id="color-column-1">
           <div onclick="selectColor(1, this)" class="color-card color-card" id="color-grey"></div>
@@ -128,7 +124,6 @@
         <div style="display: inline-block">
           <div class="big-character-card" id="big-color-card">
             <!--<object data="img/Figure_shape3.svg" width="90%" height="90%"> </object>-->
-
           </div>
         </div>
         <div class="color-column" id="color-column-2" style="display: inline-block">
@@ -160,6 +155,7 @@
     <script src="js/vendor/modernizr-3.11.2.min.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/svg.js/svg.min.js"></script>
 
     <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
     <script>
