@@ -63,47 +63,45 @@
       <!-- CARDS -->
       <div class="cc-container" id="card-list-1">
         <div onclick="switchStage(1)" class="cc-card character-card" id="card-1">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_cap_dress_socks_trainers.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(2)" class="cc-card character-card" id="card-2">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_cap_pullover_skirt_socks_shoes.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(3)" class="cc-card character-card" id="card-3">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_cap_tshirt_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(4)" class="cc-card character-card" id="card-4">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_cap_tshirt_trousers_socks_slippers.svg" width="100%" height="100%"> </object>
-          <!--<svg id="svg1" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
-            <circle id="circle1" r="30" cx="34" cy="34"
-                    style="fill: white; stroke: black; stroke-width: 2"/>
-          </svg>
-        -->
-          <!--<svg id="svg2" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
-            <rect width="60" height="60" style="fill:white;stroke-width:2;stroke:black"/>
-          </svg>
-          <svg id="svg3" xmlns="http://www.w3.org/2000/svg" style="width: 3.5in; height: 0.7in">
-            <circle id="circle2" r="30" cx="34" cy="34"
-                    style="fill: white; stroke: black; stroke-width: 2"/>
-          </svg>-->
         </div>
         <div onclick="switchStage(5)" class="cc-card character-card" id="card-5">
-          <object data="img\mannequin_hat_blouse_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
+          <div class="card-overlay"></div>
+          <object data="img\mannequin_hat_blouse_skirt_socks_trainers.svg" width="100%" height="100%"></object>
         </div>
       </div>
       <div class="cc-container" id="card-list-2">
         <div onclick="switchStage(6)" class="cc-card character-card" id="card-6">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_hat_blouse_trousers_shoes.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(7)" class="cc-card character-card" id="card-7">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_hat_dress_socks_shoes.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(8)" class="cc-card character-card" id="card-8">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_hat_jacket_dress_trainers.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(9)" class="cc-card character-card" id="card-9">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_hat_jacket_pullover_trousers_trainers.svg" width="100%" height="100%"> </object>
         </div>
         <div onclick="switchStage(10)" class="cc-card character-card" id="card-10">
+          <div class="card-overlay"></div>
           <object data="img\mannequin_hat_pullover_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
         </div>
       </div>
@@ -112,31 +110,30 @@
     <div id="stage-2" class="game-window" style="display: none">
       <!-- Show different text depending on the role -->
       <p id="explain-text-stage-2" class="explain-text"></p>
-     
+
       <div class="cc-container">
         <div class="color-column" id="color-column-1">
-          <div onclick="selectColor(1, this)" class="color-card color-card" id="color-grey"></div>
-          <div onclick="selectColor(2, this)" class="color-card color-card" id="color-orange"></div>
-          <div onclick="selectColor(3, this)" class="color-card color-card" id="color-green"></div>
-          <div onclick="selectColor(4, this)" class="color-card color-card" id="color-pink"></div>
-          <div onclick="selectColor(5, this)" class="color-card color-card" id="color-blue"></div>
+          <div onclick="selectColor(1, this)" class="color-card" id="color-grey"></div>
+          <div onclick="selectColor(2, this)" class="color-card" id="color-orange"></div>
+          <div onclick="selectColor(3, this)" class="color-card" id="color-green"></div>
+          <div onclick="selectColor(4, this)" class="color-card" id="color-pink"></div>
+          <div onclick="selectColor(5, this)" class="color-card" id="color-blue"></div>
         </div>
         <div style="display: inline-block">
           <div class="big-character-card" id="big-color-card">
-            <!--<object data="img/Figure_shape3.svg" width="90%" height="90%"> </object>-->
           </div>
         </div>
         <div class="color-column" id="color-column-2" style="display: inline-block">
-          <div onclick="selectColor(6, this)" class="color-card color-card" id="color-black"></div>
-          <div onclick="selectColor(7, this)" class="color-card color-card" id="color-red"></div>
-          <div onclick="selectColor(8, this)" class="color-card color-card" id="color-brown"></div>
-          <div onclick="selectColor(9, this)" class="color-card color-card" id="color-white"></div>
-          <div onclick="selectColor(10, this)" class="color-card color-card" id="color-yellow"></div>
+          <div onclick="selectColor(6, this)" class="color-card" id="color-black"></div>
+          <div onclick="selectColor(7, this)" class="color-card" id="color-red"></div>
+          <div onclick="selectColor(8, this)" class="color-card" id="color-brown"></div>
+          <div onclick="selectColor(9, this)" class="color-card" id="color-white"></div>
+          <div onclick="selectColor(10, this)" class="color-card" id="color-yellow"></div>
         </div>
       </div>
 
       <div class="cc-container">
-        <button onclick="lockCharacter()" class="cc-button selection-button">Save</button>
+        <button onclick="lockCharacter()" class="cc-button selection-button" id="save-button">Save</button>
       </div>
     </div>
     <div id="stage-3" class="game-window" style="display: none">
@@ -147,7 +144,7 @@
         </div>
       </div>
       <div class="cc-container">
-        <button onclick="restartGame()" class="cc-button selection-button">
+        <button onclick="restartGame()" class="cc-button selection-button" id="restart-button">
           <p class="buttontext" onclick="localStorage.clear()">New Game</p>
         </button>
       </div>
