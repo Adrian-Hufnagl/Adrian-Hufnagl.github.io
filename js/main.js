@@ -1,9 +1,12 @@
 var explainer = false;
 localStorage.setItem("selectedColor", 0);
+localStorage.setItem("gameStep", 0);
+localStorage.setItem("gameEnd", 0);
+localStorage.setItem("disabled", []);
 var selectedColorElement;
 var coloring = '';
 var playerRole;
-var characterCards;
+var colorCards;
 
 var selectedCardElements;
 var selectedCardContent;
@@ -112,47 +115,41 @@ function delay(time) {
 
 function makeElementsColorizable() {
   var script = document.createElement('script');
+  var endGame = 0;
   script.src = "../js/main.js";
-
-  selectedCardElements = colorCard.children[0].contentDocument.children[0].children[0].children[1].children;
+  selectedCardElements = colorCard.children[0].contentDocument.children[0].children;
   colorCard.children[0].contentDocument.children[0].appendChild(script);
   for (let i = 1; i < selectedCardElements.length; i++) {
     selectedCardElements[i].setAttribute("onclick", "colorObject(this)");
     selectedCardElements[i].classList.add('svg-element');
-    var css = 'svg-element:hover{-webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));}';
-    var style = document.createElement('style');
-    if (style.styleSheet) {
-      style.styleSheet.cssText = css;
-    } else {
-      style.appendChild(document.createTextNode(css));
+    selectedCardElements[i].setAttribute("onmouseover", "style='stroke: black; -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7)); filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7)); cursor:pointer;'");
+    selectedCardElements[i].setAttribute("onmouseout", "style='stroke: none; -webkit-filter: none; filter: none;'");
+    if (selectedCardElements[i].classList.contains('svg-element')
+      && !selectedCardElements[i].hasAttribute('display')
+    && selectedCardElements[i].tagName === 'g'){
+      endGame += 1;
     }
-    selectedCardElements[i].appendChild(style);
-
   }
 
+  colorCards = document.getElementsByClassName('color-card');
+  console.log(colorCards);
+  delay(200).then(() => localStorage.setItem("gameEnd", endGame));
 }
 
 function lockCharacter() {
-  var stage2 = document.getElementById("stage-2");
-  var stage3 = document.getElementById("stage-3");
-  var colorCard = document.getElementById("big-color-card");
-  var selectedCardElements = colorCard.children;
-  document.getElementById("explain-text-stage-2").innerHTML = 'This is your character!';
-  var colors = document.getElementsByClassName('color-column');
-  var saveButton = document.getElementById('save-button');
-  var restartButton = document.getElementById('restart-button');
-  stage2.children[2].appendChild(restartButton);
-  saveButton.remove();
-  colors[1].remove();
-  colors[0].remove();
-  /*var saveCard = document.getElementById("big-save-card");
-  for (let i = 0; i <= selectedCardElements.length; i++) {
-    console.log('lock element: ' + i)
-    console.log(selectedCardElements[i])
-    saveCard.appendChild(selectedCardElements[0]);
+  if(localStorage.getItem('gameStep') >= localStorage.getItem('gameEnd')){
+    console.log(localStorage.getItem('gameStep'))
+    console.log(localStorage.getItem('gameEnd'))
+    var stage2 = document.getElementById("stage-2");
+    document.getElementById("explain-text-stage-2").innerHTML = 'This is your character!';
+    var colors = document.getElementsByClassName('color-column');
+    var saveButton = document.getElementById('save-button');
+    var restartButton = document.getElementById('restart-button');
+    stage2.children[2].appendChild(restartButton);
+    saveButton.remove();
+    colors[1].remove();
+    colors[0].remove();
   }
-  stage2.style.display = "none";
-  stage3.style.display = "inline-block";*/
 }
 
 function restartGame() {
@@ -160,21 +157,32 @@ function restartGame() {
 }
 
 function selectColor(color, colorElement) {
-  localStorage.setItem("selectedColor", color);
-  selectedColorElement = colorElement;
-  //Make Cursor the color Bucket
-  var cursor = document.body;
-  cursor.setAttribute("style", "cursor: url(../img/buckets/" + localStorage.getItem('selectedColor').toString() + ".png), auto;");
-  console.log('color as setted in main.js:');
-  console.log(localStorage.getItem('selectedColor'));
+  console.log('gameEnd: ' + localStorage.getItem('gameEnd'));
+  if (parseInt(localStorage.getItem("selectedColor")) === 0) {
+    localStorage.setItem("selectedColor", color);
+    selectedColorElement = colorElement;
+    //Make border for Clicked Color
+    selectedColorElement.setAttribute("style", "opacity: 0.2;");
+    selectedColorElement.classList.remove('color-card-hover');
+    selectedColorElement.removeAttribute('onclick');
+
+    if(parseInt(localStorage.getItem('gameStep'))+1 >= parseInt(localStorage.getItem('gameEnd'))){
+      var saveButton = document.getElementById('save-button');
+      saveButton.disabled = false;
+      saveButton.setAttribute("style", "opacity: 1;");
+    }
+    //Make Cursor the color Bucket
+    //var cursor = document.body;
+    //cursor.setAttribute("style", "cursor: copy;");
+    //cursor.setAttribute("style", "cursor: url(../img/buckets/" + localStorage.getItem('selectedColor').toString() + ".png), auto;");
+  }
 }
 
 function colorObject(object) {
   if(parseInt(localStorage.getItem('selectedColor')) !== 0){
     svgPaths = object.children[0].children;
     object.removeAttribute('onclick');
-    console.log('color as received in colorObject:');
-    console.log(localStorage.getItem('selectedColor'));
+    console.log('color as received in colorObject: ' + localStorage.getItem('selectedColor'));
     var colorSwitch = localStorage.getItem('selectedColor');
     console.log('colorSwitch ' + colorSwitch);
     var colorString;
@@ -233,8 +241,6 @@ function colorObject(object) {
         console.log('Outside Switch')
         break;
     }
-    console.log('colorString');
-    console.log(colorString);
     for (var i = 0; i < svgPaths.length; i++) {
       if(svgPaths[i].hasAttribute('fill')){
         //console.log(svgPaths[i]);
@@ -243,6 +249,7 @@ function colorObject(object) {
     }
 
     localStorage.setItem('selectedColor', 0);
-    selectedColorElement.style.display = 'none';
+    localStorage.setItem('gameStep', parseInt(localStorage.getItem('gameStep')) + 1 );
+    console.log('gamestep: ' + localStorage.getItem('gameStep'));
   }
 }
