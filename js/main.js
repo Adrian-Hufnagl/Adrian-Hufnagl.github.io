@@ -158,7 +158,8 @@ function restartGame() {
 
 function selectColor(color, colorElement) {
   console.log('gameEnd: ' + localStorage.getItem('gameEnd'));
-  if (parseInt(localStorage.getItem("selectedColor")) === 0) {
+  if (parseInt(localStorage.getItem("selectedColor")) === 0
+  && localStorage.getItem('gameStep') < localStorage.getItem('gameEnd')) {
     localStorage.setItem("selectedColor", color);
     selectedColorElement = colorElement;
     //Make border for Clicked Color
