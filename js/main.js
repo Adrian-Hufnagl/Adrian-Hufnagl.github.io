@@ -231,7 +231,7 @@ function colorObject(object) {
       case 9:
         console.log('Switch')
         coloring = 'white';
-        colorString = '#ffffff'
+        colorString = '#fff9f8'
         break;
       case 10:
         console.log('Switch')
