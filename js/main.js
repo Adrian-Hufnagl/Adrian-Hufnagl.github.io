@@ -254,3 +254,12 @@ function colorObject(object) {
     console.log('gamestep: ' + localStorage.getItem('gameStep'));
   }
 }
+
+function init(){
+  delay(500).then(() => document.getElementById("challenge-button").addEventListener('click', (event) => {
+    document.location.href = "../challenge/challenge.html";
+  }));
+
+}
+
+init();
