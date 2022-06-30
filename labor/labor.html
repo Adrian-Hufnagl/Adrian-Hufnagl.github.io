@@ -1,55 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <link rel="stylesheet" href="../base.css">
-<link rel="stylesheet" href="challenge.css">
+<link rel="stylesheet" href="labor.css">
 
 <head>
     <meta charset="UTF-8">
-    <title>Scientific Thinking Challenge</title>
+    <title>Scientific Thinking Labor</title>
 </head>
 
 <body>
     <button class="button back-button" onclick="goToPreviousPage()">&#8592; Zurück</button>
     <div class="ui-container">
-        <div class="game-field">
-            <div id="object-field" style="z-index: 0;"></div>
-            <div class="border-overlay" style="z-index: 0;"></div>
-            <div class="number-overlay" style="z-index: 10;">
-                <div class="column number-overlay-row">
-                    <div class="field-number">1</div>
-                    <div class="field-number">2</div>
-                    <div class="field-number">3</div>
-                </div>
-                <div class="column number-overlay-row">
-                    <div class="field-number">4</div>
-                    <div class="field-number">5</div>
-                    <div class="field-number">6</div>
-                </div>
-                <div class="column number-overlay-row">
-                    <div class="field-number">7</div>
-                    <div class="field-number">8</div>
-                    <div class="field-number">9</div>
-                </div>
-            </div>
-            <!--buttons below field -->
-            <div id="below" style="padding-top: 21vw;">
-                <button onclick="stepForward()" class="btn">Nächster Schritt &#8594;</button>
-                <button onclick="startTreeAgain()" class="btn">Zurück zum Anfang des Baums &#8634;</button>
-            </div>
-
-        </div>
-
-        <div class="intersection"></div>
         <div id="lab-field" class="game-field">
-            <h2>Finde die Aktionskette!</h2>
-            <p>Finde Abhängigkeiten der Symbole links und zeichne sie mit Hilfe von Elementen.
-                Füge Elemente durch Klicken auf "+" hinzu.</p>
-            <p style="font-size: smaller;"><b>Tipp:</b> Die Symbole können sich pro Schritt auch ganz zufällig ändern.
-            </p>
             <div class="overflow">
-                <!-- ENGL-->
-                <!--<p>Find out about the connected chain in the matrix on the left and draw the tree here. You can add a node
-                by klicking on the green '+'-button.</p>-->
                 <div id="chain-tree" style="display: flex">
                     <div class="column">
                         <div class="chain-add" id="add-button" onclick="openPopup(this);">
@@ -76,29 +39,26 @@
                 </div>
             </div>
 
-            <button class="btn" onclick="checkTree()">Baum überprüfen</button>
-            <button id="delete" class="btn" onclick="deleteTree()">Baum löschen</button>
+            <h2>Drück auf "+" um ein neues Element hinzuzufügen!</h2>
+            <p>Was passiert, wenn neue Elemente ausgewählt werden? Finde es heraus!</p>
+            <div id="memory" style="letter-spacing: 20px; display: none;">
+                <div style="display: flex; ">
+                    <p>0</p>
+                    <p>0</p>
+                    <p>0</p>
+                </div>
+                <div style="display: flex; ">
+                    <p>0</p>
+                    <p>0</p>
+                    <p>0</p>
+                </div>
+                <div style="display: flex; ">
+                    <p>0</p>
+                    <p>0</p>
+                    <p>0</p>
+                </div>
+            </div>
 
-            <!--<p>Änderungen in letztem Schritt:</p>
-            <p>(Nur als Hilfestellung zum herzeigen:)</p>
-            <div id="memory" style="letter-spacing: 20px">
-                <div style="display: flex; ">
-                    <p>0</p>
-                    <p>0</p>
-                    <p>0</p>
-                </div>
-                <div style="display: flex; ">
-                    <p>0</p>
-                    <p>0</p>
-                    <p>0</p>
-                </div>
-                <div style="display: flex; ">
-                    <p>0</p>
-                    <p>0</p>
-                    <p>0</p>
-                </div>
-            </div>-->
-            
             <div style="width: 100%; display: none;">
                 <div>
                     <label for="xObjects">Number of Rows (max: 10)</label>
@@ -114,7 +74,32 @@
                 </div>
             </div>
 
+        </div>
+        <div class="intersection"></div>
+        <div class="game-field">
 
+            <div id="object-field" style="z-index: 0;"></div>
+            <div class="border-overlay" style="z-index: 0;"></div>
+            <div class="number-overlay" style="z-index: 10;">
+                <div class="column number-overlay-row">
+                    <div class="field-number">1</div>
+                    <div class="field-number">2</div>
+                    <div class="field-number">3</div>
+                </div>
+                <div class="column number-overlay-row">
+                    <div class="field-number">4</div>
+                    <div class="field-number">5</div>
+                    <div class="field-number">6</div>
+                </div>
+                <div class="column number-overlay-row">
+                    <div class="field-number">7</div>
+                    <div class="field-number">8</div>
+                    <div class="field-number">9</div>
+                </div>
+            </div>
+            <div id="below" style="padding-top: 21vw;">
+                <button onclick="stepForward()" class="btn">Nächster Schritt &#8594;</button>
+            </div>
         </div>
 
     </div>
@@ -132,7 +117,7 @@
         <div class="chain-arrow">-></div>
     </div>
     </div>
-    <script src="challenge.js" type="text/javascript"></script>
+    <script src="labor.js" type="text/javascript"></script>
 
 </body>
 

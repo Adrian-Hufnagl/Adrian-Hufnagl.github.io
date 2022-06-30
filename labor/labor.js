@@ -1,7 +1,6 @@
 shapes = document.getElementById('shape-collection').children;
 svgTmpl = document.getElementsByClassName('play-object')[0];
-//randomFactor = parseInt(document.getElementById('randomFactor').value);;
-
+randomFactor = 3;
 numberRows = parseInt(document.getElementById('xObjects').value);
 numberCols = parseInt(document.getElementById('yObjects').value);
 firstAdd = true;
@@ -10,9 +9,6 @@ firstAdd = true;
 var eventChain = [[false,false,false],[false,false,false],[false,false,false]]
 var lastStep = [[false,false,false],[false,false,false],[false,false,false]]
 var currentSource = 0;
-var randomFactor = 3;
-// Action Tree to be generated
-var actionTree = 0;
 
 function goToPreviousPage() {
    if (localStorage.getItem("exp-0") !== null) {
@@ -27,8 +23,6 @@ function init() {
    console.log('init lab')
    initFieldWithSize(numberCols,numberRows);
    console.log(eventChain);
-   // init action tree
-   actionTree = createActionTree();
 }
 
 function initFieldWithSize(x,y){
@@ -62,7 +56,6 @@ function createElement(){
    return object;
 }
 
-
 // iterates over every filed
 // when not part of event chain
 // -> behave randomly
@@ -70,7 +63,6 @@ function createElement(){
 // check for changes in last step
 // and overwrite last step
 function stepForward(){
-   //randomFactor = parseInt(document.getElementById('randomFactor').value);
    var newStep = [[false,false,false],[false,false,false],[false,false,false]]
    for(let i = 0; i < numberCols; i++){
       for(let j = 0; j < numberRows; j++){
@@ -94,12 +86,12 @@ function stepForward(){
                newStep[j][i] = true;
             }
          }
-         /*currentTile = document.getElementById('memory')
+         currentTile = document.getElementById('memory')
          if(newStep[j][i] === true){
             currentTile.children[j].children[i].innerHTML = '1';
          }else {
             currentTile.children[j].children[i].innerHTML = '0';
-         }*/
+         }
       }
    }
    lastStep = newStep;
@@ -316,32 +308,6 @@ function findSource(){
 
 }
 
-/* create a tree for the player */
-function createActionTree(){
-
-}
-
-/* split tree into sections that are loaded with each step */
-function loadActionEveryStep(){
-   
-}
-
-/* reload action tree to start from the tree's root again */
-function startTreeAgain(){
-
-}
-
-/* submit and check player's tree */
-function checkTree(){
-
-}
-
-/* delete player's tree so they can start all over */
-function deleteTree(){
-   
-}
-
 
 
 init();
-

@@ -1,9 +1,6 @@
 html,
-body {
-    height: 100%;
-    margin: 0;
+body { height: 100%;
 }
-
 .ui-container {
     display: flex;
     align-items: center;
@@ -12,38 +9,8 @@ body {
     height: 100%;
 }
 
-/**** BUTTONS ****/
-/* general */
-.btn { 
-    border: 1px solid black;
-    border-radius: 5px;
-    background: #00467f;
-    color: white;
-    padding: 10px;
-    margin: 10px 0 3px 0;
-    width: 100%; 
-    font-weight: bold;
-    font-size: larger;
-    border: 0;   
-}
-.btn:hover{
-    cursor: pointer; 
-    opacity: 0.85;
-
-}
-/* specific for delete tree button*/
-#delete {
-    background-color: #f15e5e;
-    ;
-}
-#delete:hover {
-    opacity: 0.85;
-}
-
-/**** CONTENT ****/
-
 /* matrix of objects */
-#object-field {
+#object-field{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -52,14 +19,12 @@ body {
 }
 
 /* space in between the two side-fields*/
-#lab-field {
+#lab-field{
     padding: 2vw;
 }
 
 /* right side */
-.game-field{
-    /*border: 1px solid black;*/
-    border-radius: 5px;
+.game-field{ 
     width: 25vw;
     /*height: 30vw;*/
     height: auto;
@@ -67,39 +32,74 @@ body {
     padding: 2vw 2vw 2vw 2vw;
     position: relative;
     background-color: #fff;
+    /*border: 1px solid black; */
+    border-radius: 5px;
+   
     
 }
+.overflow{
+    height: 25vw;
+    background-color: #00467f10;
+    overflow-y: scroll;
+    padding: 2px;
+   
+}
 
-.intersection {
+.intersection{
     height: 38vw;
     border: 1px solid black;
 }
 
-.overflow{
-    height: 15vw;
-    background-color: #00467f10;
-    overflow-y: scroll;
-    padding: 2px;
-}
 /*.play-object{
     width: 80px;
     height: 80px;
 }*/
-.object-shape {
+.object-shape{
     stroke: black;
     stroke-width: 2px;
     width: 60px;
     height: 60px;
 
 }
-
 /* to adjust the size of the matrix on the right */
 .play-object {
     width: 6vw;
     height: 6vw;
 }
 
-.chain-add {
+.btn { 
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #00467f;
+    color: white;
+    padding: 10px;
+    margin: 10px 0 30px 0;
+    font-weight: bold;
+    font-size: large;
+    width: 100%; 
+    border: 0;   
+}
+.btn:hover{
+    cursor: pointer; 
+    opacity: 0.85;
+
+}
+/*.step-button{
+    border: 1px solid black;
+    border-radius: 5px;
+    background: #00467f;
+    color: white;
+    padding: 10px;
+    margin: 10px 0 30px 0;
+    font-weight: bold;
+    font-size: large;
+}
+
+.step-button:hover{
+    cursor: pointer;
+}*/
+
+.chain-add{
     text-align: center;
     width: 2vw;
     height: 2vw;
@@ -113,7 +113,7 @@ body {
     font-size: 1.3vw;
 }
 
-.chain-number {
+.chain-number{
     text-align: center;
     width: 2vw;
     height: 2vw;
@@ -127,7 +127,7 @@ body {
     font-size: 1.3vw;
 }
 
-.chain-arrow {
+.chain-arrow{
     text-align: center;
     width: 20px;
     height: 20px;
@@ -136,7 +136,7 @@ body {
     color: #000;
 }
 
-.add-number {
+.add-number{
     width: 3.5vw;
     height: 3vw;
     padding-top: 1vw;
@@ -147,29 +147,31 @@ body {
     cursor: pointer;
 }
 
-.add-number-hover:hover {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+.add-number-hover:hover{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     background: #092c48;
 }
 
-.number-overlay {
+.number-overlay{
     position: absolute;
     height: 18.6vw;
     width: 23vw;
     padding: 2vw;
     border-radius: 5px;
+    
+
 }
 .border-overlay{
     border: 2px solid #00467f;
     position: absolute;
     height: 16vw;
-    width: 20.8vw;
-    padding: 2vw;
+    width: 20vw;
+    padding: 2.3vw;
     padding-bottom: 3vw;
     border-radius: 5px;
 }
 
-.number-overlay-row {
+.number-overlay-row{
     display: flex;
     padding: 0;
     height: 6.1vw;
@@ -178,7 +180,7 @@ body {
 
 }
 
-.field-number {
+.field-number{
     width: 100%;
     color: white;
     font-size: 1.5em;
@@ -189,16 +191,16 @@ body {
 
 }
 
-.popup {
+.popup{
     background: white;
     color: black;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     visibility: hidden;
     width: fit-content;
     position: absolute;
     cursor: default;
 }
 
-.popup.show {
+.popup.show{
     visibility: visible;
 }
