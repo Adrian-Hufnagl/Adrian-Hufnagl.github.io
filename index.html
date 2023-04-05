@@ -13,159 +13,105 @@
   <meta property="og:image" content="">
 
   <link rel="manifest" href="site.webmanifest">
-  <link rel="apple-touch-icon" href="icon.png">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <!-- Place favicon.ico in the root directory -->
-
+  <link rel="shortcut icon" href="img/logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
 
   <meta name="theme-color" content="#fafafa">
+  <script src="//cdn.amcharts.com/lib/5/index.js"></script>
+  <script src="//cdn.amcharts.com/lib/5/map.js"></script>
+  <script src="//cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
+  <script src="//cdn.amcharts.com/lib/5/xy.js"></script>
+  <script src="//cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 </head>
 
 <body>
-<!-- Add your site or application content here -->
-<div class="container">
-  <h1>Colors & Clothing</h1>
-  <div class="inner-container">
-    <div id="start" class="game-window">
-      <h2>Twins - Dress & Describe - minimum 2 Players</h2>
-      <p>For a party, schoolmates decide to dress alike to look like identical twins.
-        Choose a role you want to play.<br>
-        <br>
-        <span class="bolded">The Dresser:</span> Choose a figure and paint its clothes. Describe the coloured
-        character to the Copycat by using the right vocabulary.<br>
-        <span class="bolded">The Copycat:</span> While listening to the description of the Dresser, you try to match
-        the figures' clothes and colours.<br>
-        In the end, the Dresser's and Copycat's characters should look the same.<br><br>
-        Rules:
-      <ul>
-        <li>Do not share your screen - only you should see it.</li>
-        <li>Use the vocabulary learned in the lecture.</li>
-      </ul>
-      </p>
-      <p class="explain-text">Choose your role:</p>
-      <!--- Buttons-->
-      <div class="cc-container">
-        <button onclick="startGame('dresser')" class="cc-button role2-button">
-          <p class="buttontext">Dresser</p>
-          <i class="material-icons" style="font-size: 7vw">checkroom</i>
-        </button>
-        <button onclick="startGame('copycat')" class="cc-button role1-button">
-          <p class="buttontext">Copycat</p>
-          <i class="material-icons" style="font-size: 7vw">content_copy</i>
-        </button>
-      </div>
+<div id="bar">
+  <div id="bar-button" onclick="location.reload();">
+  <img id="bar-logo" src="img/logo.png">
+  <p id="bar-header">Geofilter</p>
+</div>
+</div>
+  <div class="content-container">
+    <div class="card">
+      <p class="tutorial-text">Auf dieser Seite kann man eine Liste (2) von Klimadiagrammen (3) erzeugen. In (1) kann man dazu Filter definieren. Jede Aufgabenstellung gibt eine Region vor, nach der gefiltert werden soll. Das Ziel ist es eine Liste mit möglichst vielen passenden und möglichst wenig unpassenden Einträgen zu erzeugen.</p>
     </div>
-    <!-- stage-1 -->
-    <div id="stage-1" class="game-window" style="display: none">
-      <p id="explain-text-stage-1" class="explain-text"></p>
-      <!-- CARDS -->
-      <div class="cc-container" id="card-list-1">
-        <div onclick="switchStage(1)" class="cc-card character-card" id="card-1">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_cap_dress_socks_trainers.svg" width="100%" height="100%"> </object>
+    <div class="card" id="iCard">
+      <p class="card-number">1</p>
+      <p class="card-header">Filter</p>
+      <p style="text-align: center; margin: 48px 0; font-size: 20px; font-weight: bold;">Welche Gebiete befinden sich im Regenwald?</p>
+      <p>Filter funktioniert noch nicht!</p>
+        <div class="input-row">
+          <div class="input-counter" id="iCounter"><p class="input-number">1</p></div>
+          <input class="input-field">
+          <p class="input-comparator">></p>
+          <input class="input-field">
         </div>
-        <div onclick="switchStage(2)" class="cc-card character-card" id="card-2">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_cap_pullover_skirt_socks_shoes.svg" width="100%" height="100%"> </object>
+        <div class="btn-row">
+          <button onclick="createInput()" class="btn btn-add"><i class="fa fa-plus"></i><p style="margin: 0 12px;">Neue Zeile</p></button>
+          <button onclick="createList()" id="btn-filter" class="btn"><i class="fa fa-search"></i><p style="margin: 0 12px;">Suchen</p></button>
         </div>
-        <div onclick="switchStage(3)" class="cc-card character-card" id="card-3">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_cap_tshirt_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
-        </div>
-        <div onclick="switchStage(4)" class="cc-card character-card" id="card-4">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_cap_tshirt_trousers_socks_slippers.svg" width="100%" height="100%"> </object>
-        </div>
-        <div onclick="switchStage(5)" class="cc-card character-card" id="card-5">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_hat_blouse_skirt_socks_trainers.svg" width="100%" height="100%"></object>
-        </div>
-      </div>
-      <div class="cc-container" id="card-list-2">
-        <div onclick="switchStage(6)" class="cc-card character-card" id="card-6">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_hat_blouse_trousers_shoes.svg" width="100%" height="100%"> </object>
-        </div>
-        <div onclick="switchStage(7)" class="cc-card character-card" id="card-7">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_hat_dress_socks_shoes.svg" width="100%" height="100%"> </object>
-        </div>
-        <div onclick="switchStage(8)" class="cc-card character-card" id="card-8">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_hat_jacket_dress_trainers.svg" width="100%" height="100%"> </object>
-        </div>
-        <div onclick="switchStage(9)" class="cc-card character-card" id="card-9">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_hat_jacket_pullover_trousers_trainers.svg" width="100%" height="100%"> </object>
-        </div>
-        <div onclick="switchStage(10)" class="cc-card character-card" id="card-10">
-          <div class="card-overlay"></div>
-          <object data="img\mannequin_hat_pullover_skirt_socks_trainers.svg" width="100%" height="100%"> </object>
-        </div>
-      </div>
-    </div>
-    <!-- stage-2 -->
-    <div id="stage-2" class="game-window" style="display: none">
-      <!-- Show different text depending on the role -->
-      <p id="explain-text-stage-2" class="explain-text"></p>
-
-      <div class="cc-container">
-        <div class="color-column" id="color-column-1">
-          <div onclick="selectColor(1, this)" class="color-card color-card-hover" id="color-grey"></div>
-          <div onclick="selectColor(2, this)" class="color-card color-card-hover" id="color-orange"></div>
-          <div onclick="selectColor(3, this)" class="color-card color-card-hover" id="color-green"></div>
-          <div onclick="selectColor(4, this)" class="color-card color-card-hover" id="color-pink"></div>
-          <div onclick="selectColor(5, this)" class="color-card color-card-hover" id="color-blue"></div>
-        </div>
-        <div style="display: inline-block">
-          <div class="big-character-card" id="big-color-card">
-          </div>
-        </div>
-        <div class="color-column" id="color-column-2" style="display: inline-block">
-          <div onclick="selectColor(6, this)" class="color-card color-card-hover" id="color-black"></div>
-          <div onclick="selectColor(7, this)" class="color-card color-card-hover" id="color-red"></div>
-          <div onclick="selectColor(8, this)" class="color-card color-card-hover" id="color-brown"></div>
-          <div onclick="selectColor(9, this)" class="color-card color-card-hover" id="color-white"></div>
-          <div onclick="selectColor(10, this)" class="color-card color-card-hover" id="color-yellow"></div>
         </div>
       </div>
 
-      <div class="cc-container">
-        <button onclick="lockCharacter()" disabled="true" class="cc-button selection-button disabled" id="save-button">Save</button>
+
+  <div class="list-diagram-inner">
+    <div class="list-container card">
+      <p class="card-number">2</p>
+      <p class="card-header">Liste</p>
+      <div id="climate-list">
       </div>
     </div>
-    <div id="stage-3" class="game-window" style="display: none">
-      <p class="explain-text">This is your character!</p>
-      <div class="cc-container">
-        <div class="big-character-card" id="big-save-card">
-
+    <div id="diagram" class="diagram-container card">
+      <p class="card-number">3</p>
+      <p class="card-header">Diagramm</p>
+      <div id="chart-header" style="display: flex; margin-top: 48px;">
+        <p>Station:</p>
+        <p id="chart-name"></p>
+      </div>
+      <div>
+        <p id="chart-height">Koordinaten: </p>
+      </div>
+      <div id="prec-axis">
+        <div>
+          <p>300</p>
+          <p>100</p>
+          <p>80</p>
+          <p>60</p>
+          <p>40</p>
+          <p>20</p>
         </div>
       </div>
-      <div class="cc-container">
-        <button onclick="restartGame()" class="cc-button selection-button" id="restart-button">
-          <p class="buttontext" onclick="localStorage.clear()">New Game</p>
-        </button>
-      </div>
+      <div id="chartdiv-2"></div>
     </div>
-    <script src="js/vendor/modernizr-3.11.2.min.js"></script>
-    <script src="js/plugins.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/svg.js/svg.min.js"></script>
+  </div>
 
-    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-    <script>
-      window.addEventListener("DOMContentLoaded", function () {
-        shuffleCards();
-        shuffleColors();
-      }, false);
-    </script>
+
+  <div class="map-container card">
+    <p class="card-number">4</p>
+    <p class="card-header">Weltkarte</p>
+    <div id="chartdiv"></div>
+  </div>
+  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/filter.js"></script>
+
+  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  <script>
+    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+</body>
+<div style="display: none;">
+  <div class="climate-list-element" onclick="createDiagram(event)">
   </div>
 </div>
-<div class="mode-element" id="challenge-button">
-  <i class="mode-description">Geheimer Link</i>
-</div>
-</body>
 
 </html>
