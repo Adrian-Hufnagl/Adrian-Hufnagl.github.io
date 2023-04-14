@@ -40,6 +40,10 @@ function createElementFromHTML(htmlString) {
 
 //Nach Klick wird Liste gefiltert und ausgegeben
 function createList(){
+  if(checkInputs()){
+    showMessage("Filter wurden korrekt gesetzt!", true)
+    filterData();
+  }
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
@@ -84,3 +88,18 @@ function showStationData(i){
   stationHeight.innerHTML = "Koordinaten: " + '(' + newLat + '/' + newLon + ') - Height: ' + newHeight + 'm';
 }
 
+function showMessage(str,success){
+  // Get the snackbar DIV
+  var x = document.getElementById("snackbar");
+  x.innerHTML = str;
+  if(success){
+    x.style.background ="#3a4";
+  } else {
+    x.style.background ="#a34";
+  }
+  // Add the "show" class to DIV
+  x.className = "show";
+
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}

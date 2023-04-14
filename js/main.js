@@ -1,35 +1,36 @@
 var wholeClimate
-var filteredClimate;
+var filteredClimate = [];
 var displayedClimate
 
-var tMonths = ["t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12",]
-var pMonths = ["n1","n2","n3","n4","n5","n6","n7","n8","n9","n10","n11","n12",]
+var tMonths = ["t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12",]
+var pMonths = ["n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12",]
 
 initData()
 
 //JSON wird eingelesen und als JS-Objekt gespeichert
-function initData(){
+function initData() {
   fetch('./masterdata.json')
     .then((response) => response.json())
     .then(json => wholeClimate = json)
 }
 
 //Klima und Stationsdaten werden gefiltert und in Liste und Karte angegeben
-function filterClimate(){
-  //TODO Filter Whole Climate
-  filteredClimate = wholeClimate
-  //TODO Filter Climate 
+function filterClimate() {
   displayedClimate = filteredClimate
-
-  for(let i = 0; i < displayedClimate.length; i++){
+  deleteMarkers();
+  for (let i = 0; i < displayedClimate.length; i++) {
     climateList.appendChild(createListRow("(" + displayedClimate[i]['country'] + ") " + displayedClimate[i]['name']));
-    if(i === displayedClimate.length - 1){
-      addStationToMap(i,true,0xd43456)
+    if (i === displayedClimate.length - 1) {
+      addStationToMap(i, true, 0xd43456)
     } else {
-      addStationToMap(i,false,0xd43456)
+      addStationToMap(i, false, 0xd43456)
     }
-
   }
+  if(climateList.children.length > 0){
+    climateList.children[0].click();
+  }
+  //createMap(am5.color(0xff00ff))
+  //selectPin(0)
 }
 
 const findObject = (obj = {}, key, value) => {

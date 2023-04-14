@@ -35,17 +35,25 @@
 </div>
   <div class="content-container">
     <div class="card">
-      <p class="tutorial-text">Auf dieser Seite kann man eine Liste von Klimadiagrammen erzeugen. Für die Listenausgabe können Filter definiert werden. Jede Aufgabenstellung gibt eine Region vor, nach der gefiltert werden soll. Das Ziel ist es eine Liste mit möglichst vielen passenden und möglichst wenig unpassenden Einträgen zu erzeugen. Der Text hier ist nicht final und wird am Ende e noch überarbeitet. Kein Sorge :P</p>
+      <p class="tutorial-text">Auf dieser Seite kann man eine Liste von Klimadiagrammen erzeugen. 
+        Für die Listenausgabe können Filter definiert werden. Jede Aufgabenstellung gibt eine Region 
+        vor, nach der gefiltert werden soll. Das Ziel ist es eine Liste mit möglichst vielen passenden und 
+        möglichst wenig unpassenden Einträgen zu erzeugen. Der Text hier ist nicht final und wird am 
+        Ende e noch überarbeitet. Kein Sorge :P</p>
     </div>
     <div class="card" id="iCard">
       <p class="card-header">Filter</p>
       <p style="text-align: center; margin: 48px 0; font-size: 20px; font-weight: bold;">Welche Gebiete befinden sich im Regenwald?</p>
-      <p>Filter funktioniert noch nicht!</p>
+      <div style="font-size: 10px; margin: 32px 128px;">
+        <p style="margin: 0;">Niederschlag: N / Temperatur: T</p>
+        <p style="margin: 0;">Niederschlag Januar - Dezember: n1 - n12</p>
+        <p style="margin: 0;">Temperatur Januar - Dezember: t1 - t12</p>
+      </div>
         <div class="input-row">
           <div class="input-counter" id="iCounter"><p class="input-number">1</p></div>
           <input class="input-field">
-          <p class="input-comparator">></p>
-          <input class="input-field">
+          <p class="input-comparator">>=</p>
+          <input class="input-field" onchange="tokenizeInput(event)">
         </div>
         <div class="btn-row">
           <button onclick="createInput()" class="btn btn-add"><i class="fa fa-plus"></i><p style="margin: 0 12px;">Neue Zeile</p></button>
@@ -89,6 +97,9 @@
     <p class="card-header">Weltkarte</p>
     <div id="chartdiv"></div>
   </div>
+
+<div id="snackbar">Some text some message..</div>
+
   <script src="js/vendor/modernizr-3.11.2.min.js"></script>
   <script src="js/plugins.js"></script>
   <script src="js/main.js"></script>
