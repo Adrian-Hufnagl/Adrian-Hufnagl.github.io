@@ -201,7 +201,11 @@ function replaceTokens(str, station) {
   // Escape special characters in tokens to prevent them from being interpreted as regular expressions
   const escapedTokens = tokens.map(token => token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   // Create a regular expression to match any of the tokens with word boundaries and lookarounds
-  const tokenRegex = new RegExp(`(?<!\\w)(${escapedTokens.join('|')})(?!\\w)`, 'g');
+  //const tokenRegex = new RegExp(`(?<!\\w)(${escapedTokens.join('|')})(?!\\w)`, 'g');
+  //RegExp(`\\b(${escapedTokens.join('|')})\\b`, 'g')
+  const tokenRegex = new RegExp(`\\b(${escapedTokens.join('|')})\\b`, 'g')
+
+
   // Replace all matches of the regular expression with the corresponding value from wholeClimate
   const outputStr = str.replace(tokenRegex, (match, token) => station[token]);
   return outputStr;
