@@ -162,7 +162,7 @@ function filterData(){
     for(j = 0; j < inputRows.length; j++){
       let str1 = replaceTokens(inputStrings[j][0], wholeClimate[i]);
       let str2 = replaceTokens(inputStrings[j][1], wholeClimate[i]);
-      console.log(calcString(str1) +" < "+ calcString(str2))
+      //console.log(calcString(str1) +" < "+ calcString(str2))
       if(calcString(str1) < calcString(str2)){
         console.log("true -> continue")
         break;

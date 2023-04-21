@@ -1,4 +1,5 @@
 var climateList = document.getElementById('climate-list')
+var listResults = document.getElementById('list-results')
 var diagramContainer = document.getElementById('diagram')
 var inputCard = document.getElementById('iCard')
 var buttonRow = document.getElementsByClassName('btn-row')[0]
@@ -14,22 +15,24 @@ function createInput(){
   let counter = inputRows.length
   newInput.children[0].children[0].innerHTML = (counter + 1).toString()
   inputCard.insertBefore(newInput, buttonRow);
-  attachBtn = createElementFromHTML('<button onclick="deleteInput()" class="btn btn-del"><i class="fa fa-trash"></i></button>')
-  inputRows[counter].appendChild(attachBtn)
-  if(counter > 1){
-    document.getElementsByClassName("btn-del")[0].remove();
-  }
 }
 
-function deleteInput(){
-  let inputRows = document.getElementsByClassName("input-row")
+function deleteInput(e){
   let newInputs = document.getElementsByClassName("input-row")
-  let counter = newInputs.length
-  newInputs[counter - 1].remove()
-  if(counter > 2){
-  attachBtn = createElementFromHTML('<button onclick="deleteInput()" class="btn btn-del"><i class="fa fa-trash"></i></button>')
-  inputRows[counter - 2].appendChild(attachBtn)
-  }
+  var el = e.currentTarget.parentNode;
+  console.log(el)
+  var elParent = el.parentNode;
+  console.log(elParent)
+  var index = Array.prototype.indexOf.call(elParent.children, el);
+  console.log('delete' + index)
+  if(newInputs.length == 1){
+    console.log(newInputs[0].children[1])
+    newInputs[0].children[1].value = "";
+    newInputs[0].children[3].value = "";
+  } else {
+  newInputs[index - 3].remove()
+  console.log(newInputs.length)
+}
 }
 
 function createElementFromHTML(htmlString) {
@@ -50,10 +53,24 @@ function createList(){
   filterClimate()
 }
 
-function createListRow(name){
+function createListRow(name, country, result){
   const newEl = document.getElementsByClassName("climate-list-element")[0].cloneNode()
-  const newContent = document.createTextNode(name);
-  newEl.appendChild(newContent);
+  const newName = document.createTextNode(name + " ");
+  const newCountry = document.createElement('div');
+  newCountry.className = "country-name"
+  newCountry.innerHTML = country;
+  newEl.appendChild(newName);
+  if(result){
+    newEl.appendChild(createElementFromHTML('<i class="fa fa-check iconCheck"></i>'))
+    newEl.style.background = '#f3fcf4'
+  } else {
+    newEl.appendChild(createElementFromHTML('<i class="fa fa-times iconFalse"></i>)'))
+    newEl.style.background = '#fcf4fc'
+  }
+  newEl.appendChild(newCountry);
+  //const newResult = document.createTextNode(result);
+  //newEl.appendChild(newResult);
+  
   return newEl
 }
 
@@ -102,4 +119,42 @@ function showMessage(str,success){
 
   // After 3 seconds, remove the show class from DIV
   setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+// Function to update the textfield with the current question
+function updateQuestion() {
+  document.getElementById("question").textContent = questions[currentQuestionIndex];
+}
+
+// Function to go to the previous question
+function previousQuestion() {
+  if (currentQuestionIndex > 0) {
+    currentQuestionIndex--;
+    updateQuestion();
+  } else {
+    currentQuestionIndex = questions.length - 1;
+    updateQuestion();
+  }
+  console.log(currentQuestionIndex)
+}
+
+// Function to go to the next question
+function nextQuestion() {
+  if (currentQuestionIndex < questions.length - 1) {
+    currentQuestionIndex++;
+    updateQuestion();
+  } else {
+    currentQuestionIndex = 0;
+    updateQuestion();
+  }
+  console.log(currentQuestionIndex)
+}
+
+// Initialize the textfield with the first question
+updateQuestion();
+
+function deleteTutorial(){
+  console.log('remove tutorial')
+  let tutorial = document.getElementById('tutorial')
+  tutorial.remove();
 }
