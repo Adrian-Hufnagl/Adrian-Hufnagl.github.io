@@ -411,7 +411,6 @@ margin: 0;
   font-weight: bold;
 }
 
-
 .list-row {
   display: flex;
   margin-left: 32px;
@@ -507,7 +506,7 @@ margin: 0;
 
 .fa-times {
   padding-bottom: 3px !important;
-  
+
 }
 
 #climate-list{
