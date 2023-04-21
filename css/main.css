@@ -1,5 +1,6 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
+  font-family: 'Roboto', sans-serif;
   background:#f0f5fa;
   padding-bottom: 16px;
 }
@@ -47,6 +48,17 @@ body {
   margin: 5px;
 }
 
+#month-numbers-axis{
+  margin-left: 53px;
+  position: absolute;
+  padding-top: 295px;
+  display: flex;
+
+}
+
+#month-numbers-axis > p{
+  margin: 13px
+}
 
 html {
   color: #222;
@@ -295,13 +307,34 @@ textarea {
   font-size: 16px;
   font-weight: bold;
   padding: 4px 24px 4px 24px;
-  margin: -14px -14px;
+  margin: -14px -12px;
 }
 
 .tutorial-text{
-  margin: 0;
+  margin: 20px 10px;
 }
 
+.country-name{
+  float: right;
+  margin-right: 10px;
+  font-weight: normal;
+}
+
+.question-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 64px;
+}
+
+#question{
+  width: 400px;
+  text-align: center;
+}
+
+.question-container input[type="text"] {
+  text-align: center;
+}
 .content-container{
   padding: 64px 8% 16px;
 }
@@ -369,6 +402,16 @@ margin: 0;
   padding-bottom: 32px;
 }
 
+#list-results{
+  text-align: right;
+  font-size: 12px;
+}
+
+#result-score{
+  font-weight: bold;
+}
+
+
 .list-row {
   display: flex;
   margin-left: 32px;
@@ -412,11 +455,27 @@ margin: 0;
   background: #c42446;
 }
 
+.btn-qst{
+  color: #a1a3a5;
+  border: 1px solid #a1a3a5;
+  background: #f1f3f5;
+  padding: 0px 4px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
 .btn-add{
   background: #303439;
   font-size: 12px;
   padding: 8px 8px 8px 16px;
   margin-right: 16px;
+}
+
+.btn-cls{
+  background: #818385;
+  padding: 4px 8px 3px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 #btn-filter{
@@ -430,11 +489,31 @@ margin: 0;
   margin: 48px 0 0 24px;
 }
 
+.iconCheck{
+  background-color: #46c424;
+  padding: 2px;
+  color: #fff;
+  float: right;
+  border-radius: 2px;
+}
+
+.iconFalse{
+  background-color: #c42446;
+  padding: 2px 3px;
+  color: #fff;
+  float: right;
+  border-radius: 2px;
+}
+
+.fa-times {
+  padding-bottom: 3px !important;
+  
+}
+
 #climate-list{
   overflow: scroll;
   overflow-y: scroll;
-  height: 390px;
-  margin-top: 24px;
+  height: 360px;
 }
 
 .climate-list-element{
