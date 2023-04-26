@@ -30,7 +30,8 @@ function deleteInput(e){
     newInputs[0].children[1].value = "";
     newInputs[0].children[3].value = "";
   } else {
-  newInputs[index - 3].remove()
+  newInputs[index - 2].remove()
+  //console.log(index)
   console.log(newInputs.length)
 }
 }
@@ -50,6 +51,11 @@ function createList(){
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
+  filterClimate()
+}
+
+function createInitialList(){
+  filterData();
   filterClimate()
 }
 
@@ -135,7 +141,7 @@ function previousQuestion() {
     currentQuestionIndex = questions.length - 1;
     updateQuestion();
   }
-  console.log(currentQuestionIndex)
+  createList();
 }
 
 // Function to go to the next question
@@ -147,7 +153,7 @@ function nextQuestion() {
     currentQuestionIndex = 0;
     updateQuestion();
   }
-  console.log(currentQuestionIndex)
+  createList();
 }
 
 // Initialize the textfield with the first question

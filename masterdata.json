@@ -877,7 +877,7 @@
   {
     "ID": 2869,
     "name": "Kuusamo Airport",
-    "lat": 66,
+    "lat": "66",
     "long": "29,22",
     "elevation": 266,
     "country": "Finland",
@@ -6477,7 +6477,7 @@
   {
     "ID": 33377,
     "name": "Lubny",
-    "lat": 50,
+    "lat": "50",
     "long": "33,02",
     "elevation": 158,
     "country": "Ukraine",
@@ -9032,7 +9032,7 @@
   {
     "ID": 40986,
     "name": "Zaranj",
-    "lat": 31,
+    "lat": "31",
     "long": "61,85",
     "elevation": 478,
     "country": "Afghanistan",
@@ -10257,7 +10257,7 @@
   {
     "ID": 42165,
     "name": "Bikaner",
-    "lat": 28,
+    "lat": "28",
     "long": "73,3",
     "elevation": 224,
     "country": "India",
@@ -15087,7 +15087,7 @@
   {
     "ID": 59758,
     "name": "Haikou",
-    "lat": 20,
+    "lat": "20",
     "long": "110,25",
     "elevation": 64,
     "country": "China",
@@ -17922,7 +17922,7 @@
   {
     "ID": 64504,
     "name": "Cocobeach",
-    "lat": 1,
+    "lat": "1",
     "long": "9,6",
     "elevation": 16,
     "country": "Gabon",
@@ -19112,7 +19112,7 @@
   {
     "ID": 67561,
     "name": "Ndola",
-    "lat": -13,
+    "lat": "-13",
     "long": "28,65",
     "elevation": 1270,
     "country": "Zambia",
@@ -20127,7 +20127,7 @@
   {
     "ID": 71051,
     "name": "Sachs Harbour",
-    "lat": 72,
+    "lat": "72",
     "long": "-125,27",
     "elevation": 88,
     "country": "Canada",
@@ -25657,7 +25657,7 @@
   {
     "ID": 72428,
     "name": "Columbus Airp./OH",
-    "lat": 40,
+    "lat": "40",
     "long": "-82,89",
     "elevation": 247,
     "country": "United States of America",
@@ -31817,7 +31817,7 @@
   {
     "ID": 82181,
     "name": "Monte Alegre",
-    "lat": -2,
+    "lat": "-2",
     "long": "-54,08",
     "elevation": 146,
     "country": "Brazil",
@@ -35387,7 +35387,7 @@
   {
     "ID": 85934,
     "name": "Punta Arenas Airport",
-    "lat": -53,
+    "lat": "-53",
     "long": "-70,85",
     "elevation": 43,
     "country": "Chile",
