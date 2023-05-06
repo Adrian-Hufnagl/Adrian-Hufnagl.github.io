@@ -14,12 +14,9 @@
     })
   );
 
-  //var rangeDataItem = yAxis.makeDataItem({
-  //  value: -50,
-  //  endValue: 60
-  //});
-//
-  //var range = yAxis.createAxisRange(rangeDataItem);
+  yAxis.get("renderer").labels.template.setAll({
+    fontSize: 10,
+  });
 
   var xAxis = chart2.xAxes.push(
 
@@ -32,25 +29,10 @@
     })
   );
 
-  xAxis.data.setAll([
-    {month: "Jan"},
-    {month: "Feb"},
-    {month: "Mar"},
-    {month: "Apr"},
-    {month: "May"},
-    {month: "Jun"},
-    {month: "Jul"},
-    {month: "Aug"},
-    {month: "Sep"},
-    {month: "Oct"},
-    {month: "dsdsd"},
-    {month: "dee"}
-  ]);
-
 
 // Set the chart data
   var data = [{
-    month: "Jan",
+    month: "Jän",
     temp: 20,
     prec: 202
   }, {
@@ -58,7 +40,7 @@
     temp: 22,
     prec: 102
   }, {
-    month: "Mar",
+    month: "Mär",
     temp: 33,
     prec: 102
   }, {
@@ -66,7 +48,7 @@
     temp: 21,
     prec: 202
   }, {
-    month: "May",
+    month: "Mai",
     temp: 20,
     prec: 2
   }, {
@@ -86,7 +68,7 @@
     temp: -22,
     prec: 66
   }, {
-    month: "Oct",
+    month: "Okt",
     temp: -17,
     prec: 70
   }, {
@@ -94,7 +76,7 @@
     temp: -7,
     prec: 112
   }, {
-    month: "Dec",
+    month: "Dez",
     temp: 3,
     prec: 188
   }];

@@ -173,7 +173,7 @@ function filterData(){
       }
     }
   }
-  console.log(filteredClimate);
+  //console.log(filteredClimate);
 };
 
 // Returns the result of a given function

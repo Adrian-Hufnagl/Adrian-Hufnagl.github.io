@@ -44,12 +44,18 @@
     
     </div>
     <div class="card" id="iCard">
-      <p class="card-header">Filter</p>
       <div class="question-container">
         <button class="btn btn-qst" onclick="previousQuestion()">←</button>
         <span id="question"></span> 
         <button class="btn btn-qst" onclick="nextQuestion()">→</button>
       </div>
+      <div class="result-score-container">
+        <div style="display: flex;">
+        <div>Genauigkeit:</div>
+        <div id="result-score"></div>
+      </div>
+      </div>
+      
         <div class="input-row">
           <div class="input-counter" id="iCounter"><p class="input-number">1</p></div>
           <input class="input-field">
@@ -60,30 +66,27 @@
         <div class="btn-row">
           <button onclick="createInput()" class="btn btn-add"><i class="fa fa-plus"></i><p style="margin: 0 12px;">Neue Zeile</p></button>
           <button onclick="createList()" id="btn-filter" class="btn"><i class="fa fa-search"></i><p style="margin: 0 12px;">Suchen</p></button>
+            
         </div>
         </div>
       </div>
 
   <div class="map-container card">
-    <p class="card-header">Weltkarte</p>
     <div id="chartdiv"></div>
   </div>
 
     <div class="list-diagram-inner">
     <div class="list-container card">
-      <p class="card-header">Liste</p>
       <div id="list-results">
-        <div id="result-whole"></div>
-        <div id="result-correct"></div>
-        <div id="result-incorret"></div>
-        <div id="result-score"></div>
+        <div id="result-whole" class="result-btn" onclick="showAll()"></div>
+        <div id="result-correct" class="result-btn" onclick="showCorrect()"></div>
+        <div id="result-incorret" class="result-btn" onclick="showIncorrect()"></div>
       </div>
       <div id="climate-list"></div>
     </div>
     <div id="diagram" class="diagram-container card">
-      <p class="card-header">Diagramm</p>
-      <div id="chart-header" style="display: flex; margin-top: 48px;">
-        <p>Station:</p>
+      <div id="chart-header" style="display: flex;">
+        <p style="margin-right: 4px;">Standort:</p>
         <p id="chart-name"></p>
       </div>
       <div>
@@ -97,9 +100,11 @@
           <p>60</p>
           <p>40</p>
           <p>20</p>
+          <p>0</p>
         </div>
       </div>
       <div id="month-numbers-axis">
+          <p style="margin: 13px 7px 13px 20px; font-weight: bold;">C˚</p>
           <p>1</p>
           <p>2</p>
           <p>3</p>
@@ -112,6 +117,7 @@
           <p>10</p>
           <p>11</p>
           <p>12</p>
+          <p style="margin: 13px 13px 13px 10px; font-weight: bold;">mm</p>
       </div>
       <div id="chartdiv-2"></div>
     </div>

@@ -7,10 +7,29 @@ var questions = [
   "6. Welche Orte sind im Januar über 10 Grad wärmer als im Juli?"];
 var currentQuestionIndex = 0;
 
+var filters = new Array(questions.length);
+for (let i = 0; i < questions.length; i++) {
+  filters[i] = [];
+  filters[i][0] = ["", ""];
+}
+
+function saveFilters(){
+  let inputRows = document.getElementsByClassName("input-row")
+  filters[currentQuestionIndex] = [];
+  for(i = 0; i < inputRows.length; i++){
+    let string1 = inputRows[i].children[1].value;
+    let string2 = inputRows[i].children[3].value;
+    filters[currentQuestionIndex][i] = [string1, string2]
+  }
+}
+
+function switchFilters(){
+  deleteInputs();
+  createInputs();
+  createList();
+}
 
 function annotateList(){
-  console.log((wholeClimate[0]['lat']))
-  console.log((parseFloat(wholeClimate[0]['lat'].replace(',', '.'))))
   for(i = 0; i < wholeClimate.length - 1; i++){
     wholeClimate[i]['fits'] = evalFunction(wholeClimate[i]);
   }
@@ -20,7 +39,6 @@ function evalFunction(climateElement){
   switch (currentQuestionIndex) {
     case 0:
       if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 && (parseFloat(climateElement['lat'].replace(',', '.'))) >= -23.5){
-        console.log("lat in tropics")
         return true;
       } return false;
     case 1:
@@ -60,5 +78,5 @@ function annotateListHeader(){
   listResults.children[0].innerHTML = "Ergebnisse:   " + numResults + " von " + numWholeResults;
   listResults.children[1].innerHTML = " Korrekt:   " + numCorrectResults + " von " + numWholeCorrectResults;
   listResults.children[2].innerHTML = " Falsch:   " + numIncorrectResults  + " von " + numWholeIncorrectResults;
-  listResults.children[3].innerHTML = " Ergebnis: " + score  + "%";
+  filterResults.innerHTML = score  + "%";
 }
