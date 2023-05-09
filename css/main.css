@@ -391,7 +391,6 @@ margin: 0;
 }
 
 #list-results{
-  text-align: right;
   font-size: 12px;
 }
 
@@ -406,9 +405,61 @@ margin: 0;
   margin-left: 4px;
 }
 
+.result-btn{
+  border-radius: 3px;
+  padding: 3px 8px;
+  border: 1px solid #a1a3a5;
+}
 .result-btn:hover{
   font-weight: bold !important;
   cursor: pointer;  
+  padding: 2px 7px;
+  border: 2px solid #000;
+  color: #fff;
+}
+.result-btn:active{
+  border: 2px solid #c3c4cc;
+}
+.result-btn.selected{
+  font-weight: bold !important;
+  color: #fff;
+  padding: 2px 7px;
+  border: 2px solid #000;
+}
+
+#result-whole{
+  background-color: #f0f5fa;
+}
+#result-whole:hover{
+  background-color: #a1a3a5;
+}
+#result-whole.selected{
+  background-color: #a1a3a5;
+}
+
+#result-correct{
+  background-color: #cbf3cf;
+}
+#result-correct:hover{
+  background-color: #46c424;
+}
+#result-correct.selected{
+  background-color: #46c424;
+}
+
+#result-incorrect{
+  background-color: #f3cfe3;
+}
+#result-incorrect:hover{
+  background-color: #c42446;
+}
+#result-incorrect.selected{
+  background-color: #c42446;
+}
+
+#result-description{
+  font-size: 12px;
+  margin: 8px 0;
 }
 
 .list-row {
@@ -514,6 +565,10 @@ margin: 0;
   overflow: scroll;
   overflow-y: scroll;
   height: 360px;
+  box-shadow: inset 0 2px 4px 0 rgba(0,0,0,0.10);
+  margin-right: -12px;
+  margin-left: -12px;
+  padding: 0 12px;
 }
 
 .climate-list-element{
@@ -527,13 +582,39 @@ margin: 0;
   color: #31333c;
 }
 
+.climate-list-element-selcted{
+  opacity: 1 !important;
+  border: 2px solid #33343c;
+  padding: 6px;
+  color: #fff;
+}
+
+.climate-list-element-selcted.climate-list-element-incorrect{
+  background: #c42446 !important;
+}
+
+.climate-list-element-selcted.climate-list-element-correct{
+  background: #46c424 !important;
+}
+
 .climate-list-element:hover{
-  background: #e3e4ec;
+  border: 2px solid #33343c;
+  padding: 6px;
   cursor: pointer;
 }
 
+.climate-list-element-incorrect:hover{
+  background: #c42446 !important;
+  color: #fff;
+}
+
+.climate-list-element-correct:hover{
+  background: #46c424 !important;
+}
+
 .climate-list-element:active{
-  background: #d3d4dc;
+border: 2px solid #c3c4cc !important;
+padding: 6px;
 }
 
 @media (max-width: 960px) {

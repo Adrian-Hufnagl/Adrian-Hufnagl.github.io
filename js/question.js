@@ -75,8 +75,12 @@ function annotateListHeader(){
   let numWholeIncorrectResults = numWholeResults - numWholeCorrectResults
   // multiplies the share of correct answers with the share of incorrect answers
   let score = parseInt(((numCorrectResults / numWholeCorrectResults) * (1 - numIncorrectResults / numResults) * 100))
-  listResults.children[0].innerHTML = "Ergebnisse:   " + numResults + " von " + numWholeResults;
-  listResults.children[1].innerHTML = " Korrekt:   " + numCorrectResults + " von " + numWholeCorrectResults;
-  listResults.children[2].innerHTML = " Falsch:   " + numIncorrectResults  + " von " + numWholeIncorrectResults;
+  //listResults.children[0].innerHTML = " Von " + numWholeResults + " verfügbaren Orten befinden sich " + numResults + " im Suchergebnis.";
+  listResults.children[0].innerHTML = + numResults + " / " + numWholeResults;
+  listResults.children[0].title = "Von " + numWholeResults + " verfügbaren Orten befinden sich " + numResults + " im Suchergebnis.";
+  listResults.children[1].title = " Insgesamt gibt es " + numWholeCorrectResults + " zutreffende Orte. Im Suchergebnis befinden sich " + numCorrectResults + " davon.";
+  listResults.children[1].innerHTML = numCorrectResults + " / " + numWholeCorrectResults;
+  listResults.children[2].title = " Insgesamt gibt es " +  + numWholeIncorrectResults  + " Orte außerhalb der gefragten Zone. Im Suchergebnis befinden sich noch " + numIncorrectResults + " davon.";
+  listResults.children[2].innerHTML =  numIncorrectResults + " / " + numWholeIncorrectResults;
   filterResults.innerHTML = score  + "%";
 }

@@ -77,15 +77,13 @@ function createMap() {
 
   pointSeries.bullets.push(function () {
     var circle = am5.Circle.new(root, {
-      radius: 4,
+      radius: 3,
       tooltipText: "{name}",
     });
-
     circle.adapters.add("fill", function (fill, target) {
       const colorValue = target.dataItem.dataContext.color;
       return am5.color(colorValue);
     });
-
     return am5.Bullet.new(root, {
       sprite: circle,
     });

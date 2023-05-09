@@ -1,13 +1,12 @@
 var climateList = document.getElementById('climate-list')
 var listResults = document.getElementById('list-results')
 var filterResults = document.getElementById('result-score')
+var resultDescription = document.getElementById('result-description')
 var diagramContainer = document.getElementById('diagram')
 var inputCard = document.getElementById('iCard')
 var buttonRow = document.getElementsByClassName('btn-row')[0]
 var stationName = document.getElementById('chart-name')
 var stationHeight = document.getElementById('chart-height')
-//var chart = document.getElementById('chartdiv-2')
-
 
 function createInput(){
   let inputRows = document.getElementsByClassName("input-row")
@@ -75,12 +74,14 @@ function createList(){
     climateList.removeChild(climateList.firstChild);
   }
   filterClimate()
+  showAll()
 }
 
 function showAll() {
-  listResults.children[0].style.fontWeight = "bold"
-  listResults.children[1].style.fontWeight = "normal"
-  listResults.children[2].style.fontWeight = "normal"
+  listResults.children[0].classList.add("selected")
+  listResults.children[1].classList.remove("selected")
+  listResults.children[2].classList.remove("selected")
+  resultDescription.innerHTML = listResults.children[0].title;
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
@@ -91,9 +92,10 @@ function showAll() {
 }
 
 function showCorrect() {
-  listResults.children[0].style.fontWeight = "normal"
-  listResults.children[1].style.fontWeight = "bold"
-  listResults.children[2].style.fontWeight = "normal"
+  listResults.children[0].classList.remove("selected")
+  listResults.children[1].classList.add("selected")
+  listResults.children[2].classList.remove("selected")
+  resultDescription.innerHTML = listResults.children[1].title;
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
@@ -106,9 +108,10 @@ function showCorrect() {
 }
 
 function showIncorrect() {
-  listResults.children[0].style.fontWeight = "normal"
-  listResults.children[1].style.fontWeight = "normal"
-  listResults.children[2].style.fontWeight = "bold"
+  listResults.children[0].classList.remove("selected")
+  listResults.children[1].classList.remove("selected")
+  listResults.children[2].classList.add("selected")
+  resultDescription.innerHTML = listResults.children[2].title;
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
@@ -135,9 +138,11 @@ function createListRow(name, country, result){
   if(result){
     newEl.appendChild(createElementFromHTML('<i class="fa fa-check iconCheck"></i>'))
     newEl.style.background = '#f3fcf4'
+    newEl.classList.add("climate-list-element-correct")
   } else {
     newEl.appendChild(createElementFromHTML('<i class="fa fa-times iconFalse"></i>)'))
     newEl.style.background = '#fcf4fc'
+    newEl.classList.add("climate-list-element-incorrect")
   }
   newEl.appendChild(newCountry);
   return newEl
@@ -152,6 +157,12 @@ function createDiagram(e){
   var filteredIndex = filteredClimate.findIndex(
     (element) => element.name === elName.split(/\r?\n|\r|\n/g)[0]
   );
+  if(document.getElementsByClassName("climate-list-element-selcted")[0]){
+    var oldEl = document.getElementsByClassName("climate-list-element-selcted")[0];
+    oldEl.classList.remove("climate-list-element-selcted");
+  } 
+  el.classList.add("climate-list-element-selcted");
+
   console.log(elName.split(/\r?\n|\r|\n/g)[0])
   console.log(filteredIndex)
   //Log the same text till there is a breakpoint
