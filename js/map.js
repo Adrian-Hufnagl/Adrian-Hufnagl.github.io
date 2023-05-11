@@ -38,23 +38,13 @@ var pointSeries = chart.series.push(
       longitude: "longitude",
       latitude: "latitude",
       name: "name",
-      color: "color" // Add this line
+      radius: "radius",
+      color: "properties.color"
     }
   })
 );
 
-var pointSeries = chart.series.push(
-  am5map.MapPointSeries.new(root, {
-    geoJSON: cities,
-    dataFields: {
-      value: "value",
-      longitude: "longitude",
-      latitude: "latitude",
-      name: "name",
-      color: "properties.color" // Use properties.color to access the color
-    }
-  })
-);
+
 
 // Updated createMap function
 function createMap() {
@@ -70,19 +60,26 @@ function createMap() {
         longitude: "longitude",
         latitude: "latitude",
         name: "name",
-        color: "properties.color" // Use properties.color to access the color
+        radius: "radius",
+        color: "properties.color"
       }
     })
   );
 
   pointSeries.bullets.push(function () {
     var circle = am5.Circle.new(root, {
-      radius: 3,
       tooltipText: "{name}",
     });
     circle.adapters.add("fill", function (fill, target) {
       const colorValue = target.dataItem.dataContext.color;
+      if(colorValue == '#34D456'){
+        console.log(colorValue)
+      }
       return am5.color(colorValue);
+    });
+    circle.adapters.add("radius", function (fill, target) {
+      const radius = target.dataItem.dataContext.radius;
+      return radius;
     });
     return am5.Bullet.new(root, {
       sprite: circle,
@@ -144,8 +141,9 @@ function addStationToMap(index,drawNew,isCorrect){
   let newName = newStation['name']
   let newLat = newStation['lat']
   let newLon = newStation['long']
-  let markerColor = isCorrect ? "#34D456" : "#D43456"; // Green for correct, red for incorrect
-  addMarker(parseFloat(newLon),parseFloat(newLat),newName,markerColor)
+  let markerColor = isCorrect ? "#3CEE65" : "#A12843";
+  let radius = isCorrect ? 3 : 2;
+  addMarker(parseFloat(newLon), parseFloat(newLat), newName, markerColor, radius)
   if(drawNew){
     createMap()
   }
@@ -159,12 +157,13 @@ function deleteMarkers(){
   };
 }
 
-function addMarker(x,y,name,markerColor){
+function addMarker(x,y,name,markerColor, radius){
   cities.features.push({
     "type": "Feature",
     "properties": {
       "name": name,
-      "color": markerColor
+      "radius": radius,
+      "color": markerColor,
     },
     "geometry": {
       "type": "Point",

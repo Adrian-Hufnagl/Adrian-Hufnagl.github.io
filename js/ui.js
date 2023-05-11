@@ -43,8 +43,8 @@ function deleteInput(e){
     newInputs[0].children[1].value = "";
     newInputs[0].children[3].value = "";
   } else {
-  newInputs[index - 1].remove()
-  //console.log(index)
+  newInputs[index - 2].remove()
+  console.log(index)
   console.log(newInputs.length)
 }
 }
@@ -239,8 +239,15 @@ function nextQuestion() {
 // Initialize the textfield with the first question
 updateQuestion();
 
-function deleteTutorial(){
-  console.log('remove tutorial')
-  let tutorial = document.getElementById('tutorial')
-  tutorial.remove();
+function toggleTutorial() {
+  let tutorial = document.getElementById('tutorial');
+  let button = document.getElementById('toggle-button');
+
+  if (tutorial.style.display === "none") {
+    tutorial.style.display = "block";
+    button.classList.add('rotated');
+  } else {
+    tutorial.style.display = "none";
+    button.classList.remove('rotated');
+  }
 }

@@ -270,7 +270,9 @@ textarea {
 
 #bar{
   position: absolute;
+  top: 0;
   width: 100%;
+  z-index: 9999;
   background: white;
   box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
 }
@@ -288,6 +290,21 @@ textarea {
   padding: 8px;
   margin: auto 0;
 }
+.bar-header{
+  display: flex;
+}
+#tutorial {
+  display: none;
+  margin: 12px 24px 24px;
+}
+
+#toggle-button {
+  transition: transform 0.3s ease;
+}
+
+#toggle-button.rotated {
+  transform: rotate(180deg);
+}
 
 .card{
   border: 2px solid #d1d3d5;
@@ -299,7 +316,8 @@ textarea {
 }
 
 .tutorial-text{
-  margin: 20px 10px;
+  margin: 10px 10px;
+  font-size: 14px;
 }
 
 .country-name{
@@ -308,16 +326,24 @@ textarea {
   font-weight: normal;
 }
 
+.toggle-container{
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  margin: 24px 0 32px;
+}
+
 .question-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 64px;
+  margin: 32px auto 24px;
 }
 
 #question{
   width: 400px;
   text-align: center;
+  margin-top: 16px;
 }
 
 .question-container input[type="text"] {
@@ -343,7 +369,7 @@ textarea {
 
 .input-row{
   display: flex;
-  margin: 32px auto 0;
+  margin: 24px auto 0;
   align-items: center;
   width: fit-content;
 }
@@ -366,12 +392,22 @@ textarea {
 }
 
 .input-field{
-  margin: 0 16px;
+  /*margin: 0 16px;*/
+  margin: 0;
   width: 300px;
-  background: #d0d4da;
+  background: #e0e4ea;
   padding: 4px 16px;
-  border: 2px solid #c0c4ca;
+  border: 1px solid #a0a4aa;
   border-radius: 4px;
+}
+
+.input-left{
+  border-radius: 4px 0 0 4px;
+}
+
+.input-right{
+  border-radius: 0 4px 4px 0;
+  margin-right: 4px;
 }
 
 .input-field > p{
@@ -379,8 +415,11 @@ margin: 0;
 }
 
 .input-comparator{
-  font-size: 20px;
-  font-weight: bold;
+  background: #d0d4da;
+  border-bottom: 1px solid #a0a4aa;
+  padding: 0px 16px;
+  font-size: 19px;
+  border-top: 1px solid #a0a4aa;
   color: #303439;
 }
 
@@ -395,7 +434,6 @@ margin: 0;
 }
 
 .result-score-container{
-  margin: auto;
   width: fit-content;
 }
 
@@ -403,6 +441,7 @@ margin: 0;
   font-weight: bold;
   text-align: center;
   margin-left: 4px;
+  margin-bottom: 12px;
 }
 
 .result-btn{
@@ -428,13 +467,13 @@ margin: 0;
 }
 
 #result-whole{
-  background-color: #f0f5fa;
+  background-color: #e0e5ea;
 }
 #result-whole:hover{
-  background-color: #a1a3a5;
+  background-color: #717375;
 }
 #result-whole.selected{
-  background-color: #a1a3a5;
+  background-color: #717375;
 }
 
 #result-correct{
@@ -499,10 +538,13 @@ margin: 0;
   border: none;
 }
 
+.btn:hover{
+  cursor: pointer;
+}
+
 .btn-del{
   font-size: 12px;
   padding:  8px 12px;
-  border: 2px solid #d1d3d5;
   background: #c42446;
 }
 
@@ -510,9 +552,10 @@ margin: 0;
   color: #a1a3a5;
   border: 1px solid #a1a3a5;
   background: #f1f3f5;
-  padding: 0px 4px;
+  padding: 3px 8px;
   font-size: 18px;
   font-weight: bold;
+  margin: 4px 24px;
 }
 
 .btn-add{
@@ -523,10 +566,17 @@ margin: 0;
 }
 
 .btn-cls{
-  background: #818385;
-  padding: 4px 8px 3px;
-  font-size: 24px;
+  background: #fff;
+  padding: 0px 7px;
+  font-size: 18px;
   font-weight: bold;
+  margin: 16px 12px;
+  border: 1px solid #818385;
+  color: #818385;
+}
+
+.btn-cls:hover{
+  cursor: pointer;
 }
 
 #btn-filter{
@@ -537,7 +587,7 @@ margin: 0;
 
 .btn-row{
   display: flex;
-  margin: 48px 0 0 24px;
+  margin: 24px 0 0 24px;
 }
 
 .iconCheck{
@@ -640,6 +690,7 @@ padding: 6px;
   .input-field{
     max-width: 250px;
     margin: 0;
+    border-radius: 4px
   }
   .diagram-container{
     max-width: 80vw;
