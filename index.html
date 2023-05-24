@@ -35,11 +35,11 @@
     </div>
     <p style="margin-left: auto;">Hilfe</p>
     <button id="toggle-button" class="btn btn-cls" onclick="toggleTutorial()"><i class="fa fa-angle-up"></i></button>
-  </div>
+  </div>  
   <div id="tutorial">
-    <p class="tutorial-text">Auf dieser Webseite sind gesammelte Klimadaten von über 1000 verschiedenen Wetterstationen. Diese Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die Auswahl der Wetterstationen einzuschränken und damit auf bestimmte Fragen gezielter einzugehen.</p>
+    <p class="tutorial-text">In dieser Webseite haben wir viele Klimadaten von über 1000 verschiedenen Wetterstationen gesammelt. Diese Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die Auswahl der Wetterstationen einzuschränken und damit auf bestimmte Fragen gezielter einzugehen.</p>
     <p class="tutorial-text">Die Filter, die ihr einstellen könnt, basieren auf Durchschnittswerten von verschiedenen Klimadaten, wie zum Beispiel Temperaturen und Niederschläge. Wir haben zwölf Variablen für die Durchschnittstemperaturen von Januar bis Dezember (t1 bis t12) und zwölf Variablen für die Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12). Außerdem gibt es zwei weitere Variablen: den alljährlichen durchschnittlichen Niederschlag (N) und die Durchschnittstemperatur (T).</p>
-    <p class="tutorial-text">Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der nur die Ergebnisse anzeigt, bei denen die addierte Temperatur von Januar und Februar (t1 + t2) größer ist als der Niederschlag im Januar (n1). Solche Filter helfen euch, die Wetterstationen zu finden, die euren Kriterien entsprechen.</p>
+    <p class="tutorial-text">Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in C˚ von Januar und Februar (t1 + t2) größer ist als der Niederschlag im Januar (n1) in mm. Solche Filter helfen euch, die Wetterstationen zu finden, die euren Kriterien entsprechen.</p>
     <p class="tutorial-text">Wenn ihr die Filter angewendet habt, werden die Ergebnisse in einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch die Klimadiagramme der verschiedenen Stationen einsehen, um mehr über das Klima und Wetter in diesen Gebieten zu erfahren.</p>
     <p class="tutorial-text">Denkt daran, dass ihr mit diesen Filtern und Daten viele verschiedene Fragestellungen untersuchen könnt, also probiert verschiedene Kombinationen aus und seht, was ihr herausfinden könnt!</p>
   </div>
@@ -47,7 +47,7 @@
   <div class="content-container">
     <div class="card" id="iCard">
       <div class="question-container">
-      <span id="question"></span>
+      <span id="question"></span> 
     </div>
       <div class="toggle-container">
         <button style="border-radius: 4px 0 0 4px;" class="btn btn-qst" onclick="previousQuestion()">←</button>
@@ -59,6 +59,57 @@
       </div>
       <button style="border-radius: 0 4px 4px 0;" class="btn btn-qst" onclick="nextQuestion()">→</button>
       </div>
+      <table>
+        <tr>
+          <th></th>
+          <th>Jährlich</th>
+          <th>Jän</th>
+          <th>Feb</th>
+          <th>Mär</th>
+          <th>Apr</th>
+          <th>Mai</th>
+          <th>Jun</th>
+          <th>Jul</th>
+          <th>Aug</th>
+          <th>Sep</th>
+          <th>Okt</th>
+          <th>Nov</th>
+          <th>Dez</th>
+        </tr>
+        <tr>
+          <th>Gesamtniederschlag (in mm)</td>
+          <td>N</td>
+          <td>n1</td>
+          <td>n2</td>
+          <td>n3</td>
+          <td>n4</td>
+          <td>n5</td>
+          <td>n6</td>
+          <td>n7</td>
+          <td>n8</td>
+          <td>n9</td>
+          <td>n10</td>
+          <td>n11</td>
+          <td>n12</td>
+         </tr>
+         <tr>
+           <th>Durchschnittstemperatur (in C˚)</td>
+            <td>T</td>
+            <td>t1</td>
+            <td>t2</td>
+            <td>t3</td>
+            <td>t4</td>
+            <td>t5</td>
+            <td>t6</td>
+            <td>t7</td>
+            <td>t8</td>
+            <td>t9</td>
+            <td>t10</td>
+            <td>t11</td>
+            <td>t12</td>
+         </tr>
+      </table>
+      <div id="input-rows">
         <div class="input-row">
           <div class="input-counter" id="iCounter"><p class="input-number">1</p></div>
           <input class="input-field input-left">
@@ -66,6 +117,7 @@
           <input class="input-field input-right" onchange="tokenizeInput(event)">
           <button onclick="deleteInput(event)" class="btn btn-del"><i class="fa fa-trash"></i></button>
         </div>
+      </div>
         <div class="btn-row">
           <button onclick="createInput()" class="btn btn-add"><i class="fa fa-plus"></i><p style="margin: 0 12px;">Neue Zeile</p></button>
           <button onclick="createList()" id="btn-filter" class="btn"><i class="fa fa-search"></i><p style="margin: 0 12px;">Suchen</p></button>
@@ -74,6 +126,9 @@
       </div>
 
   <div class="map-container card">
+    <div class="density-disclaimer">
+      <p>Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht.</p>
+    </div>
     <div id="chartdiv"></div>
   </div>
 

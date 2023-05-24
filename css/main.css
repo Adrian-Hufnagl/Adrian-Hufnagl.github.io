@@ -667,6 +667,30 @@ border: 2px solid #c3c4cc !important;
 padding: 6px;
 }
 
+.density-disclaimer{
+  font-size: 12px;
+  margin: 8px 24px;
+}
+
+table, th, td {
+  border-collapse: separate;
+  border-spacing: 16px;
+  font-size: 12px;
+}
+
+table{
+  margin: auto;
+}
+
+th {
+  font-weight: normal;
+}
+
+td {
+  font-weight: bold;
+}
+
+
 @media (max-width: 960px) {
   .list-container{
     margin: 0 auto 32px !important;
@@ -701,6 +725,14 @@ padding: 6px;
   }
   #prec-axis{
     max-width: 80vw;
+  }
+  table, th, td {
+    border-collapse: separate;
+    border-spacing: 2px;
+    font-size: 8px;
+  }
+  table{
+    margin-bottom: 24px;
   }
 }
 

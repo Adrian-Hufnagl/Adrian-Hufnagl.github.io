@@ -85,6 +85,81 @@ function createMap() {
       sprite: circle,
     });
   });
+  var graticuleSeries = chart.series.insertIndex(
+    0, am5map.GraticuleSeries.new(root, {})
+  );
+  
+  graticuleSeries.mapLines.template.setAll({
+    stroke: am5.color(0x000000),
+    strokeOpacity: 0.1
+  });
+  
+  var backgroundSeries = chart.series.unshift(
+    am5map.MapPolygonSeries.new(root, {})
+  );
+  
+  //set background color
+  backgroundSeries.mapPolygons.template.setAll({
+    fill: am5.color(0xffffff),
+    stroke: am5.color(0x6794DC),
+  });
+
+  //set foreground color
+  //polygonSeries.mapPolygons.template.setAll({
+  //  fill: am5.color(0xaaabac),
+  //  stroke: am5.color(0xffffff),
+  //});
+
+  
+  backgroundSeries.data.push({
+    geometry: am5map.getGeoRectangle(90, 180, -90, -180)
+  });
+  
+  // Add projection buttons
+  var buttons = chart.children.push(am5.Container.new(root, {
+    x: 0,
+    centerX: 0,
+    y: am5.p100,
+    dy: -10,
+    centerY: am5.p100,
+    layout: root.horizontalLayout,
+    paddingTop: 5,
+    paddingRight: 8,
+    paddingBottom: 5,
+    paddingLeft: 8,
+  }));  
+  
+  function createButton(text, projection) {
+    var button = buttons.children.push(am5.Button.new(root, {
+      paddingTop: 0,
+      paddingRight: 0,
+      paddingBottom: 0,
+      paddingLeft: 0,
+      marginLeft: 5,
+      marginRight: 5,
+      marginTop: 5,
+      marginBottom: 5,
+      fill: am5.color(0x000000),
+      label: am5.Label.new(root, {
+        text: text,
+      })
+    }));
+    button.get("background").setAll({
+      cornerRadiusTL: 0,
+      cornerRadiusTR: 0,
+      cornerRadiusBR: 0,
+      cornerRadiusBL: 0,
+      fill: am5.color(0x000000),
+      fillOpacity: 0.5
+    });
+    
+    button.events.on("click", function() {
+      chart.set("projection", projection);
+    });
+  }
+  
+    createButton("Gekrümmt", am5map.geoNaturalEarth1());
+    createButton("Globus", am5map.geoOrthographic());  
 }
 
 function selectPin(index){
@@ -99,7 +174,6 @@ function selectPin(index){
     polygonSeries = chart.series.push(
     am5map.MapPolygonSeries.new(root, {
       geoJSON: am5geodata_worldLow,
-      exclude: ["AQ"]
     })
   );
   createMap()
@@ -133,6 +207,7 @@ function selectPin(index){
       sprite: circle,
     });
   });
+  //createButtons()
 }
 
 function addStationToMap(index,drawNew,isCorrect){

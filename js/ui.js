@@ -4,9 +4,11 @@ var filterResults = document.getElementById('result-score')
 var resultDescription = document.getElementById('result-description')
 var diagramContainer = document.getElementById('diagram')
 var inputCard = document.getElementById('iCard')
+var inputRowsContainer = document.getElementById('input-rows')
 var buttonRow = document.getElementsByClassName('btn-row')[0]
 var stationName = document.getElementById('chart-name')
 var stationHeight = document.getElementById('chart-height')
+
 
 function createInput(){
   let inputRows = document.getElementsByClassName("input-row")
@@ -14,7 +16,9 @@ function createInput(){
   newInput.innerHTML = newInput.innerHTML.replace(/input-1/g, "input-" + (inputRows.length + 1))
   let counter = inputRows.length
   newInput.children[0].children[0].innerHTML = (counter + 1).toString()
-  inputCard.insertBefore(newInput, buttonRow);
+  console.log(inputRowsContainer)
+  inputRowsContainer.appendChild(newInput);
+
 }
 
 function createInputs(){
@@ -43,7 +47,8 @@ function deleteInput(e){
     newInputs[0].children[1].value = "";
     newInputs[0].children[3].value = "";
   } else {
-  newInputs[index - 2].remove()
+    console.log(newInputs)
+  newInputs[index].remove()
   console.log(index)
   console.log(newInputs.length)
 }

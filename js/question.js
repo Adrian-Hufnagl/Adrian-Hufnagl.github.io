@@ -1,4 +1,6 @@
+var densityDisclaimer = "Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht."
 var questions = [
+  "Probier die Filter- und Suchfunktionen aus. Wenn du auf den Pfeil klickst, kommst du zu den Aufgaben.",
   "1. Welche Orte liegen in den Tropen?",
   "2. Welche Orte liegen über 1000 Meter?",
   "3. Welche Orte liegen in Japan?",
@@ -38,26 +40,28 @@ function annotateList(){
 function evalFunction(climateElement){
   switch (currentQuestionIndex) {
     case 0:
+        return true;     
+    case 1:
       if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 && (parseFloat(climateElement['lat'].replace(',', '.'))) >= -23.5){
         return true;
       } return false;
-    case 1:
+    case 2:
       if(parseFloat(climateElement['elevation']) >= 1000){
         return true;
       } return false;
-    case 2:
+    case 3:
       if(climateElement['country'] == "Japan"){
         return true;
       } return false;
-    case 3:
+    case 4:
       if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 0){
         return true;
       } return false;
-      case 4:
+      case 5:
       if(climateElement['country'] == "Brazil"){
         return true;
       } return false;
-      case 5:
+      case 6:
       if(climateElement['t1'] >= climateElement['t7'] + 10){
         return true;
       } return false;
