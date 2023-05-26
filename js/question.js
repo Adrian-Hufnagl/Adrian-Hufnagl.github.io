@@ -1,12 +1,17 @@
 var densityDisclaimer = "Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht."
 var questions = [
   "Probier die Filter- und Suchfunktionen aus. Wenn du auf den Pfeil klickst, kommst du zu den Aufgaben.",
-  "1. Welche Orte liegen in den Tropen?",
-  "2. Welche Orte liegen über 1000 Meter?",
-  "3. Welche Orte liegen in Japan?",
-  "4. Welche Orte sind auf der Südhalbkugel?",
-  "5. Welche Orte liegen in Brasilien?",
-  "6. Welche Orte sind im Januar über 10 Grad wärmer als im Juli?"];
+  "1. Welche Orte haben eine Jahresdurchschnittstemperatur von über 20°C?",
+  "2. Welche Orte haben eine Jahresdurchschnittstemperatur von über 10°C, und haben einen jährlichen Niederschlag von weniger als 1000mm?",
+  "3. Welche Orte haben eine Jahresdurchschnittstemperatur von über 12°C, haben einen jährlichen Niederschlag von weniger als 500mm und sind im Jänner über 10°C wärmer als im Juli?",
+  "4. Welche Orte haben in der ersten Jahreshälfte drei mal so viel Niederschlag wie in der zweiten Hälfte?",
+  "5. Welche Orte sind auf der Südhalbkugel?",
+  "6. Welche Orte liegen in den Tropen? (Solare Abgrenzung: Tropen liegen zwischen 23°26′ nördlicher und südlicher Breite)",
+  "7. Welche Orte liegen weder in den nördlichen gemäßigten Breiten noch in den nördlichen Subtropen? (Solare Abgrenzung: Nördliche Gemäßigte Breiten liegen zwischen 66°33′55″ und 45° nördlicher Breite. Nördliche Subtropen liegen zwischen 45° und 23°26′ nördlicher Breite)",
+  "8. Welche Orte liegen in Argentinien oder Chile?",
+  "9. Welche Orte liegen auf den Britischen Inseln?",
+  "10. Welche Orte liegen auf Madagaskar?"
+];
 var currentQuestionIndex = 0;
 
 var filters = new Array(questions.length);
@@ -42,27 +47,56 @@ function evalFunction(climateElement){
     case 0:
         return true;     
     case 1:
-      if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 && (parseFloat(climateElement['lat'].replace(',', '.'))) >= -23.5){
+      if(parseFloat(climateElement['T']) >= 20){
         return true;
       } return false;
     case 2:
-      if(parseFloat(climateElement['elevation']) >= 1000){
+      if(parseFloat(climateElement['T']) >= 10 && parseFloat(climateElement['N']) <= 1000){
         return true;
       } return false;
     case 3:
-      if(climateElement['country'] == "Japan"){
+      if(parseFloat(climateElement['T']) >= 12 && parseFloat(climateElement['N']) <= 500 && climateElement['t1'] >= climateElement['t7'] + 10){
         return true;
       } return false;
     case 4:
+      if(
+        (parseFloat(climateElement['n1']) +
+         parseFloat(climateElement['n2']) +
+         parseFloat(climateElement['n3']) +
+         parseFloat(climateElement['n4']) +
+         parseFloat(climateElement['n5']) +
+         parseFloat(climateElement['n6'])) >=
+         (parseFloat(climateElement['n7']) +
+          parseFloat(climateElement['n8']) +
+          parseFloat(climateElement['n9']) +
+          parseFloat(climateElement['n10']) +
+          parseFloat(climateElement['n11']) +
+          parseFloat(climateElement['n12'])) * 3
+         ){
+        return true;
+      } return false;
+    case 5:
       if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 0){
         return true;
       } return false;
-      case 5:
-      if(climateElement['country'] == "Brazil"){
+      case 6:
+      if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 && (parseFloat(climateElement['lat'].replace(',', '.'))) >= -23.5){
         return true;
       } return false;
-      case 6:
-      if(climateElement['t1'] >= climateElement['t7'] + 10){
+      case 7:
+        if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 || (parseFloat(climateElement['lat'].replace(',', '.'))) >= 66.5){
+        return true;
+      } return false;
+      case 8:
+      if(climateElement['country'] == "Argentina" || climateElement['country'] == "Chile"){
+        return true;
+      } return false;
+      case 9:
+      if(climateElement['country'] == "United Kingdom of Great Britain and N.-Irela." || climateElement['country'] == "Ireland"){
+        return true;
+      } return false;
+      case 10:
+      if(climateElement['country'] == "Madagascar"){
         return true;
       } return false;
     default:
