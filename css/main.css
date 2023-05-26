@@ -341,9 +341,9 @@ textarea {
 }
 
 #question{
-  width: 400px;
+  max-width: 700px;
   text-align: center;
-  margin-top: 16px;
+  margin: 16px 32px 0;
 }
 
 .question-container input[type="text"] {
@@ -361,6 +361,8 @@ textarea {
   display: flex;
   margin: 0 auto;
   width: fit-content;
+  padding-left: 8%;
+  padding-right: 8%;
 }
 
 .list-diagram-inner > .card{
@@ -559,10 +561,17 @@ margin: 0;
 }
 
 .btn-add{
-  background: #303439;
+  background: #50585F;
   font-size: 12px;
   padding: 8px 8px 8px 16px;
-  margin-right: 16px;
+  border-right: 300px solid #e0e4ea;
+  border-left: 300px solid #e0e4ea;
+  transform: translateX(-22px);
+  display: flex;
+  margin: 24px auto 0;
+  align-items: center;
+  width: fit-content;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
 }
 
 .btn-cls{
@@ -583,11 +592,12 @@ margin: 0;
   background: #4394fc;
   font-size: 12px;
   padding: 8px 8px 8px 16px;
+  margin: 0 0 0 auto;
 }
 
 .btn-row{
   display: flex;
-  margin: 24px 0 0 24px;
+  margin: 36px 24px 12px;
 }
 
 .iconCheck{
@@ -667,7 +677,7 @@ border: 2px solid #c3c4cc !important;
 padding: 6px;
 }
 
-.density-disclaimer{
+#disclaimer{
   font-size: 12px;
   margin: 8px 24px;
 }
@@ -733,6 +743,11 @@ td {
   }
   table{
     margin-bottom: 24px;
+  }
+  .btn-add{
+    border-right: 90px solid #F0F2F5;
+    border-left: 90px solid #F0F2F5;
+    transform: none;
   }
 }
 

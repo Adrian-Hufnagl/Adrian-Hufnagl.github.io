@@ -5,9 +5,10 @@ var resultDescription = document.getElementById('result-description')
 var diagramContainer = document.getElementById('diagram')
 var inputCard = document.getElementById('iCard')
 var inputRowsContainer = document.getElementById('input-rows')
-var buttonRow = document.getElementsByClassName('btn-row')[0]
 var stationName = document.getElementById('chart-name')
 var stationHeight = document.getElementById('chart-height')
+var disclaimerLabel = document.getElementById('disclaimer')
+var varTable = document.getElementById('var-table')
 
 
 function createInput(){
@@ -213,7 +214,20 @@ function showMessage(str,success){
 // Function to update the textfield with the current question
 function updateQuestion() {
   document.getElementById("question").textContent = questions[currentQuestionIndex];
-}
+  switch (currentQuestionIndex) {
+    case 0: case 1: case 2: case 3:
+      varTable.style.display = "table";
+      break;
+    case 6:
+      disclaimerLabel.innerHTML = densityDisclaimer1; 
+      break;
+    case 7:
+      disclaimerLabel.innerHTML = densityDisclaimer2; 
+      break;
+    default: 
+    disclaimerLabel.innerHTML = "";
+    varTable.style.display = "none";
+}}
 
 // Function to go to the previous question
 function previousQuestion() {

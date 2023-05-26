@@ -184,6 +184,7 @@ function selectPin(index){
     })
   );    
   pointSeries.bullets.push(function() {
+    console.log("test")
     return am5.Bullet.new(root, {
       sprite: am5.Circle.new(root, {
         radius: 10,

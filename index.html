@@ -37,7 +37,7 @@
     <button id="toggle-button" class="btn btn-cls" onclick="toggleTutorial()"><i class="fa fa-angle-up"></i></button>
   </div>  
   <div id="tutorial">
-    <p class="tutorial-text">In dieser Webseite haben wir viele Klimadaten von über 1000 verschiedenen Wetterstationen gesammelt. Diese Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die Auswahl der Wetterstationen einzuschränken und damit auf bestimmte Fragen gezielter einzugehen.</p>
+    <p class="tutorial-text">Auf dieser Webseite haben wir viele Klimadaten von über 1000 verschiedenen Wetterstationen gesammelt. Diese Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die Auswahl der Wetterstationen einzuschränken und damit auf bestimmte Fragen gezielter einzugehen.</p>
     <p class="tutorial-text">Die Filter, die ihr einstellen könnt, basieren auf Durchschnittswerten von verschiedenen Klimadaten, wie zum Beispiel Temperaturen und Niederschläge. Wir haben zwölf Variablen für die Durchschnittstemperaturen von Januar bis Dezember (t1 bis t12) und zwölf Variablen für die Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12). Außerdem gibt es zwei weitere Variablen: den alljährlichen durchschnittlichen Niederschlag (N) und die Durchschnittstemperatur (T).</p>
     <p class="tutorial-text">Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in C˚ von Januar und Februar (t1 + t2) größer ist als der Niederschlag im Januar (n1) in mm. Solche Filter helfen euch, die Wetterstationen zu finden, die euren Kriterien entsprechen.</p>
     <p class="tutorial-text">Wenn ihr die Filter angewendet habt, werden die Ergebnisse in einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch die Klimadiagramme der verschiedenen Stationen einsehen, um mehr über das Klima und Wetter in diesen Gebieten zu erfahren.</p>
@@ -59,7 +59,7 @@
       </div>
       <button style="border-radius: 0 4px 4px 0;" class="btn btn-qst" onclick="nextQuestion()">→</button>
       </div>
-      <table>
+      <table id="var-table">
         <tr>
           <th></th>
           <th>Jährlich</th>
@@ -118,20 +118,19 @@
           <button onclick="deleteInput(event)" class="btn btn-del"><i class="fa fa-trash"></i></button>
         </div>
       </div>
-        <div class="btn-row">
           <button onclick="createInput()" class="btn btn-add"><i class="fa fa-plus"></i><p style="margin: 0 12px;">Neue Zeile</p></button>
+        <div class="btn-row">
           <button onclick="createList()" id="btn-filter" class="btn"><i class="fa fa-search"></i><p style="margin: 0 12px;">Suchen</p></button>
         </div>
         </div>
       </div>
-
+      <div style="padding-left: 8%; padding-right: 8%;">
   <div class="map-container card">
-    <div class="density-disclaimer">
-      <p>Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht.</p>
+    <div id="disclaimer">
     </div>
     <div id="chartdiv"></div>
   </div>
-
+</div>
     <div class="list-diagram-inner">
     <div class="list-container card">
       <div id="list-results">

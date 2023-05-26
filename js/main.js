@@ -11,7 +11,7 @@ initData()
 
 //JSON wird eingelesen und als JS-Objekt gespeichert
 function initData() {
-  fetch('./masterdata.json')
+  fetch('./masterdata2.json')
     .then((response) => response.json())
     .then(json => wholeClimate = json)
     .then(console.log("done"))

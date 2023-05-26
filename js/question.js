@@ -1,16 +1,17 @@
-var densityDisclaimer = "Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht."
+var densityDisclaimer1 = "Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht. Nach der solaren Abgrenzung liegen die Tropen zwischen 23°26′ nördlicher und südlicher Breite."
+var densityDisclaimer2 = "Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht. Nach der solaren Abgrenzung liegen die Nördlichen Gemäßigten Breiten zwischen 66°33′55″ und 45° nördlicher Breite. Die Nördlichen Subtropen liegen zwischen 45° und 23°26′ nördlicher Breite."
 var questions = [
   "Probier die Filter- und Suchfunktionen aus. Wenn du auf den Pfeil klickst, kommst du zu den Aufgaben.",
-  "1. Welche Orte haben eine Jahresdurchschnittstemperatur von über 20°C?",
-  "2. Welche Orte haben eine Jahresdurchschnittstemperatur von über 10°C, und haben einen jährlichen Niederschlag von weniger als 1000mm?",
-  "3. Welche Orte haben eine Jahresdurchschnittstemperatur von über 12°C, haben einen jährlichen Niederschlag von weniger als 500mm und sind im Jänner über 10°C wärmer als im Juli?",
-  "4. Welche Orte haben in der ersten Jahreshälfte drei mal so viel Niederschlag wie in der zweiten Hälfte?",
-  "5. Welche Orte sind auf der Südhalbkugel?",
-  "6. Welche Orte liegen in den Tropen? (Solare Abgrenzung: Tropen liegen zwischen 23°26′ nördlicher und südlicher Breite)",
-  "7. Welche Orte liegen weder in den nördlichen gemäßigten Breiten noch in den nördlichen Subtropen? (Solare Abgrenzung: Nördliche Gemäßigte Breiten liegen zwischen 66°33′55″ und 45° nördlicher Breite. Nördliche Subtropen liegen zwischen 45° und 23°26′ nördlicher Breite)",
-  "8. Welche Orte liegen in Argentinien oder Chile?",
-  "9. Welche Orte liegen auf den Britischen Inseln?",
-  "10. Welche Orte liegen auf Madagaskar?"
+  "1a) Welche Orte haben eine Jahresdurchschnittstemperatur von über 20°C?",
+  "1b) Welche Orte haben eine Jahresdurchschnittstemperatur von über 10°C, und haben einen jährlichen Niederschlag von weniger als 1000mm?",
+  "1c) Welche Orte haben eine Jahresdurchschnittstemperatur von über 12°C, haben einen jährlichen Niederschlag von weniger als 500mm und sind im Jänner über 10°C wärmer als im Juli?",
+  "2. Welche Orte haben in der ersten Jahreshälfte drei mal so viel Niederschlag wie in der zweiten Hälfte?",
+  "3. Welche Orte sind auf der Südhalbkugel?",
+  "4. Welche Orte liegen in den Tropen?",
+  "5. Welche Orte liegen weder in den nördlichen gemäßigten Breiten noch in den nördlichen Subtropen?",
+  "6. Welche Orte liegen in Argentinien oder Chile?",
+  "7. Welche Orte liegen auf den Britischen Inseln?",
+  "8. Welche Orte liegen auf Madagaskar?"
 ];
 var currentQuestionIndex = 0;
 
@@ -37,7 +38,7 @@ function switchFilters(){
 }
 
 function annotateList(){
-  for(i = 0; i < wholeClimate.length - 1; i++){
+  for(i = 0; i < wholeClimate.length; i++){
     wholeClimate[i]['fits'] = evalFunction(wholeClimate[i]);
   }
 }
@@ -92,7 +93,7 @@ function evalFunction(climateElement){
         return true;
       } return false;
       case 9:
-      if(climateElement['country'] == "United Kingdom of Great Britain and N.-Irela." || climateElement['country'] == "Ireland"){
+      if(climateElement['country'] == "United Kingdom" || climateElement['country'] == "Ireland"){
         return true;
       } return false;
       case 10:
