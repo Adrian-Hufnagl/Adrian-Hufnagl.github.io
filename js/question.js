@@ -5,11 +5,12 @@ var questions = [
   "1a) Welche Orte haben eine Jahresdurchschnittstemperatur von über 20°C?",
   "1b) Welche Orte haben eine Jahresdurchschnittstemperatur von über 10°C, und haben einen jährlichen Niederschlag von weniger als 1000mm?",
   "1c) Welche Orte haben eine Jahresdurchschnittstemperatur von über 12°C, haben einen jährlichen Niederschlag von weniger als 500mm und sind im Jänner über 10°C wärmer als im Juli?",
-  "2. Welche Orte haben in der ersten Jahreshälfte drei mal so viel Niederschlag wie in der zweiten Hälfte?",
-  "3. Welche Orte sind auf der Südhalbkugel?",
-  "4. Welche Orte liegen in den Tropen?",
-  "5. Welche Orte liegen weder in den nördlichen gemäßigten Breiten noch in den nördlichen Subtropen?",
-  "6. Welche Orte liegen in Argentinien oder Chile?",
+  "1d) Welche Orte haben in der ersten Jahreshälfte drei mal so viel Niederschlag wie in der zweiten Hälfte?",
+  "2. Welche Orte sind auf der Südhalbkugel?",
+  "3. Welche Orte liegen in den Tropen?",
+  "4. Welche Orte liegen weder in den nördlichen gemäßigten Breiten noch in den nördlichen Subtropen?",
+  "5. Welche Orte liegen in der Mongolei?",
+  "6. Welche Orte liegen in Argentinien?",
   "7. Welche Orte liegen auf den Britischen Inseln?",
   "8. Welche Orte liegen auf Madagaskar?"
 ];
@@ -46,7 +47,7 @@ function annotateList(){
 function evalFunction(climateElement){
   switch (currentQuestionIndex) {
     case 0:
-        return true;     
+      return true;
     case 1:
       if(parseFloat(climateElement['T']) >= 20){
         return true;
@@ -62,41 +63,45 @@ function evalFunction(climateElement){
     case 4:
       if(
         (parseFloat(climateElement['n1']) +
-         parseFloat(climateElement['n2']) +
-         parseFloat(climateElement['n3']) +
-         parseFloat(climateElement['n4']) +
-         parseFloat(climateElement['n5']) +
-         parseFloat(climateElement['n6'])) >=
-         (parseFloat(climateElement['n7']) +
+          parseFloat(climateElement['n2']) +
+          parseFloat(climateElement['n3']) +
+          parseFloat(climateElement['n4']) +
+          parseFloat(climateElement['n5']) +
+          parseFloat(climateElement['n6'])) >=
+        (parseFloat(climateElement['n7']) +
           parseFloat(climateElement['n8']) +
           parseFloat(climateElement['n9']) +
           parseFloat(climateElement['n10']) +
           parseFloat(climateElement['n11']) +
           parseFloat(climateElement['n12'])) * 3
-         ){
+      ){
         return true;
       } return false;
     case 5:
       if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 0){
         return true;
       } return false;
-      case 6:
+    case 6:
       if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 && (parseFloat(climateElement['lat'].replace(',', '.'))) >= -23.5){
         return true;
       } return false;
-      case 7:
-        if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 || (parseFloat(climateElement['lat'].replace(',', '.'))) >= 66.5){
+    case 7:
+      if((parseFloat(climateElement['lat'].replace(',', '.'))) <= 23.5 || (parseFloat(climateElement['lat'].replace(',', '.'))) >= 66.5){
         return true;
       } return false;
-      case 8:
-      if(climateElement['country'] == "Argentina" || climateElement['country'] == "Chile"){
+    case 8:
+      if(climateElement['country'] == "Mongolia"){
         return true;
       } return false;
-      case 9:
+    case 9:
+      if(climateElement['country'] == "Argentina"){
+        return true;
+      } return false;
+    case 10:
       if(climateElement['country'] == "United Kingdom" || climateElement['country'] == "Ireland"){
         return true;
       } return false;
-      case 10:
+    case 11:
       if(climateElement['country'] == "Madagascar"){
         return true;
       } return false;
