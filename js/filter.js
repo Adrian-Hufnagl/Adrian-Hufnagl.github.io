@@ -89,14 +89,14 @@ function tokenizeInput(e){
 function checkInputs(){
   let inputRows = document.getElementsByClassName("input-row")
   for(i = 0; i < inputRows.length; i++){
-    console.log("Row " + i)
+    
     let string1 = inputRows[i].children[1].value;
     let string2 = inputRows[i].children[3].value;
     if(checkSyntax(string1)){
-      console.log(i + "(str1) Correct")
-      console.log(i + "(str1) testcalc = " + testCalc(string1))
+      
+      
       if(testCalc(string1)){
-        console.log(i + "(str1) Calculated")
+        
       } else {
         showMessage("Zeile " + (i+1) + ": linkes Feld lässt sich nicht berechnen")
         return false;
@@ -106,10 +106,10 @@ function checkInputs(){
       return false;
     }
     if(checkSyntax(string2)){
-      console.log(i + "(str2) Correct")
-      console.log(i + "(str2) testcalc = " + testCalc(string2))
+      
+      
       if(testCalc(string2)){
-        console.log(i + "(str2) Calculated")
+        
       } else {
         showMessage("Zeile " + (i+1) + ": rechtes Feld lässt sich nicht berechnen")
         return false;
@@ -131,7 +131,7 @@ function testCalc(str){
     const regex = new RegExp(`(^|[^a-zA-Z0-9])${stringsToReplace[i]}($|[^a-zA-Z0-9])`, "g");
     str = str.replace(regex, `$1${1}$2`);
   }
-  console.log(str)
+  
   try {
     // Try to evaluate the string as a mathematical expression
     eval(str);
@@ -156,15 +156,15 @@ function filterData(){
     let string2 = inputRows[i].children[3].value;
     inputStrings[i] = [string1, string2] 
   }
-  console.log("Input =>")
-  console.log(inputStrings)
+  
+  
   for(i = 0; i < wholeClimate.length; i++){
     for(j = 0; j < inputRows.length; j++){
       let str1 = replaceTokens(inputStrings[j][0], wholeClimate[i]);
       let str2 = replaceTokens(inputStrings[j][1], wholeClimate[i]);
-      //console.log(calcString(str1) +" < "+ calcString(str2))
+      //
       if(calcString(str1) < calcString(str2)){
-        console.log("true -> continue")
+        
         break;
       } else {
         if (j === inputRows.length - 1){
@@ -173,7 +173,7 @@ function filterData(){
       }
     }
   }
-  //console.log(filteredClimate);
+  //
 };
 
 // Returns the result of a given function
@@ -184,14 +184,14 @@ function calcString(fn) {
 //function testCalc(str) {
 //  const regex = /[nt]\((\d{1,2}(\s*,\s*\d{1,2})*)?\)/g; // matches "n" or "t" followed by brackets containing one or more comma-separated numbers
 //  strRepl = str.replace(regex, "1"); // replaces all matches with "1"
-//  console.log(strRepl)
-//  console.log(calcString(strRepl))
+//  
+//  
 //}
 
 
 //Checks if the right characters and variables are used
 function checkSyntax(str){
-    console.log("Vars:  "  + varCheck.test(str));
+    
     return charCheck.test(str)
     //return charCheck.test(str) && varCheck.test(str)
 }

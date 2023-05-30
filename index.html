@@ -37,11 +37,73 @@
     <button id="toggle-button" class="btn btn-cls" onclick="toggleTutorial()"><i class="fa fa-angle-up"></i></button>
   </div>  
   <div id="tutorial">
-    <p class="tutorial-text">Auf dieser Webseite haben wir viele Klimadaten von über 1000 verschiedenen Wetterstationen gesammelt. Diese Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die Auswahl der Wetterstationen einzuschränken und damit auf bestimmte Fragen gezielter einzugehen.</p>
+    <p class="tutorial-text">Auf dieser Webseite haben wir viele Klimadaten von über 1000 verschiedenen Wetterstationenauf der ganzen Welt gesammelt. Diese Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die Auswahl der Wetterstationen einzuschränken und damit auf bestimmte Fragen gezielter einzugehen.</p>
+    <p></p>
     <p class="tutorial-text">Die Filter, die ihr einstellen könnt, basieren auf Durchschnittswerten von verschiedenen Klimadaten, wie zum Beispiel Temperaturen und Niederschläge. Wir haben zwölf Variablen für die Durchschnittstemperaturen von Januar bis Dezember (t1 bis t12) und zwölf Variablen für die Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12). Außerdem gibt es zwei weitere Variablen: den alljährlichen durchschnittlichen Niederschlag (N) und die Durchschnittstemperatur (T).</p>
+    <table style="display: table; border-radius: 4px; border: 1px solid #a0a4aa; background: #fafbfc; margin-top: 40px; margin-bottom: 60px;">
+      <tr>
+        <th></th>
+        <th>Jährlich</th>
+        <th>Jan</th>
+        <th>Feb</th>
+        <th>Mär</th>
+        <th>Apr</th>
+        <th>Mai</th>
+        <th>Jun</th>
+        <th>Jul</th>
+        <th>Aug</th>
+        <th>Sep</th>
+        <th>Okt</th>
+        <th>Nov</th>
+        <th>Dez</th>
+      </tr>
+      <tr>
+        <th>Gesamtniederschlag (in mm)</td>
+        <td>N</td>
+        <td>n1</td>
+        <td>n2</td>
+        <td>n3</td>
+        <td>n4</td>
+        <td>n5</td>
+        <td>n6</td>
+        <td>n7</td>
+        <td>n8</td>
+        <td>n9</td>
+        <td>n10</td>
+        <td>n11</td>
+        <td>n12</td>
+       </tr>
+       <tr>
+         <th>Durchschnittstemperatur (in C˚)</td>
+          <td>T</td>
+          <td>t1</td>
+          <td>t2</td>
+          <td>t3</td>
+          <td>t4</td>
+          <td>t5</td>
+          <td>t6</td>
+          <td>t7</td>
+          <td>t8</td>
+          <td>t9</td>
+          <td>t10</td>
+          <td>t11</td>
+          <td>t12</td>
+       </tr>
+    </table>
     <p class="tutorial-text">Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in C˚ von Januar und Februar (t1 + t2) größer ist als der Niederschlag im Januar (n1) in mm. Solche Filter helfen euch, die Wetterstationen zu finden, die euren Kriterien entsprechen.</p>
+    <img class="tutorial-img" src="img/exmFil.png">
     <p class="tutorial-text">Wenn ihr die Filter angewendet habt, werden die Ergebnisse in einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch die Klimadiagramme der verschiedenen Stationen einsehen, um mehr über das Klima und Wetter in diesen Gebieten zu erfahren.</p>
+    <div class="img-row">
+      <img class="tutorial-img" src="img/exmMap.png">
+      <div style="margin: 20px"></div>
+      <img class="tutorial-img" src="img/exmCha.png">
+    </div>
     <p class="tutorial-text">Denkt daran, dass ihr mit diesen Filtern und Daten viele verschiedene Fragestellungen untersuchen könnt, also probiert verschiedene Kombinationen aus und seht, was ihr herausfinden könnt!</p>
+    <div class="img-row">
+      <img class="tutorial-img" src="img/exmFil2.png">
+      <div style="margin: 20px"></div>
+      <img class="tutorial-img" src="img/exmMap2.png">
+    </div>
   </div>
 </div>
   <div class="content-container">
@@ -52,8 +114,8 @@
       <div class="toggle-container">
         <button style="border-radius: 4px 0 0 4px;" class="btn btn-qst" onclick="previousQuestion()">←</button>
         <div class="result-score-container">
-          <div style="display: flex;">
-          <div>Genauigkeit:</div>
+          <div style="display: inline-flex;">
+          <div id="result-score-label"></div>
           <div id="result-score"></div>
         </div>
       </div>
@@ -63,7 +125,7 @@
         <tr>
           <th></th>
           <th>Jährlich</th>
-          <th>Jän</th>
+          <th>Jan</th>
           <th>Feb</th>
           <th>Mär</th>
           <th>Apr</th>
@@ -93,7 +155,7 @@
           <td>n12</td>
          </tr>
          <tr>
-           <th>Durchschnittstemperatur (in C˚)</td>
+           <th>Durchschnittstemperatur (in ˚C)</td>
             <td>T</td>
             <td>t1</td>
             <td>t2</td>
@@ -118,7 +180,12 @@
           <button onclick="deleteInput(event)" class="btn btn-del"><i class="fa fa-trash"></i></button>
         </div>
       </div>
-          <button onclick="createInput()" class="btn btn-add"><i class="fa fa-plus"></i><p style="margin: 0 12px;">Neue Zeile</p></button>
+          <button onclick="createInput()" class="btn btn-add">
+            <div class="btn-add-inner">
+              <i class="fa fa-plus" style="align-self: center;"></i>
+              <p style="margin: 0 12px;">Neue Zeile</p>
+            </div>
+          </button>
         <div class="btn-row">
           <button onclick="createList()" id="btn-filter" class="btn"><i class="fa fa-search"></i><p style="margin: 0 12px;">Suchen</p></button>
         </div>
@@ -139,7 +206,7 @@
         <button id="result-incorrect" class="result-btn" onclick="showIncorrect()"></button>
       </div>
       <div id="result-description">
-        Von 1136 verfügbaren Orten befinden sich 1136 im Suchergebnis.
+        Insgesamt gibt es 1514 verfügbaren Orte.
       </div>
       <div id="climate-list"></div>
     </div>

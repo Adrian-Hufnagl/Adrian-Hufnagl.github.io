@@ -32,7 +32,7 @@
 
 // Set the chart data
   var data = [{
-    month: "Jän",
+    month: "Jan",
     temp: 20,
     prec: 202
   }, {

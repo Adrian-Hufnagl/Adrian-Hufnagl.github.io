@@ -10,6 +10,7 @@ var stationHeight = document.getElementById('chart-height')
 var disclaimerLabel = document.getElementById('disclaimer')
 var varTable = document.getElementById('var-table')
 
+var noFilter = true;
 
 function createInput(){
   let inputRows = document.getElementsByClassName("input-row")
@@ -17,7 +18,7 @@ function createInput(){
   newInput.innerHTML = newInput.innerHTML.replace(/input-1/g, "input-" + (inputRows.length + 1))
   let counter = inputRows.length
   newInput.children[0].children[0].innerHTML = (counter + 1).toString()
-  console.log(inputRowsContainer)
+
   inputRowsContainer.appendChild(newInput);
 
 }
@@ -38,20 +39,20 @@ function createInputs(){
 function deleteInput(e){
   let newInputs = document.getElementsByClassName("input-row")
   var el = e.currentTarget.parentNode;
-  console.log(el)
+
   var elParent = el.parentNode;
-  console.log(elParent)
+
   var index = Array.prototype.indexOf.call(elParent.children, el);
-  console.log('delete' + index)
+
   if(newInputs.length == 1){
-    console.log(newInputs[0].children[1])
+  
     newInputs[0].children[1].value = "";
     newInputs[0].children[3].value = "";
   } else {
-    console.log(newInputs)
+  
   newInputs[index].remove()
-  console.log(index)
-  console.log(newInputs.length)
+
+
 }
 }
 
@@ -72,9 +73,18 @@ function createElementFromHTML(htmlString) {
 
 //Nach Klick wird Liste gefiltert und ausgegeben
 function createList(){
+  let firstInput = inputRowsContainer.children[0].children[1].value;
+
+
   if(checkInputs()){
+    if(firstInput != ""){
     showMessage("Filter wurden korrekt gesetzt!", true)
-    filterData();
+    noFilter = false;
+  }
+  filterData();
+}
+  if(firstInput == ""){
+    noFilter = true;
   }
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
@@ -169,11 +179,11 @@ function createDiagram(e){
   } 
   el.classList.add("climate-list-element-selcted");
 
-  console.log(elName.split(/\r?\n|\r|\n/g)[0])
-  console.log(filteredIndex)
+
+
   //Log the same text till there is a breakpoint
   selectPin(filteredIndex)
-  console.log(displayedIndex)
+
   stationName.innerHTML = elName
 
   for(let i = 0; i < 12; i++){

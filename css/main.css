@@ -295,7 +295,26 @@ textarea {
 }
 #tutorial {
   display: none;
-  margin: 12px 24px 24px;
+  margin: 64px 12.5vw 0;
+}
+
+.tutorial-text{
+  margin: 0;
+  font-size: 16px;
+}
+
+.tutorial-img{
+  max-width: 50%;
+  margin: 40px auto 60px;
+  display: block;
+}
+
+.img-row{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  max-width: 80%;
 }
 
 #toggle-button {
@@ -315,11 +334,6 @@ textarea {
   max-width: 894px;
 }
 
-.tutorial-text{
-  margin: 10px 10px;
-  font-size: 14px;
-}
-
 .country-name{
   float: right;
   margin-right: 10px;
@@ -330,7 +344,7 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: baseline;
-  margin: 24px 0 32px;
+  margin: 24px 0 64px;
 }
 
 .question-container {
@@ -344,6 +358,8 @@ textarea {
   max-width: 700px;
   text-align: center;
   margin: 16px 32px 0;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .question-container input[type="text"] {
@@ -436,7 +452,8 @@ margin: 0;
 }
 
 .result-score-container{
-  width: fit-content;
+  width: 150px;
+  text-align: center;
 }
 
 #result-score{
@@ -561,17 +578,32 @@ margin: 0;
 }
 
 .btn-add{
-  background: #50585F;
+  background: #e0e4ea;
+  border: 1px solid #a0a4aa;
   font-size: 12px;
-  padding: 8px 8px 8px 16px;
-  border-right: 300px solid #e0e4ea;
-  border-left: 300px solid #e0e4ea;
-  transform: translateX(-22px);
+  transform: translateX(-24px);
   display: flex;
   margin: 24px auto 0;
   align-items: center;
-  width: fit-content;
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+  padding: 0;
+  width: 720px;
+  box-shadow: 0 3px 5px 0 rgba(0,0,0,0.2);
+  opacity: 0.8;
+}
+.btn-add:hover{
+  opacity: 1.0;
+}
+.btn-add:active{
+  box-shadow: none;
+}
+.btn-add-inner{
+  display: flex;
+  margin: auto;
+  padding: 7px 0 6px 12px;
+  background: #c0c4ca;
+  border: 1px solid #a0a4aa;
+  color: #303439;
+  font-weight: bold;
 }
 
 .btn-cls{
@@ -597,7 +629,7 @@ margin: 0;
 
 .btn-row{
   display: flex;
-  margin: 36px 24px 12px;
+  margin: 64px 24px 12px;
 }
 
 .iconCheck{
@@ -682,6 +714,13 @@ padding: 6px;
   margin: 8px 24px;
 }
 
+#var-table{
+  width: 763px;
+  border-radius: 4px;
+  border: 1px solid #a0a4aa;
+  background: #fafbfc;
+}
+
 table, th, td {
   border-collapse: separate;
   border-spacing: 16px;
@@ -694,10 +733,12 @@ table{
 
 th {
   font-weight: normal;
+  text-align: right;
 }
 
 td {
   font-weight: bold;
+  text-align: center;
 }
 
 
@@ -745,9 +786,12 @@ td {
     margin-bottom: 24px;
   }
   .btn-add{
-    border-right: 90px solid #F0F2F5;
-    border-left: 90px solid #F0F2F5;
     transform: none;
+    width: 300px;
+  }
+
+  #var-table{
+    width: unset;
   }
 }
 

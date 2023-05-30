@@ -73,7 +73,7 @@ function createMap() {
     circle.adapters.add("fill", function (fill, target) {
       const colorValue = target.dataItem.dataContext.color;
       if(colorValue == '#34D456'){
-        console.log(colorValue)
+        
       }
       return am5.color(colorValue);
     });
@@ -178,13 +178,14 @@ function selectPin(index){
   );
   createMap()
   let pin = cities.features[index]
-  var pointSeries = chart.series.push(
+  var pointSeries2 = chart.series.push(
     am5map.MapPointSeries.new(root, {
       geoJSON: pin
     })
   );    
-  pointSeries.bullets.push(function() {
-    console.log("test")
+  
+  pointSeries2.bullets.push(function() {
+    
     return am5.Bullet.new(root, {
       sprite: am5.Circle.new(root, {
         radius: 10,
@@ -193,7 +194,7 @@ function selectPin(index){
   })
     });
   });
-  pointSeries.bullets.push(function () {
+  pointSeries2.bullets.push(function () {
     var circle = am5.Circle.new(root, {
       radius: 8,
       tooltipText: "{name}",
