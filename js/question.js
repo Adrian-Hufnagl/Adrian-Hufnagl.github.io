@@ -8,7 +8,7 @@ var questions = [
   "1d) An welchen Orten ist der Niederschlag in der ersten Jahreshälfte mindestens drei mal so hoch wie in der zweiten?",
   "2. Welche Orte befinden sich auf der Südhalbkugel?",
   "3. Welche Orte befinden sich in den tropischen Zone?",
-  "4. Welche Orte befinden sich weder in den nördlichen gemäßigten Zone noch in den nördlichen subtropen Zone?",
+  "4. Welche Orte befinden sich weder in den nördlichen gemäßigten Zone noch in der nördlichen subtropischen Zone?",
   "5. Welche Orte befinden sich in der Mongolei?",
   "6. Welche Orte befinden sich in Argentinien?",
   "7. Welche Orte befinden sich auf den Britischen Inseln?",
