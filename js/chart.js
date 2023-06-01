@@ -129,6 +129,11 @@
     series2.data.setAll(newData);
   }
 
+  function deleteGraph() {
+    series1.data.clear();
+    series2.data.clear();
+  }
+
 
   var precDensity = yAxis.makeDataItem({ value: 50, endValue: 100 });
   var tempFreezing = yAxis.makeDataItem({ value: 0, endValue: -50 });

@@ -179,8 +179,6 @@ function createDiagram(e){
   } 
   el.classList.add("climate-list-element-selcted");
 
-
-
   //Log the same text till there is a breakpoint
   selectPin(filteredIndex)
 
@@ -194,6 +192,12 @@ function createDiagram(e){
   }
   showStationData(displayedIndex)
   createNewGraph(data);
+}
+
+function deleteDiagram(){
+  stationName.innerHTML = "Keine Station ausgewählt"
+  stationHeight.innerHTML = ""
+  deleteGraph();
 }
 
 //Nimmt Stationsdaten von geklicktem Element und schreibt es ins Diagrammfeld

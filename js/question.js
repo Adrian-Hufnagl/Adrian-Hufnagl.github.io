@@ -1,7 +1,7 @@
 var densityDisclaimer1 = "Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht. Nach der solaren Abgrenzung liegen die Tropen zwischen 23°26′ nördlicher und südlicher Breite."
 var densityDisclaimer2 = "Bedenke, dass die Daten von den Wetterstationien die Klimazonen nicht vollständig erfassen. Zonen außerhalb von Wetterstationen werden nicht berücksichtigt. Ebenso fallen Zonen in denen viele Wetterstationen liegen mehr ins Gewicht. Nach der solaren Abgrenzung liegen die Nördlichen Gemäßigten Breiten zwischen 66°33′55″ und 45° nördlicher Breite. Die Nördlichen Subtropen liegen zwischen 45° und 23°26′ nördlicher Breite."
 var questions = [
-  "Probier die Filter- und Suchfunktionen aus. Wenn du auf einen der Pfeil klickst, kommst du zu den Aufgaben.",
+  "Es werden die Klimadaten von 1514 Wetterstationen gezeigt. Mit den Variablen aus der Tabelle lassen sich Bedingungen definieren, um den Datensatz zu filtern. Mit den Pfeilen kommst du zu den Aufgaben.",
   "1a) Welche Orte haben eine Jahresdurchschnittstemperatur von über 20°C?",
   "1b) Welche Orte haben eine Jahresdurchschnittstemperatur von über 10 °C und einen jährlichen Niederschlag von weniger als 1000 mm?",
   "1c) Welche Orte haben eine Jahresdurchschnittstemperatur von über 12 °C, haben einen jährlichen Niederschlag von weniger als 500 mm und sind im Januar über 10 °C wärmer als im Juli?",
@@ -132,13 +132,21 @@ function annotateListHeader(){
     filterResults.innerHTML = "";
     filterResultsLabel.innerHTML = "";
   } else{
-    listResults.children[0].innerHTML = + numResults + " / " + numWholeResults;
-    listResults.children[0].title = "Von " + numWholeResults + " verfügbaren Orten befinden sich " + numResults + " im Suchergebnis.";
-    listResults.children[1].title = " Insgesamt gibt es " + numWholeCorrectResults + " zutreffende Orte. Im Suchergebnis befinden sich " + numCorrectResults + " davon.";
-    listResults.children[1].innerHTML = numCorrectResults + " / " + numWholeCorrectResults;
-    listResults.children[2].title = " Insgesamt gibt es " +  + numWholeIncorrectResults  + " Orte außerhalb der gefragten Zone. Im Suchergebnis befinden sich noch " + numIncorrectResults + " davon.";
-    listResults.children[2].innerHTML =  numIncorrectResults + " / " + numWholeIncorrectResults;  
-    filterResultsLabel.innerHTML = "Genauigkeit:";
-    filterResults.innerHTML = score  + " %";
+    if(numResults == 0){
+      deleteDiagram();
+      console.log("no results")
+      filterResultsLabel.innerHTML = "Kein Treffer:";
+      filterResults.innerHTML = " 0 %";
+    } else{
+      console.log("schon results")
+      listResults.children[0].innerHTML = + numResults + " / " + numWholeResults;
+      listResults.children[0].title = "Von " + numWholeResults + " verfügbaren Orten befinden sich " + numResults + " im Suchergebnis.";
+      listResults.children[1].title = " Insgesamt gibt es " + numWholeCorrectResults + " zutreffende Orte. Im Suchergebnis befinden sich " + numCorrectResults + " davon.";
+      listResults.children[1].innerHTML = numCorrectResults + " / " + numWholeCorrectResults;
+      listResults.children[2].title = " Insgesamt gibt es " +  + numWholeIncorrectResults  + " Orte außerhalb der gefragten Zone. Im Suchergebnis befinden sich noch " + numIncorrectResults + " davon.";
+      listResults.children[2].innerHTML =  numIncorrectResults + " / " + numWholeIncorrectResults;  
+      filterResultsLabel.innerHTML = "Genauigkeit:";
+      filterResults.innerHTML = score  + " %";
+  }
   }
 }

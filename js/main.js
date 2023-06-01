@@ -34,6 +34,8 @@ function filterClimate() {
   }
   if(climateList.children.length > 0){
     climateList.children[0].click();
+  } else{
+    createMap();
   }
 }
 

@@ -50,7 +50,6 @@ var pointSeries = chart.series.push(
 function createMap() {
   // Clear existing point series
   chart.series.removeValue(pointSeries);
-
   // Create a new point series
   pointSeries = chart.series.push(
     am5map.MapPointSeries.new(root, {
@@ -162,6 +161,10 @@ function createMap() {
     createButton("Globus", am5map.geoOrthographic());  
 }
 
+var pin;
+var pointSeries2;
+var circle;
+
 function selectPin(index){
   chart.series.clear()
   chart = root.container.children.push(
@@ -177,8 +180,8 @@ function selectPin(index){
     })
   );
   createMap()
-  let pin = cities.features[index]
-  var pointSeries2 = chart.series.push(
+  pin = cities.features[index]
+  pointSeries2 = chart.series.push(
     am5map.MapPointSeries.new(root, {
       geoJSON: pin
     })
@@ -195,7 +198,7 @@ function selectPin(index){
     });
   });
   pointSeries2.bullets.push(function () {
-    var circle = am5.Circle.new(root, {
+    circle = am5.Circle.new(root, {
       radius: 8,
       tooltipText: "{name}",
     });
@@ -209,11 +212,9 @@ function selectPin(index){
       sprite: circle,
     });
   });
-  //createButtons()
 }
 
 function addStationToMap(index,drawNew,isCorrect){
-  // TODO take Station from displayedClimate
   let newStation = displayedClimate[index]
   let newName = newStation['name']
   let newLat = newStation['lat']
@@ -232,6 +233,9 @@ function deleteMarkers(){
     "features": [
     ]
   };
+  if(pointSeries2 != null){
+    pointSeries2.bullets.clear()
+  }
 }
 
 function addMarker(x,y,name,markerColor, radius){
