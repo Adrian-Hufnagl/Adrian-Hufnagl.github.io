@@ -21,23 +21,22 @@ var filterResultsLabel = document.getElementById('result-score-label')
 var filters = new Array(questions.length);
 for (let i = 0; i < questions.length; i++) {
   filters[i] = [];
-  filters[i][0] = ["", ""];
 }
 
 function saveFilters(){
-  let inputRows = document.getElementsByClassName("input-row")
-  filters[currentQuestionIndex] = [];
-  for(i = 0; i < inputRows.length; i++){
-    let string1 = inputRows[i].children[1].value;
-    let string2 = inputRows[i].children[3].value;
-    filters[currentQuestionIndex][i] = [string1, string2]
-  }
+  // Filters are stored live; no action needed here.
 }
 
 function switchFilters(){
-  deleteInputs();
-  createInputs();
-  createList();
+  if (typeof renderFilterList === "function") {
+    renderFilterList();
+  }
+  if (typeof resetComposer === "function") {
+    resetComposer();
+  }
+  if (typeof createList === "function") {
+    createList();
+  }
 }
 
 function annotateList(){

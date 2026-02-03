@@ -4,65 +4,318 @@ var filterResults = document.getElementById('result-score')
 var resultDescription = document.getElementById('result-description')
 var diagramContainer = document.getElementById('diagram')
 var inputCard = document.getElementById('iCard')
-var inputRowsContainer = document.getElementById('input-rows')
 var stationName = document.getElementById('chart-name')
 var stationHeight = document.getElementById('chart-height')
 var disclaimerLabel = document.getElementById('disclaimer')
 var varTable = document.getElementById('var-table')
 
+var filterList = document.getElementById('filter-list')
+var filterComposer = document.getElementById('filter-composer')
+var filterLeftInput = document.getElementById('filter-left')
+var filterRightInput = document.getElementById('filter-right')
+var filterToggleButton = document.getElementById('filter-toggle')
+var filterAddButton = document.getElementById('filter-add')
+var filterCountBadge = document.getElementById('filter-count')
+
 var noFilter = true;
+var activeFilterIndex = null;
 
-function createInput(){
-  let inputRows = document.getElementsByClassName("input-row")
-  let newInput = inputRows[0].cloneNode(true)
-  newInput.innerHTML = newInput.innerHTML.replace(/input-1/g, "input-" + (inputRows.length + 1))
-  let counter = inputRows.length
-  newInput.children[0].children[0].innerHTML = (counter + 1).toString()
-
-  inputRowsContainer.appendChild(newInput);
-
+function getCurrentFilters() {
+  if (!filters || !filters[currentQuestionIndex]) {
+    return [];
+  }
+  return filters[currentQuestionIndex];
 }
 
-function createInputs(){
-  let inputRows = document.getElementsByClassName("input-row")
-  for(i = 0; i < filters[currentQuestionIndex].length - 1; i++){
-    createInput()
-  }
-  for(i = 0; i < filters[currentQuestionIndex].length; i++){
-    let String1 = filters[currentQuestionIndex][i][0]
-    let String2 = filters[currentQuestionIndex][i][1]
-    inputRows[i].children[1].value = String1
-    inputRows[i].children[3].value = String2
-  }
+function getActiveFiltersLocal() {
+  return getCurrentFilters().filter(function(filter) {
+    return filter && filter.active && filter.left && filter.right;
+  });
 }
 
-function deleteInput(e){
-  let newInputs = document.getElementsByClassName("input-row")
-  var el = e.currentTarget.parentNode;
-
-  var elParent = el.parentNode;
-
-  var index = Array.prototype.indexOf.call(elParent.children, el);
-
-  if(newInputs.length == 1){
-  
-    newInputs[0].children[1].value = "";
-    newInputs[0].children[3].value = "";
+function updateFilterCount() {
+  if (!filterCountBadge) {
+    return;
+  }
+  var activeCount = getActiveFiltersLocal().length;
+  var totalCount = getCurrentFilters().length;
+  if (totalCount === 0) {
+    filterCountBadge.textContent = "0 aktiv";
   } else {
-  
-  newInputs[index].remove()
-
-
-}
-}
-
-function deleteInputs(){
-  let newInputs = document.getElementsByClassName("input-row")
-  for(i = newInputs.length - 1; i > 0; i--){
-    newInputs[i].remove()
+    filterCountBadge.textContent = activeCount + " / " + totalCount + " aktiv";
   }
-  newInputs[0].children[1].value = "";
-  newInputs[0].children[3].value = "";
+}
+
+function setComposerStep(step) {
+  if (!filterComposer) {
+    return;
+  }
+  if (step === 'right') {
+    filterComposer.classList.add('is-right');
+    filterComposer.dataset.step = 'right';
+    if (filterRightInput) {
+      filterRightInput.focus();
+    }
+  } else {
+    filterComposer.classList.remove('is-right');
+    filterComposer.dataset.step = 'left';
+    if (filterLeftInput) {
+      filterLeftInput.focus();
+    }
+  }
+}
+
+function resetComposer() {
+  if (filterLeftInput) {
+    filterLeftInput.value = '';
+  }
+  if (filterRightInput) {
+    filterRightInput.value = '';
+  }
+  activeFilterIndex = null;
+  setComposerStep('left');
+  if (filterAddButton) {
+    filterAddButton.textContent = 'Add';
+  }
+}
+
+function loadComposerForFilter(index) {
+  var list = getCurrentFilters();
+  var filter = list[index];
+  if (!filter) {
+    return;
+  }
+  activeFilterIndex = index;
+  if (filterLeftInput) {
+    filterLeftInput.value = filter.left || '';
+  }
+  if (filterRightInput) {
+    filterRightInput.value = filter.right || '';
+  }
+  if (filterAddButton) {
+    filterAddButton.textContent = 'Update';
+  }
+  setComposerStep('left');
+  renderFilterList();
+}
+
+function renderFilterList() {
+  if (!filterList) {
+    return;
+  }
+  filterList.innerHTML = '';
+  var list = getCurrentFilters();
+
+  if (!list.length) {
+    var empty = document.createElement('div');
+    empty.className = 'filter-empty';
+    empty.textContent = 'Noch keine Filter hinzugefügt.';
+    filterList.appendChild(empty);
+    updateFilterCount();
+    return;
+  }
+
+  list.forEach(function(filter, index) {
+    var card = document.createElement('div');
+    var stateClass = filter.active ? 'active' : 'inactive';
+    var editingClass = activeFilterIndex === index ? 'editing' : '';
+    card.className = 'filter-card ' + stateClass + ' ' + editingClass;
+    card.dataset.index = index;
+
+    var removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'filter-remove';
+    removeBtn.setAttribute('aria-label', 'Filter entfernen');
+    removeBtn.textContent = '×';
+
+    var header = document.createElement('div');
+    header.className = 'filter-card-header';
+
+    var toggleLabel = document.createElement('label');
+    toggleLabel.className = 'filter-toggle';
+
+    var toggleInput = document.createElement('input');
+    toggleInput.type = 'checkbox';
+    toggleInput.checked = !!filter.active;
+
+    var toggleBox = document.createElement('span');
+    toggleBox.className = 'filter-toggle-box';
+
+    toggleLabel.appendChild(toggleInput);
+    toggleLabel.appendChild(toggleBox);
+
+    var expression = document.createElement('div');
+    expression.className = 'filter-expression';
+    expression.textContent = (filter.left || '') + ' >= ' + (filter.right || '');
+
+    header.appendChild(toggleLabel);
+    header.appendChild(expression);
+
+    card.appendChild(removeBtn);
+    card.appendChild(header);
+
+    if (!filter.active) {
+      var meta = document.createElement('div');
+      meta.className = 'filter-meta';
+      meta.textContent = 'Inaktiv';
+      card.appendChild(meta);
+    }
+
+    filterList.appendChild(card);
+  });
+
+  updateFilterCount();
+}
+
+function validateExpression(value, sideLabel) {
+  if (!value) {
+    showMessage('Bitte ' + sideLabel + 'e Seite ausfüllen');
+    return false;
+  }
+  if (!checkSyntax(value)) {
+    showMessage('Syntaxfehler ' + sideLabel + 'e Seite');
+    return false;
+  }
+  if (!testCalc(value)) {
+    showMessage(sideLabel + 'e Seite lässt sich nicht berechnen');
+    return false;
+  }
+  return true;
+}
+
+function addOrUpdateFilter() {
+  var left = filterLeftInput ? filterLeftInput.value.trim() : '';
+  var right = filterRightInput ? filterRightInput.value.trim() : '';
+  if (!validateExpression(left, 'link')) {
+    return;
+  }
+  if (!validateExpression(right, 'recht')) {
+    return;
+  }
+
+  var list = getCurrentFilters();
+  var newFilter = {
+    left: left,
+    right: right,
+    active: true
+  };
+
+  if (activeFilterIndex !== null && list[activeFilterIndex]) {
+    newFilter.active = list[activeFilterIndex].active;
+    list[activeFilterIndex] = newFilter;
+  } else {
+    list.push(newFilter);
+  }
+
+  filters[currentQuestionIndex] = list;
+  activeFilterIndex = null;
+  renderFilterList();
+  resetComposer();
+  showMessage('Filter gespeichert', true);
+  createList();
+}
+
+function removeFilter(index) {
+  var list = getCurrentFilters();
+  if (!list[index]) {
+    return;
+  }
+  list.splice(index, 1);
+  filters[currentQuestionIndex] = list;
+  if (activeFilterIndex === index) {
+    resetComposer();
+  } else if (activeFilterIndex !== null && activeFilterIndex > index) {
+    activeFilterIndex -= 1;
+  }
+  renderFilterList();
+  createList();
+}
+
+function toggleFilterActive(index, isActive) {
+  var list = getCurrentFilters();
+  if (!list[index]) {
+    return;
+  }
+  list[index].active = isActive;
+  filters[currentQuestionIndex] = list;
+  renderFilterList();
+  createList();
+}
+
+function setupFilterUI() {
+  if (!filterComposer) {
+    return;
+  }
+
+  if (filterToggleButton) {
+    filterToggleButton.addEventListener('click', function() {
+      var step = filterComposer.classList.contains('is-right') ? 'left' : 'right';
+      setComposerStep(step);
+    });
+  }
+
+  if (filterAddButton) {
+    filterAddButton.addEventListener('click', function() {
+      addOrUpdateFilter();
+    });
+  }
+
+  if (filterLeftInput) {
+    filterLeftInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        setComposerStep('right');
+      }
+    });
+  }
+
+  if (filterRightInput) {
+    filterRightInput.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        addOrUpdateFilter();
+      }
+    });
+  }
+
+  if (filterList) {
+    filterList.addEventListener('click', function(event) {
+      var removeButton = event.target.closest('.filter-remove');
+      if (removeButton) {
+        event.stopPropagation();
+        var index = parseInt(removeButton.closest('.filter-card').dataset.index, 10);
+        removeFilter(index);
+        return;
+      }
+
+      var toggle = event.target.closest('.filter-toggle');
+      if (toggle) {
+        event.stopPropagation();
+        return;
+      }
+
+      var card = event.target.closest('.filter-card');
+      if (card) {
+        var idx = parseInt(card.dataset.index, 10);
+        loadComposerForFilter(idx);
+      }
+    });
+
+    filterList.addEventListener('change', function(event) {
+      if (event.target && event.target.type === 'checkbox') {
+        event.stopPropagation();
+        var card = event.target.closest('.filter-card');
+        if (!card) {
+          return;
+        }
+        var index = parseInt(card.dataset.index, 10);
+        toggleFilterActive(index, event.target.checked);
+      }
+    });
+  }
+
+  resetComposer();
+  renderFilterList();
 }
 
 function createElementFromHTML(htmlString) {
@@ -73,19 +326,17 @@ function createElementFromHTML(htmlString) {
 
 //Nach Klick wird Liste gefiltert und ausgegeben
 function createList(){
-  let firstInput = inputRowsContainer.children[0].children[1].value;
-
-
-  if(checkInputs()){
-    if(firstInput != ""){
+  var activeFilters = getActiveFiltersLocal();
+  if (!checkInputs()) {
+    return;
+  }
+  if (activeFilters.length > 0) {
     showMessage("Filter wurden korrekt gesetzt!", true)
     noFilter = false;
-  }
-  filterData();
-}
-  if(firstInput == ""){
+  } else {
     noFilter = true;
   }
+  filterData();
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
@@ -333,8 +584,13 @@ function setupViewToggle() {
   syncView();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupViewToggle);
-} else {
+function setupUI() {
   setupViewToggle();
+  setupFilterUI();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupUI);
+} else {
+  setupUI();
 }

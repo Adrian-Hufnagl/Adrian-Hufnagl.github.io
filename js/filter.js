@@ -86,36 +86,44 @@ function tokenizeInput(e){
 
 // Checks if input contains valid values
 // Checks if string can be calculated
+function getActiveFilters() {
+  if (!filters || !filters[currentQuestionIndex]) {
+    return [];
+  }
+  return filters[currentQuestionIndex].filter(function(filter) {
+    return filter && filter.active && filter.left && filter.right;
+  });
+}
+
 function checkInputs(){
-  let inputRows = document.getElementsByClassName("input-row")
-  for(i = 0; i < inputRows.length; i++){
-    
-    let string1 = inputRows[i].children[1].value;
-    let string2 = inputRows[i].children[3].value;
+  let activeFilters = getActiveFilters();
+  if (activeFilters.length === 0) {
+    return true;
+  }
+
+  for(i = 0; i < activeFilters.length; i++){
+    let string1 = activeFilters[i].left;
+    let string2 = activeFilters[i].right;
     if(checkSyntax(string1)){
-      
-      
       if(testCalc(string1)){
         
       } else {
-        showMessage("Zeile " + (i+1) + ": linkes Feld lässt sich nicht berechnen")
+        showMessage("Filter " + (i+1) + ": linke Seite lässt sich nicht berechnen")
         return false;
       }
     } else{
-      showMessage("Syntaxfehler in Zeile " + (i+1) + " linke Seite")
+      showMessage("Syntaxfehler in Filter " + (i+1) + " linke Seite")
       return false;
     }
     if(checkSyntax(string2)){
-      
-      
       if(testCalc(string2)){
         
       } else {
-        showMessage("Zeile " + (i+1) + ": rechtes Feld lässt sich nicht berechnen")
+        showMessage("Filter " + (i+1) + ": rechte Seite lässt sich nicht berechnen")
         return false;
       }
     } else {
-      showMessage("Syntaxfehler in Zeile " + (i+1) + " rechte Seite")
+      showMessage("Syntaxfehler in Filter " + (i+1) + " rechte Seite")
       return false;
     }
   }
@@ -148,32 +156,32 @@ function testCalc(str){
 // Filters wholeClimate based on comparing the input values
 function filterData(){
   filteredClimate = [];
-  let inputRows = document.getElementsByClassName("input-row")
-  let inputStrings = [];
-  // For every station and input calculate the comparator
-  for(i = 0; i < inputRows.length; i++){
-    let string1 = inputRows[i].children[1].value;
-    let string2 = inputRows[i].children[3].value;
-    inputStrings[i] = [string1, string2] 
+  let activeFilters = getActiveFilters();
+  if (!wholeClimate) {
+    return;
   }
-  
+  if (activeFilters.length === 0) {
+    filteredClimate = wholeClimate.slice();
+    return;
+  }
+
+  let inputStrings = activeFilters.map(function(filter) {
+    return [filter.left, filter.right];
+  });
   
   for(i = 0; i < wholeClimate.length; i++){
-    for(j = 0; j < inputRows.length; j++){
+    for(j = 0; j < inputStrings.length; j++){
       let str1 = replaceTokens(inputStrings[j][0], wholeClimate[i]);
       let str2 = replaceTokens(inputStrings[j][1], wholeClimate[i]);
-      //
       if(calcString(str1) < calcString(str2)){
-        
         break;
       } else {
-        if (j === inputRows.length - 1){
+        if (j === inputStrings.length - 1){
           filteredClimate.push(wholeClimate[i])
         }
       }
     }
   }
-  //
 };
 
 // Returns the result of a given function
