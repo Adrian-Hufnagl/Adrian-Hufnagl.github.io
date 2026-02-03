@@ -284,3 +284,57 @@ function toggleTutorial() {
     button.classList.remove('rotated');
   }
 }
+
+function setActiveView(view) {
+  document.body.setAttribute('data-view', view);
+  let buttons = document.querySelectorAll('.view-toggle-btn');
+  buttons.forEach(function(button) {
+    const isActive = button.dataset.view === view;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+  });
+}
+
+function setupViewToggle() {
+  let buttons = document.querySelectorAll('.view-toggle-btn');
+  if (!buttons.length) {
+    return;
+  }
+
+  buttons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      setActiveView(button.dataset.view);
+    });
+  });
+
+  let mobileQuery = window.matchMedia('(max-width: 980px)');
+
+  function syncView() {
+    if (mobileQuery.matches) {
+      const currentView = document.body.dataset.view;
+      if (currentView === 'sidebar' || currentView === 'main') {
+        setActiveView(currentView);
+      } else {
+        setActiveView('main');
+      }
+    } else {
+      document.body.setAttribute('data-view', 'all');
+      buttons.forEach(function(button) {
+        button.classList.remove('active');
+      });
+    }
+  }
+
+  if (typeof mobileQuery.addEventListener === 'function') {
+    mobileQuery.addEventListener('change', syncView);
+  } else if (typeof mobileQuery.addListener === 'function') {
+    mobileQuery.addListener(syncView);
+  }
+  syncView();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupViewToggle);
+} else {
+  setupViewToggle();
+}

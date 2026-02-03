@@ -11,6 +11,12 @@
 
     <link rel="manifest" href="site.webmanifest" />
     <link rel="shortcut icon" href="img/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;700&family=Sora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -19,15 +25,19 @@
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/legal.css" />
 
-    <meta name="theme-color" content="#fafafa" />
+    <meta name="theme-color" content="#f6f2eb" />
   </head>
 
   <body>
     <div id="bar">
-      <div class="bar-header">
-        <div id="bar-button" onclick="window.location.href='index.html';">
-          <img id="bar-logo" src="img/logo.png" />
-          <p id="bar-header">Geofilter</p>
+      <div class="bar-fixed">
+        <div class="bar-shell">
+          <div class="bar-header">
+            <div id="bar-button" onclick="window.location.href='index.html';">
+              <img id="bar-logo" src="img/logo.png" alt="Geofilter Logo" />
+              <p id="bar-header">Geofilter</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
