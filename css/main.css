@@ -882,7 +882,7 @@ p {
 }
 
 .map-container {
-  padding: 20px;
+  padding: 0;
   min-width: 0;
 }
 
@@ -905,11 +905,12 @@ p {
 #svgmap {
   width: 100%;
   max-width: 100%;
-  aspect-ratio: 16 / 9;
-  height: clamp(240px, 40vw, 420px);
+  aspect-ratio: 1652 / 1220;
+  height: clamp(220px, 38vw, 420px);
   margin: 0 auto;
   touch-action: none; /* required for smooth pointer pan */
   user-select: none;
+  overflow: hidden;
 }
 
 #svgmap svg {

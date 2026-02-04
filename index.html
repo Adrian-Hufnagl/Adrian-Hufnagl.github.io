@@ -1,92 +1,248 @@
 <!doctype html>
 <html class="no-js" lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <title>Geofilter</title>
+    <meta
+      name="description"
+      content="Klimadaten-Explorer mit interaktiven Filtern und Weltkarte."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<head>
-  <meta charset="utf-8">
-  <title>Geofilter</title>
-  <meta name="description" content="Klimadaten-Explorer mit interaktiven Filtern und Weltkarte.">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Geofilter" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="" />
+    <meta property="og:image" content="" />
 
-  <meta property="og:title" content="Geofilter">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="shortcut icon" href="img/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;700&family=Sora:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/legal.css" />
 
-  <link rel="manifest" href="site.webmanifest">
-  <link rel="shortcut icon" href="img/logo.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/legal.css">
+    <meta name="theme-color" content="#f6f2eb" />
+  </head>
 
-  <meta name="theme-color" content="#f6f2eb">
-</head>
-
-<body data-view="main">
-
-<main class="page app-shell">
-  <aside class="sidebar">
-    <div id="bar" class="sidebar-bar">
-      <div class="bar-fixed">
-        <div class="bar-shell">
-          <div class="bar-header">
-            <div id="bar-button" onclick="location.reload();">
-              <img id="bar-logo" src="img/logo.png" alt="Geofilter Logo">
-              <p id="bar-header">Geofilter</p>
+  <body data-view="main">
+    <main class="page app-shell">
+      <aside class="sidebar">
+        <div id="bar" class="sidebar-bar">
+          <div class="bar-fixed">
+            <div class="bar-shell">
+              <div class="bar-header">
+                <div id="bar-button" onclick="location.reload()">
+                  <img id="bar-logo" src="img/logo.png" alt="Geofilter Logo" />
+                  <p id="bar-header">Geofilter</p>
+                </div>
+                <div class="bar-actions">
+                  <p class="bar-help">Hilfe</p>
+                  <button
+                    id="toggle-button"
+                    class="btn btn-ghost btn-icon"
+                    onclick="toggleTutorial()"
+                  >
+                    <i class="fa fa-angle-up"></i>
+                  </button>
+                </div>
+              </div>
             </div>
-            <div class="bar-actions">
-              <p class="bar-help">Hilfe</p>
-              <button id="toggle-button" class="btn btn-ghost btn-icon" onclick="toggleTutorial()">
-                <i class="fa fa-angle-up"></i>
-              </button>
+          </div>
+          <div id="tutorial">
+            <div class="tutorial-shell">
+              <p class="tutorial-text">
+                Auf dieser Webseite haben wir viele Klimadaten von über 1000
+                verschiedenen Wetterstationenauf der ganzen Welt gesammelt.
+                Diese Daten helfen uns, das Klima und Wetter der verschiedenen
+                Gebiete besser zu verstehen. Ihr könnt verschiedene Filter
+                verwenden, um die Auswahl der Wetterstationen einzuschränken und
+                damit auf bestimmte Fragen gezielter einzugehen.
+              </p>
+              <p></p>
+              <p class="tutorial-text">
+                Die Filter, die ihr einstellen könnt, basieren auf
+                Durchschnittswerten von verschiedenen Klimadaten, wie zum
+                Beispiel Temperaturen und Niederschläge. Wir haben zwölf
+                Variablen für die Durchschnittstemperaturen von Januar bis
+                Dezember (t1 bis t12) und zwölf Variablen für die
+                Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12).
+                Außerdem gibt es zwei weitere Variablen: den alljährlichen
+                durchschnittlichen Niederschlag (N) und die
+                Durchschnittstemperatur (T).
+              </p>
+              <div class="table-scroll">
+                <table class="tutorial-table">
+                  <tr>
+                    <th></th>
+                    <th>Jährlich</th>
+                    <th>Jan</th>
+                    <th>Feb</th>
+                    <th>Mär</th>
+                    <th>Apr</th>
+                    <th>Mai</th>
+                    <th>Jun</th>
+                    <th>Jul</th>
+                    <th>Aug</th>
+                    <th>Sep</th>
+                    <th>Okt</th>
+                    <th>Nov</th>
+                    <th>Dez</th>
+                  </tr>
+                  <tr>
+                    <th>Gesamtniederschlag (in mm)</th>
+                    <td>N</td>
+                    <td>n1</td>
+                    <td>n2</td>
+                    <td>n3</td>
+                    <td>n4</td>
+                    <td>n5</td>
+                    <td>n6</td>
+                    <td>n7</td>
+                    <td>n8</td>
+                    <td>n9</td>
+                    <td>n10</td>
+                    <td>n11</td>
+                    <td>n12</td>
+                  </tr>
+                  <tr>
+                    <th>Durchschnittstemperatur (in C˚)</th>
+                    <td>T</td>
+                    <td>t1</td>
+                    <td>t2</td>
+                    <td>t3</td>
+                    <td>t4</td>
+                    <td>t5</td>
+                    <td>t6</td>
+                    <td>t7</td>
+                    <td>t8</td>
+                    <td>t9</td>
+                    <td>t10</td>
+                    <td>t11</td>
+                    <td>t12</td>
+                  </tr>
+                </table>
+              </div>
+              <p class="tutorial-text">
+                Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter
+                zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der
+                nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in
+                C˚ von Januar und Februar (t1 + t2) größer ist als der
+                Niederschlag im Januar (n1) in mm. Solche Filter helfen euch,
+                die Wetterstationen zu finden, die euren Kriterien entsprechen.
+              </p>
+              <img
+                class="tutorial-img"
+                src="img/exmFil.png"
+                alt="Beispiel Filter"
+              />
+              <p class="tutorial-text">
+                Wenn ihr die Filter angewendet habt, werden die Ergebnisse in
+                einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch
+                die Klimadiagramme der verschiedenen Stationen einsehen, um mehr
+                über das Klima und Wetter in diesen Gebieten zu erfahren.
+              </p>
+              <div class="img-row">
+                <img
+                  class="tutorial-img"
+                  src="img/exmMap.png"
+                  alt="Beispiel Karte"
+                />
+                <div class="img-spacer"></div>
+                <img
+                  class="tutorial-img"
+                  src="img/exmCha.png"
+                  alt="Beispiel Diagramm"
+                />
+              </div>
+              <p class="tutorial-text">
+                Denkt daran, dass ihr mit diesen Filtern und Daten viele
+                verschiedene Fragestellungen untersuchen könnt, also probiert
+                verschiedene Kombinationen aus und seht, was ihr herausfinden
+                könnt!
+              </p>
+              <div class="img-row">
+                <img
+                  class="tutorial-img"
+                  src="img/exmFil2.png"
+                  alt="Beispiel Filter 2"
+                />
+                <div class="img-spacer"></div>
+                <img
+                  class="tutorial-img"
+                  src="img/exmMap2.png"
+                  alt="Beispiel Karte 2"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div id="tutorial">
-        <div class="tutorial-shell">
-          <p class="tutorial-text">Auf dieser Webseite haben wir viele Klimadaten von über 1000 verschiedenen Wetterstationenauf der ganzen Welt gesammelt. Diese Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die Auswahl der Wetterstationen einzuschränken und damit auf bestimmte Fragen gezielter einzugehen.</p>
-          <p></p>
-          <p class="tutorial-text">Die Filter, die ihr einstellen könnt, basieren auf Durchschnittswerten von verschiedenen Klimadaten, wie zum Beispiel Temperaturen und Niederschläge. Wir haben zwölf Variablen für die Durchschnittstemperaturen von Januar bis Dezember (t1 bis t12) und zwölf Variablen für die Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12). Außerdem gibt es zwei weitere Variablen: den alljährlichen durchschnittlichen Niederschlag (N) und die Durchschnittstemperatur (T).</p>
-          <div class="table-scroll">
-            <table class="tutorial-table">
-              <tr>
-                <th></th>
-                <th>Jährlich</th>
-                <th>Jan</th>
-                <th>Feb</th>
-                <th>Mär</th>
-                <th>Apr</th>
-                <th>Mai</th>
-                <th>Jun</th>
-                <th>Jul</th>
-                <th>Aug</th>
-                <th>Sep</th>
-                <th>Okt</th>
-                <th>Nov</th>
-                <th>Dez</th>
-              </tr>
-              <tr>
-                <th>Gesamtniederschlag (in mm)</th>
-                <td>N</td>
-                <td>n1</td>
-                <td>n2</td>
-                <td>n3</td>
-                <td>n4</td>
-                <td>n5</td>
-                <td>n6</td>
-                <td>n7</td>
-                <td>n8</td>
-                <td>n9</td>
-                <td>n10</td>
-                <td>n11</td>
-                <td>n12</td>
-               </tr>
-               <tr>
-                 <th>Durchschnittstemperatur (in C˚)</th>
+        <section class="content-container">
+          <div class="card card-hero" id="iCard">
+            <div class="question-container">
+              <span id="question"></span>
+            </div>
+            <div class="toggle-container">
+              <button
+                class="btn btn-qst btn-qst-prev"
+                onclick="previousQuestion()"
+              >
+                ←
+              </button>
+              <div class="result-score-container">
+                <div class="result-score-inner">
+                  <div id="result-score-label"></div>
+                  <div id="result-score"></div>
+                </div>
+              </div>
+              <button class="btn btn-qst btn-qst-next" onclick="nextQuestion()">
+                →
+              </button>
+            </div>
+            <div class="table-scroll">
+              <table id="var-table">
+                <tr>
+                  <th></th>
+                  <th>Jährlich</th>
+                  <th>Jan</th>
+                  <th>Feb</th>
+                  <th>Mär</th>
+                  <th>Apr</th>
+                  <th>Mai</th>
+                  <th>Jun</th>
+                  <th>Jul</th>
+                  <th>Aug</th>
+                  <th>Sep</th>
+                  <th>Okt</th>
+                  <th>Nov</th>
+                  <th>Dez</th>
+                </tr>
+                <tr>
+                  <th>Gesamtniederschlag (in mm)</th>
+                  <td>N</td>
+                  <td>n1</td>
+                  <td>n2</td>
+                  <td>n3</td>
+                  <td>n4</td>
+                  <td>n5</td>
+                  <td>n6</td>
+                  <td>n7</td>
+                  <td>n8</td>
+                  <td>n9</td>
+                  <td>n10</td>
+                  <td>n11</td>
+                  <td>n12</td>
+                </tr>
+                <tr>
+                  <th>Durchschnittstemperatur (in ˚C)</th>
                   <td>T</td>
                   <td>t1</td>
                   <td>t2</td>
@@ -100,198 +256,159 @@
                   <td>t10</td>
                   <td>t11</td>
                   <td>t12</td>
-               </tr>
-            </table>
+                </tr>
+              </table>
+            </div>
+            <div class="filter-panel">
+              <div class="filter-header">
+                <p class="filter-title">Aktive Filter</p>
+                <span id="filter-count" class="filter-count">0 aktiv</span>
+              </div>
+              <div id="filter-list" class="filter-list"></div>
+              <div id="filter-composer" class="filter-composer">
+                <p class="filter-label">Neuer Filter</p>
+                <div class="filter-input-row">
+                  <button
+                    id="filter-toggle"
+                    class="filter-toggle-btn"
+                    type="button"
+                  >
+                    >=
+                  </button>
+                  <input
+                    id="filter-left"
+                    class="filter-input"
+                    type="text"
+                    placeholder="z.B. t1 + t2"
+                  />
+                  <input
+                    id="filter-right"
+                    class="filter-input"
+                    type="text"
+                    placeholder="z.B. 40"
+                  />
+                  <button id="filter-add" class="filter-add-btn" type="button">
+                    Add
+                  </button>
+                </div>
+                <p class="filter-hint">
+                  Variablen: t1–t12 (Temp), n1–n12 (Niederschlag), T (Ø Temp), N
+                  (jährl. Niederschlag)
+                </p>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button
+                onclick="createList()"
+                id="btn-filter"
+                class="btn btn-primary"
+              >
+                <i class="fa fa-search"></i>
+                <span class="btn-label">Suchen</span>
+              </button>
+            </div>
           </div>
-          <p class="tutorial-text">Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in C˚ von Januar und Februar (t1 + t2) größer ist als der Niederschlag im Januar (n1) in mm. Solche Filter helfen euch, die Wetterstationen zu finden, die euren Kriterien entsprechen.</p>
-          <img class="tutorial-img" src="img/exmFil.png" alt="Beispiel Filter">
-          <p class="tutorial-text">Wenn ihr die Filter angewendet habt, werden die Ergebnisse in einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch die Klimadiagramme der verschiedenen Stationen einsehen, um mehr über das Klima und Wetter in diesen Gebieten zu erfahren.</p>
-          <div class="img-row">
-            <img class="tutorial-img" src="img/exmMap.png" alt="Beispiel Karte">
-            <div class="img-spacer"></div>
-            <img class="tutorial-img" src="img/exmCha.png" alt="Beispiel Diagramm">
+        </section>
+      </aside>
+
+      <section class="main-panel">
+        <section class="map-section">
+          <div class="map-container card">
+            <div
+              id="svgmap"
+              class="map-visual map-visual--svg"
+              aria-label="Interactive world map"
+            ></div>
           </div>
-          <p class="tutorial-text">Denkt daran, dass ihr mit diesen Filtern und Daten viele verschiedene Fragestellungen untersuchen könnt, also probiert verschiedene Kombinationen aus und seht, was ihr herausfinden könnt!</p>
-          <div class="img-row">
-            <img class="tutorial-img" src="img/exmFil2.png" alt="Beispiel Filter 2">
-            <div class="img-spacer"></div>
-            <img class="tutorial-img" src="img/exmMap2.png" alt="Beispiel Karte 2">
+        </section>
+
+        <section class="list-diagram-inner">
+          <div class="list-container card list-card">
+            <div id="list-results">
+              <button
+                id="result-whole"
+                class="result-btn selected"
+                onclick="showAll()"
+              ></button>
+              <button
+                id="result-correct"
+                class="result-btn"
+                onclick="showCorrect()"
+              ></button>
+              <button
+                id="result-incorrect"
+                class="result-btn"
+                onclick="showIncorrect()"
+              ></button>
+            </div>
+            <div id="result-description">
+              Insgesamt gibt es 1514 verfügbaren Orte.
+            </div>
+            <div id="climate-list"></div>
           </div>
-        </div>
-      </div>
+          <div id="diagram" class="diagram-container card diagram-card">
+            <div id="chart-header" class="chart-header">
+              <p class="chart-label">Standort:</p>
+              <p id="chart-name"></p>
+            </div>
+            <div>
+              <p id="chart-height">Koordinaten:</p>
+            </div>
+            <div id="chartdiv-2"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <div class="view-toggle-dock" role="tablist" aria-label="Ansicht wechseln">
+      <button class="view-toggle-btn" type="button" data-view="sidebar">
+        <i class="fa fa-filter"></i>
+        <span>Filter</span>
+      </button>
+      <button class="view-toggle-btn" type="button" data-view="main">
+        <i class="fa fa-map"></i>
+        <span>Karte & Liste</span>
+      </button>
     </div>
-    <section class="content-container">
-      <div class="card card-hero" id="iCard">
-      <div class="question-container">
-        <span id="question"></span>
-      </div>
-      <div class="toggle-container">
-        <button class="btn btn-qst btn-qst-prev" onclick="previousQuestion()">←</button>
-        <div class="result-score-container">
-          <div class="result-score-inner">
-            <div id="result-score-label"></div>
-            <div id="result-score"></div>
-          </div>
-        </div>
-        <button class="btn btn-qst btn-qst-next" onclick="nextQuestion()">→</button>
-      </div>
-      <div class="table-scroll">
-        <table id="var-table">
-          <tr>
-            <th></th>
-            <th>Jährlich</th>
-            <th>Jan</th>
-            <th>Feb</th>
-            <th>Mär</th>
-            <th>Apr</th>
-            <th>Mai</th>
-            <th>Jun</th>
-            <th>Jul</th>
-            <th>Aug</th>
-            <th>Sep</th>
-            <th>Okt</th>
-            <th>Nov</th>
-            <th>Dez</th>
-          </tr>
-          <tr>
-            <th>Gesamtniederschlag (in mm)</th>
-            <td>N</td>
-            <td>n1</td>
-            <td>n2</td>
-            <td>n3</td>
-            <td>n4</td>
-            <td>n5</td>
-            <td>n6</td>
-            <td>n7</td>
-            <td>n8</td>
-            <td>n9</td>
-            <td>n10</td>
-            <td>n11</td>
-            <td>n12</td>
-           </tr>
-           <tr>
-             <th>Durchschnittstemperatur (in ˚C)</th>
-              <td>T</td>
-              <td>t1</td>
-              <td>t2</td>
-              <td>t3</td>
-              <td>t4</td>
-              <td>t5</td>
-              <td>t6</td>
-              <td>t7</td>
-              <td>t8</td>
-              <td>t9</td>
-              <td>t10</td>
-              <td>t11</td>
-              <td>t12</td>
-           </tr>
-        </table>
-      </div>
-      <div class="filter-panel">
-        <div class="filter-header">
-          <p class="filter-title">Aktive Filter</p>
-          <span id="filter-count" class="filter-count">0 aktiv</span>
-        </div>
-        <div id="filter-list" class="filter-list"></div>
-        <div id="filter-composer" class="filter-composer">
-          <p class="filter-label">Neuer Filter</p>
-          <div class="filter-input-row">
-            <button id="filter-toggle" class="filter-toggle-btn" type="button">>=</button>
-            <input id="filter-left" class="filter-input" type="text" placeholder="z.B. t1 + t2">
-            <input id="filter-right" class="filter-input" type="text" placeholder="z.B. 40">
-            <button id="filter-add" class="filter-add-btn" type="button">Add</button>
-          </div>
-          <p class="filter-hint">Variablen: t1–t12 (Temp), n1–n12 (Niederschlag), T (Ø Temp), N (jährl. Niederschlag)</p>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button onclick="createList()" id="btn-filter" class="btn btn-primary">
-          <i class="fa fa-search"></i>
-          <span class="btn-label">Suchen</span>
-        </button>
-      </div>
-      </div>
-    </section>
-  </aside>
 
-  <section class="main-panel">
-    <section class="map-section">
-      <div class="map-container card">
-        <div class="map-head">
-          <div id="disclaimer"></div>
-        </div>
-        <div id="svgmap" class="map-visual map-visual--svg" aria-label="Interactive world map"></div>
+    <div id="snackbar">Some text some message..</div>
+
+    <footer class="site-footer">
+      <div class="footer-links">
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutzerklärung</a>
       </div>
-    </section>
+      <p class="footer-copyright">
+        © 2026 Adrian Hufnagl. Alle Rechte vorbehalten.
+      </p>
+    </footer>
 
-    <section class="list-diagram-inner">
-      <div class="list-container card list-card">
-        <div id="list-results">
-          <button id="result-whole" class="result-btn selected" onclick="showAll()"></button>
-          <button id="result-correct" class="result-btn" onclick="showCorrect()"></button>
-          <button id="result-incorrect" class="result-btn" onclick="showIncorrect()"></button>
-        </div>
-        <div id="result-description">
-          Insgesamt gibt es 1514 verfügbaren Orte.
-        </div>
-        <div id="climate-list"></div>
-      </div>
-      <div id="diagram" class="diagram-container card diagram-card">
-        <div id="chart-header" class="chart-header">
-          <p class="chart-label">Standort:</p>
-          <p id="chart-name"></p>
-        </div>
-        <div>
-          <p id="chart-height">Koordinaten: </p>
-        </div>
-        <div id="chartdiv-2"></div>
-      </div>
-    </section>
-  </section>
-</main>
+    <script src="js/vendor/modernizr-3.11.2.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/question.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/svgmap.js"></script>
+    <script src="js/chart.js"></script>
+    <script src="js/filter.js"></script>
 
-<div class="view-toggle-dock" role="tablist" aria-label="Ansicht wechseln">
-  <button class="view-toggle-btn" type="button" data-view="sidebar">
-    <i class="fa fa-filter"></i>
-    <span>Filter</span>
-  </button>
-  <button class="view-toggle-btn" type="button" data-view="main">
-    <i class="fa fa-map"></i>
-    <span>Karte & Liste</span>
-  </button>
-</div>
+    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+    <script>
+      window.ga = function () {
+        ga.q.push(arguments);
+      };
+      ga.q = [];
+      ga.l = +new Date();
+      ga("create", "UA-XXXXX-Y", "auto");
+      ga("set", "anonymizeIp", true);
+      ga("set", "transport", "beacon");
+      ga("send", "pageview");
+    </script>
+    <script src="https://www.google-analytics.com/analytics.js" async></script>
 
-<div id="snackbar">Some text some message..</div>
-
-<footer class="site-footer">
-  <div class="footer-links">
-    <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutzerklärung</a>
-  </div>
-  <p class="footer-copyright">© 2026 Adrian Hufnagl. Alle Rechte vorbehalten.</p>
-</footer>
-
-  <script src="js/vendor/modernizr-3.11.2.min.js"></script>
-  <script src="js/plugins.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/question.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/map.js"></script>
-  <script src="js/svgmap.js"></script>
-  <script src="js/chart.js"></script>
-  <script src="js/filter.js"></script>
-
-
-  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-  <script>
-    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
-    ga('create', 'UA-XXXXX-Y', 'auto'); ga('set', 'anonymizeIp', true); ga('set', 'transport', 'beacon'); ga('send', 'pageview')
-  </script>
-  <script src="https://www.google-analytics.com/analytics.js" async></script>
-
-  <div style="display: none;">
-    <div class="climate-list-element" onclick="createDiagram(event)">
+    <div style="display: none">
+      <div class="climate-list-element" onclick="createDiagram(event)"></div>
     </div>
-  </div>
-</body>
+  </body>
 </html>

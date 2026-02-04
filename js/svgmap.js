@@ -1,9 +1,6 @@
 /**
- * Custom high-performance SVG world map (Mercator).
- *
- * Base map SVG source (CC BY-SA 3.0):
- * - "Mercator Projection.svg" by Geordie Bosanko (2011)
- * - https://commons.wikimedia.org/wiki/File:Mercator_Projection.svg
+ * Custom high-performance SVG world map (Equirectangular / Plate Carrée).
+ * Supports infinite horizontal panning (spinning like a globe).
  *
  * Markers are expected in the same shape as `cities.features` from `js/map.js`:
  * - geometry.coordinates: [lon, lat]
@@ -14,30 +11,59 @@
 
   const DEBUG = /(?:\?|&)svgdebug=1(?:&|$)/.test(window.location.search || "");
 
+  // Equirectangular world map dimensions from viewBox
+  // Using the BlankMap-World-Equirectangular.svg from Wikimedia Commons
+  const MAP_WIDTH = 2752.766;
+  const MAP_HEIGHT = 1537.631;
+
   const BASE_VIEWBOX = {
     x: 0,
     y: 0,
-    width: 1652.4702,
-    height: 1220.6385,
+    width: MAP_WIDTH,
+    height: MAP_HEIGHT,
   };
 
-  const MAX_MERCATOR_LAT = 85.05112878;
+  // Actual map content bounds within the SVG (analyzed from path data)
+  // The map content has padding within the viewBox
+  const CONTENT_X_MIN = 1.54;
+  const CONTENT_X_MAX = 2723.27;
+  const CONTENT_Y_MIN = 112.24; // Top of map (corresponds to +90° lat)
+  const CONTENT_Y_MAX = 1457.56; // Bottom of map (corresponds to -90° lat)
+  const CONTENT_WIDTH = CONTENT_X_MAX - CONTENT_X_MIN; // ~2721.73
+  const CONTENT_HEIGHT = CONTENT_Y_MAX - CONTENT_Y_MIN; // ~1345.32
+
+  // Geographic bounds
+  const LON_MIN = -180;
+  const LON_MAX = 180;
+  const LON_RANGE = LON_MAX - LON_MIN; // 360
+
+  const LAT_MIN = -90;
+  const LAT_MAX = 90;
+  const LAT_RANGE = LAT_MAX - LAT_MIN; // 180
 
   function clamp(n, min, max) {
     return Math.min(max, Math.max(min, n));
   }
 
-  function mercatorProject(lonDeg, latDeg) {
-    const lon = clamp(lonDeg, -180, 180);
-    const lat = clamp(latDeg, -MAX_MERCATOR_LAT, MAX_MERCATOR_LAT);
-    const xNorm = (lon + 180) / 360;
-    const latRad = (lat * Math.PI) / 180;
-    const yNorm =
-      (1 - Math.log(Math.tan(Math.PI / 4 + latRad / 2)) / Math.PI) / 2;
+  /**
+   * Equirectangular projection - linear mapping adjusted for actual map bounds
+   * Maps lon/lat to the actual map content area within the SVG
+   */
+  function equirectangularProject(lonDeg, latDeg) {
+    // Normalize longitude to [-180, 180]
+    let lon = ((lonDeg + 180) % 360) - 180;
+    if (lon < -180) lon += 360;
+
+    // Clamp latitude to valid range
+    const lat = clamp(latDeg, LAT_MIN, LAT_MAX);
+
+    // Linear projection mapped to content bounds
+    const xNorm = (lon - LON_MIN) / LON_RANGE;
+    const yNorm = (LAT_MAX - lat) / LAT_RANGE;
 
     return {
-      x: xNorm * BASE_VIEWBOX.width,
-      y: yNorm * BASE_VIEWBOX.height,
+      x: CONTENT_X_MIN + xNorm * CONTENT_WIDTH,
+      y: CONTENT_Y_MIN + yNorm * CONTENT_HEIGHT,
     };
   }
 
@@ -57,7 +83,7 @@
     }
   }
 
-  class SvgMercatorMap {
+  class SvgWorldMap {
     constructor(container) {
       this.container = container;
       this.svg = createSvgEl("svg");
@@ -71,14 +97,14 @@
 
       this._rafPending = false;
       this._scale = 1;
-      this._tx = 0;
+      this._tx = 0; // Horizontal translation (can be any value for wrapping)
       this._ty = 0;
       this._minScale = 1;
       this._maxScale = 24;
 
-      // Wheel zoom state (rAF-throttled for smoothness)
+      // Wheel zoom state
       this._wheelAccumPx = 0;
-      this._wheelLastPoint = null; // {x,y}
+      this._wheelLastPoint = null;
       this._wheelRaf = null;
 
       this._pointerActive = false;
@@ -90,7 +116,10 @@
       this._markerElsByIndex = new Map();
       this._markers = [];
 
-      this._landEl = null;
+      this._mapImages = [];
+      this._markerGroups = [];
+      this._selectionGroups = [];
+
       this._interactionDepth = 0;
       this._interactionIdleTimer = null;
       this._gestureState = null;
@@ -104,15 +133,17 @@
       setAttrs(this.svg, {
         viewBox: `${BASE_VIEWBOX.x} ${BASE_VIEWBOX.y} ${BASE_VIEWBOX.width} ${BASE_VIEWBOX.height}`,
         role: "img",
+        style: "overflow: hidden;",
       });
 
+      // Ocean background (extends for wrapping)
       const ocean = createSvgEl("rect");
       setAttrs(ocean, {
-        x: BASE_VIEWBOX.x,
+        x: -MAP_WIDTH * 2,
         y: BASE_VIEWBOX.y,
-        width: BASE_VIEWBOX.width,
-        height: BASE_VIEWBOX.height,
-        fill: "#ffffff",
+        width: MAP_WIDTH * 5,
+        height: MAP_HEIGHT,
+        fill: "#00000000",
       });
       this.svg.appendChild(ocean);
 
@@ -121,13 +152,13 @@
       this.viewport.appendChild(this.markerLayer);
       this.viewport.appendChild(this.selectionLayer);
 
-      // Status overlay (outside viewport so it doesn't scale)
+      // Status overlay
       if (DEBUG && this._statusText && this.statusLayer) {
         setAttrs(this._statusText, {
           x: 10,
-          y: 18,
+          y: 30,
           fill: "rgba(31, 42, 47, 0.6)",
-          "font-size": 14,
+          "font-size": 24,
           "font-family":
             "system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
         });
@@ -136,22 +167,56 @@
         this.svg.appendChild(this.statusLayer);
       }
 
-      // Base map: use static SVG image for land masses
-      const baseImg = createSvgEl("image");
-      setAttrs(baseImg, {
-        href: "img/mercator_projection.svg",
+      // Create 3 copies of the map for seamless horizontal wrapping
+      // (left copy, center, right copy)
+      for (let i = -1; i <= 1; i++) {
+        const baseImg = createSvgEl("image");
+        setAttrs(baseImg, {
+          href: "img/world_equirectangular.svg",
+          x: i * MAP_WIDTH,
+          y: BASE_VIEWBOX.y,
+          width: MAP_WIDTH,
+          height: MAP_HEIGHT,
+          preserveAspectRatio: "none",
+          opacity: "0.92",
+          "pointer-events": "none",
+        });
+        this.baseLayer.appendChild(baseImg);
+        this._mapImages.push(baseImg);
+      }
+
+      // Create marker groups for each copy
+      for (let i = -1; i <= 1; i++) {
+        const group = createSvgEl("g");
+        setAttrs(group, { transform: `translate(${i * MAP_WIDTH}, 0)` });
+        this.markerLayer.appendChild(group);
+        this._markerGroups.push(group);
+
+        const selGroup = createSvgEl("g");
+        setAttrs(selGroup, { transform: `translate(${i * MAP_WIDTH}, 0)` });
+        this.selectionLayer.appendChild(selGroup);
+        this._selectionGroups.push(selGroup);
+      }
+
+      // Clip path to hide content outside the viewbox
+      const defs = createSvgEl("defs");
+      const clipPath = createSvgEl("clipPath");
+      clipPath.id = "map-clip";
+      const clipRect = createSvgEl("rect");
+      setAttrs(clipRect, {
         x: BASE_VIEWBOX.x,
         y: BASE_VIEWBOX.y,
         width: BASE_VIEWBOX.width,
         height: BASE_VIEWBOX.height,
-        preserveAspectRatio: "none",
-        opacity: "0.88",
-        "pointer-events": "none",
       });
-      this.baseLayer.appendChild(baseImg);
-      this._landEl = baseImg;
+      clipPath.appendChild(clipRect);
+      defs.appendChild(clipPath);
+      this.svg.insertBefore(defs, this.svg.firstChild);
 
-      // Subtle border (outside viewport so it doesn't scale).
+      // Apply clip to the svg
+      this.svg.style.clipPath = "url(#map-clip)";
+
+      // Border
       const border = createSvgEl("rect");
       setAttrs(border, {
         x: BASE_VIEWBOX.x + 0.5,
@@ -167,7 +232,7 @@
       this.container.innerHTML = "";
       this.container.appendChild(this.svg);
 
-      // Tooltip element (HTML, outside SVG for crisp text and easy styling)
+      // Tooltip
       const tip = document.createElement("div");
       tip.className = "svgmap-tooltip";
       tip.style.cssText =
@@ -190,18 +255,24 @@
       return { x: local.x, y: local.y };
     }
 
-    _clampTransform() {
-      const viewW = BASE_VIEWBOX.width;
-      const viewH = BASE_VIEWBOX.height;
-      const scaledW = BASE_VIEWBOX.width * this._scale;
-      const scaledH = BASE_VIEWBOX.height * this._scale;
-
-      if (scaledW <= viewW) {
-        this._tx = (viewW - scaledW) / 2;
-      } else {
-        this._tx = clamp(this._tx, viewW - scaledW, 0);
+    _normalizeHorizontalTranslation() {
+      // Wrap tx to keep it within a reasonable range for rendering
+      const scaledWidth = MAP_WIDTH * this._scale;
+      if (scaledWidth > 0) {
+        // Normalize to keep the map roughly centered
+        while (this._tx > scaledWidth) this._tx -= scaledWidth;
+        while (this._tx < -scaledWidth) this._tx += scaledWidth;
       }
+    }
 
+    _clampTransform() {
+      const viewH = BASE_VIEWBOX.height;
+      const scaledH = MAP_HEIGHT * this._scale;
+
+      // Horizontal: allow free movement (infinite wrapping)
+      this._normalizeHorizontalTranslation();
+
+      // Vertical: clamp to prevent going off the map
       if (scaledH <= viewH) {
         this._ty = (viewH - scaledH) / 2;
       } else {
@@ -218,7 +289,7 @@
           this._clampTransform();
           this.viewport.setAttribute(
             "transform",
-            `matrix(${this._scale} 0 0 ${this._scale} ${this._tx} ${this._ty})`
+            `matrix(${this._scale} 0 0 ${this._scale} ${this._tx} ${this._ty})`,
           );
         });
         return;
@@ -227,15 +298,14 @@
       this._clampTransform();
       this.viewport.setAttribute(
         "transform",
-        `matrix(${this._scale} 0 0 ${this._scale} ${this._tx} ${this._ty})`
+        `matrix(${this._scale} 0 0 ${this._scale} ${this._tx} ${this._ty})`,
       );
     }
 
     _wheelDeltaPixels(e) {
-      // Normalize delta across devices and deltaMode (pixel/line/page).
       let dy = e.deltaY;
-      if (e.deltaMode === 1) dy *= 16; // lines -> px (typical)
-      if (e.deltaMode === 2) dy *= BASE_VIEWBOX.height; // pages -> px-ish
+      if (e.deltaMode === 1) dy *= 16;
+      if (e.deltaMode === 2) dy *= BASE_VIEWBOX.height;
       return dy;
     }
 
@@ -256,21 +326,18 @@
     }
 
     _attachEvents() {
-      // Hover tooltip + selection (delegated)
       let hoverTimer = null;
-      
+
       this.markerLayer.addEventListener("mouseover", (e) => {
         const t = e.target;
         if (!t || typeof t.getAttribute !== "function") return;
         const name = t.getAttribute("data-name");
         const idxStr = t.getAttribute("data-i");
         if (!name) return;
-        
-        // Show tooltip immediately
+
         this._tooltip.textContent = name;
         this._tooltip.style.opacity = "1";
-        
-        // Select station after short delay (so quick mouse movements don't spam)
+
         if (hoverTimer) clearTimeout(hoverTimer);
         hoverTimer = setTimeout(() => {
           const idx = Number(idxStr);
@@ -311,19 +378,17 @@
           this._wheelAccumPx += this._wheelDeltaPixels(e);
           this._wheelLastPoint = p;
 
-          // Trackpad pinch in Chromium usually comes as ctrlKey+wheel.
-          // Apply immediately for responsiveness (no extra frame of perceived delay).
           if (e.ctrlKey) {
             const deltaPx = this._wheelAccumPx;
             this._wheelAccumPx = 0;
             const worldX = (p.x - this._tx) / this._scale;
             const worldY = (p.y - this._ty) / this._scale;
-            const zoomIntensity = 0.0017; // slightly gentler for pinch
+            const zoomIntensity = 0.0017;
             const zoom = Math.exp(-deltaPx * zoomIntensity);
             const nextScale = clamp(
               this._scale * zoom,
               this._minScale,
-              this._maxScale
+              this._maxScale,
             );
             this._scale = nextScale;
             this._tx = p.x - worldX * this._scale;
@@ -344,22 +409,24 @@
             const worldX = (point.x - this._tx) / this._scale;
             const worldY = (point.y - this._ty) / this._scale;
 
-            // Continuous zoom; tuned to feel snappy but stable.
             const zoomIntensity = 0.002;
             const zoom = Math.exp(-deltaPx * zoomIntensity);
 
-            const nextScale = clamp(this._scale * zoom, this._minScale, this._maxScale);
+            const nextScale = clamp(
+              this._scale * zoom,
+              this._minScale,
+              this._maxScale,
+            );
             this._scale = nextScale;
             this._tx = point.x - worldX * this._scale;
             this._ty = point.y - worldY * this._scale;
             this._applyTransform(false);
           });
         },
-        { passive: false }
+        { passive: false },
       );
 
-      // Safari trackpad pinch often dispatches gesture events instead of ctrl+wheel.
-      // These are non-standard but widely supported on macOS Safari.
+      // Safari gesture events
       this.svg.addEventListener(
         "gesturestart",
         (e) => {
@@ -375,7 +442,7 @@
             worldY,
           };
         },
-        { passive: false }
+        { passive: false },
       );
 
       this.svg.addEventListener(
@@ -388,14 +455,14 @@
           const nextScale = clamp(
             baseScale * e.scale,
             this._minScale,
-            this._maxScale
+            this._maxScale,
           );
           this._scale = nextScale;
           this._tx = point.x - worldX * this._scale;
           this._ty = point.y - worldY * this._scale;
           this._applyTransform(true);
         },
-        { passive: false }
+        { passive: false },
       );
 
       this.svg.addEventListener(
@@ -405,12 +472,11 @@
           this._setInteracting(false);
           this._gestureState = null;
         },
-        { passive: false }
+        { passive: false },
       );
 
       // Drag pan
       this.svg.addEventListener("pointerdown", (e) => {
-        // Only primary button for mouse.
         if (e.pointerType === "mouse" && e.button !== 0) return;
         this._pointerActive = true;
         this._pointerId = e.pointerId;
@@ -418,20 +484,26 @@
         this.svg.setPointerCapture(e.pointerId);
 
         const p = this._clientToSvgPoint(e.clientX, e.clientY);
-        this._dragStart = { x: p.x, y: p.y, tx: this._tx, ty: this._ty, clientX: e.clientX, clientY: e.clientY };
+        this._dragStart = {
+          x: p.x,
+          y: p.y,
+          tx: this._tx,
+          ty: this._ty,
+          clientX: e.clientX,
+          clientY: e.clientY,
+        };
       });
 
       this.svg.addEventListener("pointermove", (e) => {
         if (!this._pointerActive) return;
         if (this._pointerId !== e.pointerId) return;
-        
-        // Check if we moved enough to consider it a drag (not a click)
+
         const dx = e.clientX - this._dragStart.clientX;
         const dy = e.clientY - this._dragStart.clientY;
         if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
           this._didDrag = true;
         }
-        
+
         const p = this._clientToSvgPoint(e.clientX, e.clientY);
         this._tx = this._dragStart.tx + (p.x - this._dragStart.x);
         this._ty = this._dragStart.ty + (p.y - this._dragStart.y);
@@ -440,8 +512,7 @@
 
       this.svg.addEventListener("pointerup", (e) => {
         if (this._pointerId !== e.pointerId) return;
-        
-        // If we didn't drag, check if we clicked on a marker
+
         if (!this._didDrag) {
           const t = e.target;
           if (t && typeof t.getAttribute === "function") {
@@ -454,35 +525,33 @@
             }
           }
         }
-        
+
         this._pointerActive = false;
         this._pointerId = null;
       });
-      
+
       this.svg.addEventListener("pointercancel", (e) => {
         if (this._pointerId !== e.pointerId) return;
         this._pointerActive = false;
         this._pointerId = null;
       });
-      
+
       this.svg.addEventListener("pointerleave", (e) => {
         if (this._pointerId !== e.pointerId) return;
         this._pointerActive = false;
         this._pointerId = null;
       });
     }
-    
+
     _handleMarkerClick(idx, name) {
       this.setSelected(idx);
 
       const list = document.getElementById("climate-list");
       if (list && name) {
         for (const child of list.children) {
-          // innerText includes name + icon + country, so use startsWith
           const label = (child.innerText || "").trim();
           if (label.startsWith(name)) {
             child.scrollIntoView({ behavior: "smooth", block: "nearest" });
-            // Trigger the onclick handler directly (more reliable than .click())
             if (typeof window.createDiagram === "function") {
               window.createDiagram({ currentTarget: child, target: child });
             } else {
@@ -501,9 +570,12 @@
     setMarkers(features) {
       this._markers = Array.isArray(features) ? features : [];
       this._markerElsByIndex.clear();
-      this.markerLayer.innerHTML = "";
 
-      const frag = document.createDocumentFragment();
+      // Clear all marker groups
+      for (const group of this._markerGroups) {
+        group.innerHTML = "";
+      }
+
       let renderedCount = 0;
 
       for (let i = 0; i < this._markers.length; i++) {
@@ -515,52 +587,57 @@
         const lat = parseMaybeLocaleNumber(coords[1]);
         if (!Number.isFinite(lon) || !Number.isFinite(lat)) continue;
 
-        const p = mercatorProject(lon, lat);
+        const p = equirectangularProject(lon, lat);
         const name = (f.properties && f.properties.name) || "";
         const color =
           f.properties && f.properties.color ? f.properties.color : "#111";
+        // Scale radius for the larger coordinate system (viewBox ~2753×1538)
         const rRaw =
           f.properties && Number.isFinite(f.properties.radius)
             ? f.properties.radius
             : 2;
-        // Slightly boost radius so markers remain visible on a full-world view.
-        const r = Math.max(2.4, rRaw + 0.5);
+        const r = Math.max(6, (rRaw + 1) * 1.5);
 
-        const halo = createSvgEl("circle");
-        setAttrs(halo, {
-          cx: p.x,
-          cy: p.y,
-          r: r + 1.4,
-          fill: "none",
-          stroke: "rgba(255,255,255,0.9)",
-          "stroke-width": 2.2,
-          "vector-effect": "non-scaling-stroke",
-          "pointer-events": "none",
-        });
+        // Add marker to all 3 groups for seamless wrapping
+        for (const group of this._markerGroups) {
+          const halo = createSvgEl("circle");
+          setAttrs(halo, {
+            cx: p.x,
+            cy: p.y,
+            r: r + 3,
+            fill: "none",
+            stroke: "rgba(255,255,255,0.9)",
+            "stroke-width": 4,
+            "vector-effect": "non-scaling-stroke",
+            "pointer-events": "none",
+          });
 
-        const core = createSvgEl("circle");
-        setAttrs(core, {
-          cx: p.x,
-          cy: p.y,
-          r: r,
-          fill: color,
-          stroke: "rgba(0,0,0,0.55)",
-          "stroke-width": 0.9,
-          "vector-effect": "non-scaling-stroke",
-          opacity: 0.98,
-          "data-i": i,
-          "data-name": name,
-        });
-        core.style.cursor = "pointer";
+          const core = createSvgEl("circle");
+          setAttrs(core, {
+            cx: p.x,
+            cy: p.y,
+            r: r,
+            fill: color,
+            stroke: "rgba(0,0,0,0.55)",
+            "stroke-width": 1.5,
+            "vector-effect": "non-scaling-stroke",
+            opacity: 0.98,
+            "data-i": i,
+            "data-name": name,
+          });
+          core.style.cursor = "pointer";
 
-        // Store the core circle for selection ring anchoring.
-        this._markerElsByIndex.set(i, core);
-        frag.appendChild(halo);
-        frag.appendChild(core);
+          group.appendChild(halo);
+          group.appendChild(core);
+
+          // Store reference to center group's marker
+          if (group === this._markerGroups[1]) {
+            this._markerElsByIndex.set(i, core);
+          }
+        }
         renderedCount++;
       }
 
-      this.markerLayer.appendChild(frag);
       this._renderSelection();
 
       if (DEBUG && this._statusText) {
@@ -579,7 +656,11 @@
     }
 
     _renderSelection() {
-      this.selectionLayer.innerHTML = "";
+      // Clear all selection groups
+      for (const group of this._selectionGroups) {
+        group.innerHTML = "";
+      }
+
       if (this._selectedIndex === null) return;
       const base = this._markerElsByIndex.get(this._selectedIndex);
       if (!base) return;
@@ -587,18 +668,21 @@
       const cx = base.getAttribute("cx");
       const cy = base.getAttribute("cy");
 
-      const ring = createSvgEl("circle");
-      setAttrs(ring, {
-        cx,
-        cy,
-        r: 10,
-        fill: "none",
-        stroke: "#111",
-        "stroke-width": 1.2,
-        "vector-effect": "non-scaling-stroke",
-        opacity: 0.65,
-      });
-      this.selectionLayer.appendChild(ring);
+      // Add selection ring to all groups for seamless wrapping
+      for (const group of this._selectionGroups) {
+        const ring = createSvgEl("circle");
+        setAttrs(ring, {
+          cx,
+          cy,
+          r: 20,
+          fill: "none",
+          stroke: "#111",
+          "stroke-width": 3,
+          "vector-effect": "non-scaling-stroke",
+          opacity: 0.65,
+        });
+        group.appendChild(ring);
+      }
     }
 
     resetView() {
@@ -612,16 +696,14 @@
   function init() {
     const container = document.getElementById("svgmap");
     if (!container) return;
-    const map = new SvgMercatorMap(container);
+    const map = new SvgWorldMap(container);
 
-    // Expose a tiny API for `js/map.js` to sync markers/selection.
     window.svgMap = {
       setMarkers: (features) => map.setMarkers(features),
       setSelected: (idx) => map.setSelected(idx),
       resetView: () => map.resetView(),
     };
 
-    // Initial render if markers already exist.
     try {
       if (window.cities && Array.isArray(window.cities.features)) {
         map.setMarkers(window.cities.features);
@@ -637,4 +719,3 @@
     init();
   }
 })();
-
