@@ -57,111 +57,6 @@
     }
   }
 
-  function buildLandPathData(geojson) {
-    if (!geojson || geojson.type !== "FeatureCollection") return "";
-    const features = Array.isArray(geojson.features) ? geojson.features : [];
-
-    let d = "";
-
-    for (const f of features) {
-      const props = f && f.properties ? f.properties : null;
-      // Keep Antarctica excluded like your AMCharts map.
-      if (props && props.id === "AQ") continue;
-
-      const geom = f && f.geometry ? f.geometry : null;
-      if (!geom) continue;
-
-      const type = geom.type;
-      const coords = geom.coordinates;
-      if (!coords) continue;
-
-      const writeRing = (ring) => {
-        if (!Array.isArray(ring) || ring.length < 2) return;
-        const p0 = ring[0];
-        if (!p0 || p0.length < 2) return;
-        const m0 = mercatorProject(p0[0], p0[1]);
-        d += `M${m0.x.toFixed(2)},${m0.y.toFixed(2)}`;
-        for (let i = 1; i < ring.length; i++) {
-          const p = ring[i];
-          if (!p || p.length < 2) continue;
-          const m = mercatorProject(p[0], p[1]);
-          d += `L${m.x.toFixed(2)},${m.y.toFixed(2)}`;
-        }
-        d += "Z";
-      };
-
-      if (type === "Polygon") {
-        // coords: [ [ring], [hole], ... ]
-        for (const ring of coords) writeRing(ring);
-      } else if (type === "MultiPolygon") {
-        // coords: [ [ [ring], ... ], ... ]
-        for (const poly of coords) {
-          if (!Array.isArray(poly)) continue;
-          for (const ring of poly) writeRing(ring);
-        }
-      }
-    }
-
-    return d;
-  }
-
-  function buildLandPathDataAsync(geojson, onDone) {
-    if (!geojson || geojson.type !== "FeatureCollection") {
-      onDone("");
-      return;
-    }
-    const features = Array.isArray(geojson.features) ? geojson.features : [];
-
-    let idx = 0;
-    const parts = [];
-
-    const step = () => {
-      const start = performance.now();
-      while (idx < features.length && performance.now() - start < 10) {
-        const f = features[idx++];
-        const props = f && f.properties ? f.properties : null;
-        if (props && props.id === "AQ") continue;
-        const geom = f && f.geometry ? f.geometry : null;
-        if (!geom) continue;
-        const type = geom.type;
-        const coords = geom.coordinates;
-        if (!coords) continue;
-
-        const writeRing = (ring) => {
-          if (!Array.isArray(ring) || ring.length < 2) return;
-          const p0 = ring[0];
-          if (!p0 || p0.length < 2) return;
-          const m0 = mercatorProject(p0[0], p0[1]);
-          parts.push("M", String(m0.x), ",", String(m0.y));
-          for (let i = 1; i < ring.length; i++) {
-            const p = ring[i];
-            if (!p || p.length < 2) continue;
-            const m = mercatorProject(p[0], p[1]);
-            parts.push("L", String(m.x), ",", String(m.y));
-          }
-          parts.push("Z");
-        };
-
-        if (type === "Polygon") {
-          for (const ring of coords) writeRing(ring);
-        } else if (type === "MultiPolygon") {
-          for (const poly of coords) {
-            if (!Array.isArray(poly)) continue;
-            for (const ring of poly) writeRing(ring);
-          }
-        }
-      }
-
-      if (idx < features.length) {
-        requestAnimationFrame(step);
-      } else {
-        onDone(parts.join(""));
-      }
-    };
-
-    requestAnimationFrame(step);
-  }
-
   class SvgMercatorMap {
     constructor(container) {
       this.container = container;
@@ -241,40 +136,20 @@
         this.svg.appendChild(this.statusLayer);
       }
 
-      // Base map: render land polygons ourselves (Mercator) so we fully control styling
-      // and avoid baked-in "small territory" dots from some blank map SVG assets.
-      const land = createSvgEl("path");
-      setAttrs(land, {
-        d: "",
-        fill: "#c6c6c6",
-        stroke: "#ffffff",
-        "stroke-width": 1,
-        "vector-effect": "non-scaling-stroke",
+      // Base map: use static SVG image for land masses
+      const baseImg = createSvgEl("image");
+      setAttrs(baseImg, {
+        href: "img/mercator_projection.svg",
+        x: BASE_VIEWBOX.x,
+        y: BASE_VIEWBOX.y,
+        width: BASE_VIEWBOX.width,
+        height: BASE_VIEWBOX.height,
+        preserveAspectRatio: "none",
+        opacity: "0.88",
         "pointer-events": "none",
       });
-      this.baseLayer.appendChild(land);
-      this._landEl = land;
-
-      if (window.am5geodata_worldLow) {
-        // Build path asynchronously to avoid blocking page load.
-        buildLandPathDataAsync(window.am5geodata_worldLow, (d) => {
-          if (d) land.setAttribute("d", d);
-        });
-      } else {
-        // Fallback to a static asset if amCharts geodata is unavailable.
-        const baseImg = createSvgEl("image");
-        setAttrs(baseImg, {
-          href: "img/mercator_projection.svg",
-          x: BASE_VIEWBOX.x,
-          y: BASE_VIEWBOX.y,
-          width: BASE_VIEWBOX.width,
-          height: BASE_VIEWBOX.height,
-          preserveAspectRatio: "none",
-          opacity: "0.88",
-          "pointer-events": "none",
-        });
-        this.baseLayer.appendChild(baseImg);
-      }
+      this.baseLayer.appendChild(baseImg);
+      this._landEl = baseImg;
 
       // Subtle border (outside viewport so it doesn't scale).
       const border = createSvgEl("rect");
@@ -367,12 +242,6 @@
     _setInteracting(on) {
       if (on) {
         this._interactionDepth++;
-        if (this._interactionDepth === 1) {
-          // Reduce expensive stroke work while zooming/pinching.
-          if (this._landEl) {
-            this._landEl.setAttribute("stroke-opacity", "0.0");
-          }
-        }
         if (this._interactionIdleTimer) {
           clearTimeout(this._interactionIdleTimer);
           this._interactionIdleTimer = null;
@@ -384,11 +253,6 @@
       }
 
       if (this._interactionDepth > 0) this._interactionDepth--;
-      if (this._interactionDepth === 0) {
-        if (this._landEl) {
-          this._landEl.setAttribute("stroke-opacity", "1");
-        }
-      }
     }
 
     _attachEvents() {
