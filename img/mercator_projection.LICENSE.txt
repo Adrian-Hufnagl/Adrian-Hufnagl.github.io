@@ -1,0 +1,9 @@
+Base map used for `#svgmap` (custom SVG renderer)
+
+Title: "Mercator Projection.svg"
+Author: Geordie Bosanko
+Source: https://commons.wikimedia.org/wiki/File:Mercator_Projection.svg
+License: CC BY-SA 3.0
+
+This repository includes the original SVG file as `img/mercator_projection.svg`.
+

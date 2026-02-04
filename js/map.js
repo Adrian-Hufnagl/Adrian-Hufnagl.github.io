@@ -30,6 +30,23 @@ var cities = {
   ]
 };
 
+function parseLocaleFloat(value) {
+  if (typeof value === "number") return value;
+  if (typeof value !== "string") return NaN;
+  return parseFloat(value.replace(",", "."));
+}
+
+// Debounced sync to the custom SVG map (if present).
+var _svgMapSyncRaf = null;
+function syncSvgMapMarkers() {
+  if (!window.svgMap || typeof window.svgMap.setMarkers !== "function") return;
+  if (_svgMapSyncRaf) return;
+  _svgMapSyncRaf = requestAnimationFrame(function () {
+    _svgMapSyncRaf = null;
+    window.svgMap.setMarkers(cities.features);
+  });
+}
+
 var pointSeries = chart.series.push(
   am5map.MapPointSeries.new(root, {
     geoJSON: cities,
@@ -159,6 +176,9 @@ function createMap() {
   
     createButton("Gekrümmt", am5map.geoNaturalEarth1());
     createButton("Globus", am5map.geoOrthographic());  
+
+  // Sync markers to the custom SVG map (if present)
+  syncSvgMapMarkers();
 }
 
 var pin;
@@ -212,6 +232,11 @@ function selectPin(index){
       sprite: circle,
     });
   });
+
+  // Sync selection to the custom SVG map (if present)
+  if (window.svgMap && typeof window.svgMap.setSelected === "function") {
+    window.svgMap.setSelected(index);
+  }
 }
 
 function addStationToMap(index,drawNew,isCorrect){
@@ -221,7 +246,7 @@ function addStationToMap(index,drawNew,isCorrect){
   let newLon = newStation['long']
   let markerColor = isCorrect ? "#3CEE65" : "#A12843";
   let radius = isCorrect ? 3 : 2;
-  addMarker(parseFloat(newLon), parseFloat(newLat), newName, markerColor, radius)
+  addMarker(parseLocaleFloat(newLon), parseLocaleFloat(newLat), newName, markerColor, radius)
   if(drawNew){
     createMap()
   }
@@ -235,6 +260,14 @@ function deleteMarkers(){
   };
   if(pointSeries2 != null){
     pointSeries2.bullets.clear()
+  }
+
+  // Sync clear to the custom SVG map (if present)
+  if (window.svgMap && typeof window.svgMap.setMarkers === "function") {
+    window.svgMap.setMarkers([]);
+  }
+  if (window.svgMap && typeof window.svgMap.setSelected === "function") {
+    window.svgMap.setSelected(null);
   }
 }
 
