@@ -187,125 +187,105 @@
         </div>
         <section class="content-container">
           <div class="card card-hero" id="iCard">
-            <div class="question-container">
-              <span id="question"></span>
-            </div>
-            <div class="toggle-container">
+            <!-- Task Navigation: Label with arrows -->
+            <div class="task-nav">
               <button
                 class="btn btn-qst btn-qst-prev"
                 onclick="previousQuestion()"
               >
                 ←
               </button>
-              <div class="result-score-container">
-                <div class="result-score-inner">
-                  <div id="result-score-label"></div>
-                  <div id="result-score"></div>
-                </div>
-              </div>
+              <span id="task-label" class="task-label">Einführung</span>
               <button class="btn btn-qst btn-qst-next" onclick="nextQuestion()">
                 →
               </button>
             </div>
-            <div class="table-scroll">
-              <table id="var-table">
-                <tr>
-                  <th></th>
-                  <th>Jährlich</th>
-                  <th>Jan</th>
-                  <th>Feb</th>
-                  <th>Mär</th>
-                  <th>Apr</th>
-                  <th>Mai</th>
-                  <th>Jun</th>
-                  <th>Jul</th>
-                  <th>Aug</th>
-                  <th>Sep</th>
-                  <th>Okt</th>
-                  <th>Nov</th>
-                  <th>Dez</th>
-                </tr>
-                <tr>
-                  <th>Gesamtniederschlag (in mm)</th>
-                  <td>N</td>
-                  <td>n1</td>
-                  <td>n2</td>
-                  <td>n3</td>
-                  <td>n4</td>
-                  <td>n5</td>
-                  <td>n6</td>
-                  <td>n7</td>
-                  <td>n8</td>
-                  <td>n9</td>
-                  <td>n10</td>
-                  <td>n11</td>
-                  <td>n12</td>
-                </tr>
-                <tr>
-                  <th>Durchschnittstemperatur (in ˚C)</th>
-                  <td>T</td>
-                  <td>t1</td>
-                  <td>t2</td>
-                  <td>t3</td>
-                  <td>t4</td>
-                  <td>t5</td>
-                  <td>t6</td>
-                  <td>t7</td>
-                  <td>t8</td>
-                  <td>t9</td>
-                  <td>t10</td>
-                  <td>t11</td>
-                  <td>t12</td>
-                </tr>
-              </table>
+
+            <!-- Task Description with fixed height -->
+            <div class="task-description-box">
+              <div class="task-description-content">
+                <span id="question"></span>
+              </div>
+              <div class="task-accuracy">
+                <span id="result-score-label"></span>
+                <span id="result-score"></span>
+              </div>
             </div>
+
+            <!-- Filter Composer -->
+            <div id="filter-composer" class="filter-composer">
+              <p class="filter-label">Neuer Filter</p>
+              <div class="filter-input-row">
+                <button
+                  id="filter-toggle"
+                  class="filter-toggle-btn"
+                  type="button"
+                >
+                  >=
+                </button>
+                <input
+                  id="filter-left"
+                  class="filter-input"
+                  type="text"
+                  placeholder="z.B. t1 + t2"
+                />
+                <input
+                  id="filter-right"
+                  class="filter-input"
+                  type="text"
+                  placeholder="z.B. 40"
+                />
+                <button id="filter-add" class="filter-add-btn" type="button">
+                  Add
+                </button>
+              </div>
+              <p class="filter-hint">
+                Variablen: t1–t12 (Temp), n1–n12 (Niederschlag), T (Ø Temp), N
+                (jährl. Niederschlag)
+              </p>
+            </div>
+
+            <!-- Variable Table (Vertical, Foldable) -->
+            <div class="var-table-section">
+              <button id="var-table-toggle" class="var-table-toggle" type="button">
+                <span class="var-table-toggle-label">Variablen-Tabelle</span>
+                <i class="fa fa-angle-down var-table-toggle-icon"></i>
+              </button>
+              <div id="var-table-content" class="var-table-content">
+                <table id="var-table" class="var-table-vertical">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th>Niederschlag (mm)</th>
+                      <th>Temperatur (°C)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr><th>Jährlich</th><td>N</td><td>T</td></tr>
+                    <tr><th>Januar</th><td>n1</td><td>t1</td></tr>
+                    <tr><th>Februar</th><td>n2</td><td>t2</td></tr>
+                    <tr><th>März</th><td>n3</td><td>t3</td></tr>
+                    <tr><th>April</th><td>n4</td><td>t4</td></tr>
+                    <tr><th>Mai</th><td>n5</td><td>t5</td></tr>
+                    <tr><th>Juni</th><td>n6</td><td>t6</td></tr>
+                    <tr><th>Juli</th><td>n7</td><td>t7</td></tr>
+                    <tr><th>August</th><td>n8</td><td>t8</td></tr>
+                    <tr><th>September</th><td>n9</td><td>t9</td></tr>
+                    <tr><th>Oktober</th><td>n10</td><td>t10</td></tr>
+                    <tr><th>November</th><td>n11</td><td>t11</td></tr>
+                    <tr><th>Dezember</th><td>n12</td><td>t12</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Saved Filters -->
             <div class="filter-panel">
               <div class="filter-header">
-                <p class="filter-title">Aktive Filter</p>
+                <p class="filter-title">Gespeicherte Filter</p>
                 <span id="filter-count" class="filter-count">0 aktiv</span>
               </div>
               <div id="filter-list" class="filter-list"></div>
-              <div id="filter-composer" class="filter-composer">
-                <p class="filter-label">Neuer Filter</p>
-                <div class="filter-input-row">
-                  <button
-                    id="filter-toggle"
-                    class="filter-toggle-btn"
-                    type="button"
-                  >
-                    >=
-                  </button>
-                  <input
-                    id="filter-left"
-                    class="filter-input"
-                    type="text"
-                    placeholder="z.B. t1 + t2"
-                  />
-                  <input
-                    id="filter-right"
-                    class="filter-input"
-                    type="text"
-                    placeholder="z.B. 40"
-                  />
-                  <button id="filter-add" class="filter-add-btn" type="button">
-                    Add
-                  </button>
-                </div>
-                <p class="filter-hint">
-                  Variablen: t1–t12 (Temp), n1–n12 (Niederschlag), T (Ø Temp), N
-                  (jährl. Niederschlag)
-                </p>
-              </div>
-            </div>
-            <div class="btn-row">
-              <button
-                onclick="createList()"
-                id="btn-filter"
-                class="btn btn-primary"
-              >
-                <i class="fa fa-search"></i>
-                <span class="btn-label">Suchen</span>
-              </button>
             </div>
           </div>
         </section>
@@ -357,6 +337,16 @@
             <div id="chartdiv-2"></div>
           </div>
         </section>
+
+        <footer class="site-footer">
+          <div class="footer-links">
+            <a href="impressum.html">Impressum</a>
+            <a href="datenschutz.html">Datenschutzerklärung</a>
+          </div>
+          <p class="footer-copyright">
+            © 2026 Adrian Hufnagl. Alle Rechte vorbehalten.
+          </p>
+        </footer>
       </section>
     </main>
 
@@ -372,16 +362,6 @@
     </div>
 
     <div id="snackbar">Some text some message..</div>
-
-    <footer class="site-footer">
-      <div class="footer-links">
-        <a href="impressum.html">Impressum</a>
-        <a href="datenschutz.html">Datenschutzerklärung</a>
-      </div>
-      <p class="footer-copyright">
-        © 2026 Adrian Hufnagl. Alle Rechte vorbehalten.
-      </p>
-    </footer>
 
     <script src="js/vendor/modernizr-3.11.2.min.js"></script>
     <script src="js/plugins.js"></script>

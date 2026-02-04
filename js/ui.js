@@ -8,6 +8,9 @@ var stationName = document.getElementById('chart-name')
 var stationHeight = document.getElementById('chart-height')
 var disclaimerLabel = document.getElementById('disclaimer')
 var varTable = document.getElementById('var-table')
+var taskLabel = document.getElementById('task-label')
+var varTableToggle = document.getElementById('var-table-toggle')
+var varTableContent = document.getElementById('var-table-content')
 
 var filterList = document.getElementById('filter-list')
 var filterComposer = document.getElementById('filter-composer')
@@ -476,23 +479,46 @@ function showMessage(str,success){
   setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
+// Task labels mapping
+var taskLabels = [
+  "Einführung",
+  "Aufgabe 1a",
+  "Aufgabe 1b",
+  "Aufgabe 1c",
+  "Aufgabe 1d",
+  "Aufgabe 2",
+  "Aufgabe 3",
+  "Aufgabe 4",
+  "Aufgabe 5",
+  "Aufgabe 6",
+  "Aufgabe 7",
+  "Aufgabe 8"
+];
+
 // Function to update the textfield with the current question
 function updateQuestion() {
   document.getElementById("question").textContent = questions[currentQuestionIndex];
+  
+  // Update task label
+  if (taskLabel) {
+    taskLabel.textContent = taskLabels[currentQuestionIndex] || "Aufgabe";
+  }
+  
   switch (currentQuestionIndex) {
     case 0: case 1: case 2: case 3:
-      varTable.style.display = "table";
+      if (varTable) varTable.style.display = "table";
       break;
     case 6:
-      disclaimerLabel.innerHTML = densityDisclaimer1; 
+      if (disclaimerLabel) disclaimerLabel.innerHTML = densityDisclaimer1; 
       break;
     case 7:
-      disclaimerLabel.innerHTML = densityDisclaimer2; 
+      if (disclaimerLabel) disclaimerLabel.innerHTML = densityDisclaimer2; 
       break;
     default: 
-    disclaimerLabel.innerHTML = "";
-    varTable.style.display = "none";
-}}
+      if (disclaimerLabel) disclaimerLabel.innerHTML = "";
+      if (varTable) varTable.style.display = "none";
+  }
+}
 
 // Function to go to the previous question
 function previousQuestion() {
@@ -533,6 +559,20 @@ function toggleTutorial() {
   } else {
     tutorial.style.display = "none";
     button.classList.remove('rotated');
+  }
+}
+
+function toggleVarTable() {
+  if (!varTableToggle || !varTableContent) {
+    return;
+  }
+  varTableToggle.classList.toggle('expanded');
+  varTableContent.classList.toggle('visible');
+}
+
+function setupVarTableToggle() {
+  if (varTableToggle) {
+    varTableToggle.addEventListener('click', toggleVarTable);
   }
 }
 
@@ -587,6 +627,7 @@ function setupViewToggle() {
 function setupUI() {
   setupViewToggle();
   setupFilterUI();
+  setupVarTableToggle();
 }
 
 if (document.readyState === 'loading') {
