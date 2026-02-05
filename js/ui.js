@@ -1,24 +1,24 @@
-var climateList = document.getElementById('climate-list')
-var listResults = document.getElementById('list-results')
-var filterResults = document.getElementById('result-score')
-var resultDescription = document.getElementById('result-description')
-var diagramContainer = document.getElementById('diagram')
-var inputCard = document.getElementById('iCard')
-var stationName = document.getElementById('chart-name')
-var stationHeight = document.getElementById('chart-height')
-var disclaimerLabel = document.getElementById('disclaimer')
-var varTable = document.getElementById('var-table')
-var taskLabel = document.getElementById('task-label')
-var varTableToggle = document.getElementById('var-table-toggle')
-var varTableContent = document.getElementById('var-table-content')
+var climateList = document.getElementById("climate-list");
+var listResults = document.getElementById("list-results");
+var filterResults = document.getElementById("result-score");
+var resultDescription = document.getElementById("result-description");
+var diagramContainer = document.getElementById("diagram");
+var inputCard = document.getElementById("iCard");
+var stationName = document.getElementById("chart-name");
+var stationHeight = document.getElementById("chart-height");
+var disclaimerLabel = document.getElementById("disclaimer");
+var varTable = document.getElementById("var-table");
+var taskLabel = document.getElementById("task-label");
+var varTableToggle = document.getElementById("var-table-toggle");
+var varTableContent = document.getElementById("var-table-content");
 
-var filterList = document.getElementById('filter-list')
-var filterComposer = document.getElementById('filter-composer')
-var filterLeftInput = document.getElementById('filter-left')
-var filterRightInput = document.getElementById('filter-right')
-var filterToggleButton = document.getElementById('filter-toggle')
-var filterAddButton = document.getElementById('filter-add')
-var filterCountBadge = document.getElementById('filter-count')
+var filterList = document.getElementById("filter-list");
+var filterComposer = document.getElementById("filter-composer");
+var filterLeftInput = document.getElementById("filter-left");
+var filterRightInput = document.getElementById("filter-right");
+var filterToggleButton = document.getElementById("filter-toggle");
+var filterAddButton = document.getElementById("filter-add");
+var filterCountBadge = document.getElementById("filter-count");
 
 var noFilter = true;
 var activeFilterIndex = null;
@@ -31,7 +31,7 @@ function getCurrentFilters() {
 }
 
 function getActiveFiltersLocal() {
-  return getCurrentFilters().filter(function(filter) {
+  return getCurrentFilters().filter(function (filter) {
     return filter && filter.active && filter.left && filter.right;
   });
 }
@@ -53,15 +53,15 @@ function setComposerStep(step) {
   if (!filterComposer) {
     return;
   }
-  if (step === 'right') {
-    filterComposer.classList.add('is-right');
-    filterComposer.dataset.step = 'right';
+  if (step === "right") {
+    filterComposer.classList.add("is-right");
+    filterComposer.dataset.step = "right";
     if (filterRightInput) {
       filterRightInput.focus();
     }
   } else {
-    filterComposer.classList.remove('is-right');
-    filterComposer.dataset.step = 'left';
+    filterComposer.classList.remove("is-right");
+    filterComposer.dataset.step = "left";
     if (filterLeftInput) {
       filterLeftInput.focus();
     }
@@ -70,15 +70,15 @@ function setComposerStep(step) {
 
 function resetComposer() {
   if (filterLeftInput) {
-    filterLeftInput.value = '';
+    filterLeftInput.value = "";
   }
   if (filterRightInput) {
-    filterRightInput.value = '';
+    filterRightInput.value = "";
   }
   activeFilterIndex = null;
-  setComposerStep('left');
+  setComposerStep("left");
   if (filterAddButton) {
-    filterAddButton.textContent = 'Add';
+    filterAddButton.textContent = "Add";
   }
 }
 
@@ -90,15 +90,15 @@ function loadComposerForFilter(index) {
   }
   activeFilterIndex = index;
   if (filterLeftInput) {
-    filterLeftInput.value = filter.left || '';
+    filterLeftInput.value = filter.left || "";
   }
   if (filterRightInput) {
-    filterRightInput.value = filter.right || '';
+    filterRightInput.value = filter.right || "";
   }
   if (filterAddButton) {
-    filterAddButton.textContent = 'Update';
+    filterAddButton.textContent = "Update";
   }
-  setComposerStep('left');
+  setComposerStep("left");
   renderFilterList();
 }
 
@@ -106,50 +106,51 @@ function renderFilterList() {
   if (!filterList) {
     return;
   }
-  filterList.innerHTML = '';
+  filterList.innerHTML = "";
   var list = getCurrentFilters();
 
   if (!list.length) {
-    var empty = document.createElement('div');
-    empty.className = 'filter-empty';
-    empty.textContent = 'Noch keine Filter hinzugefügt.';
+    var empty = document.createElement("div");
+    empty.className = "filter-empty";
+    empty.textContent = "Noch keine Filter hinzugefügt.";
     filterList.appendChild(empty);
     updateFilterCount();
     return;
   }
 
-  list.forEach(function(filter, index) {
-    var card = document.createElement('div');
-    var stateClass = filter.active ? 'active' : 'inactive';
-    var editingClass = activeFilterIndex === index ? 'editing' : '';
-    card.className = 'filter-card ' + stateClass + ' ' + editingClass;
+  list.forEach(function (filter, index) {
+    var card = document.createElement("div");
+    var stateClass = filter.active ? "active" : "inactive";
+    var editingClass = activeFilterIndex === index ? "editing" : "";
+    card.className = "filter-card " + stateClass + " " + editingClass;
     card.dataset.index = index;
 
-    var removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
-    removeBtn.className = 'filter-remove';
-    removeBtn.setAttribute('aria-label', 'Filter entfernen');
-    removeBtn.textContent = '×';
+    var removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "filter-remove";
+    removeBtn.setAttribute("aria-label", "Filter entfernen");
+    removeBtn.textContent = "×";
 
-    var header = document.createElement('div');
-    header.className = 'filter-card-header';
+    var header = document.createElement("div");
+    header.className = "filter-card-header";
 
-    var toggleLabel = document.createElement('label');
-    toggleLabel.className = 'filter-toggle';
+    var toggleLabel = document.createElement("label");
+    toggleLabel.className = "filter-toggle";
 
-    var toggleInput = document.createElement('input');
-    toggleInput.type = 'checkbox';
+    var toggleInput = document.createElement("input");
+    toggleInput.type = "checkbox";
     toggleInput.checked = !!filter.active;
 
-    var toggleBox = document.createElement('span');
-    toggleBox.className = 'filter-toggle-box';
+    var toggleBox = document.createElement("span");
+    toggleBox.className = "filter-toggle-box";
 
     toggleLabel.appendChild(toggleInput);
     toggleLabel.appendChild(toggleBox);
 
-    var expression = document.createElement('div');
-    expression.className = 'filter-expression';
-    expression.textContent = (filter.left || '') + ' >= ' + (filter.right || '');
+    var expression = document.createElement("div");
+    expression.className = "filter-expression";
+    expression.textContent =
+      (filter.left || "") + " >= " + (filter.right || "");
 
     header.appendChild(toggleLabel);
     header.appendChild(expression);
@@ -158,9 +159,9 @@ function renderFilterList() {
     card.appendChild(header);
 
     if (!filter.active) {
-      var meta = document.createElement('div');
-      meta.className = 'filter-meta';
-      meta.textContent = 'Inaktiv';
+      var meta = document.createElement("div");
+      meta.className = "filter-meta";
+      meta.textContent = "Inaktiv";
       card.appendChild(meta);
     }
 
@@ -172,27 +173,27 @@ function renderFilterList() {
 
 function validateExpression(value, sideLabel) {
   if (!value) {
-    showMessage('Bitte ' + sideLabel + 'e Seite ausfüllen');
+    showMessage("Bitte " + sideLabel + "e Seite ausfüllen");
     return false;
   }
   if (!checkSyntax(value)) {
-    showMessage('Syntaxfehler ' + sideLabel + 'e Seite');
+    showMessage("Syntaxfehler " + sideLabel + "e Seite");
     return false;
   }
   if (!testCalc(value)) {
-    showMessage(sideLabel + 'e Seite lässt sich nicht berechnen');
+    showMessage(sideLabel + "e Seite lässt sich nicht berechnen");
     return false;
   }
   return true;
 }
 
 function addOrUpdateFilter() {
-  var left = filterLeftInput ? filterLeftInput.value.trim() : '';
-  var right = filterRightInput ? filterRightInput.value.trim() : '';
-  if (!validateExpression(left, 'link')) {
+  var left = filterLeftInput ? filterLeftInput.value.trim() : "";
+  var right = filterRightInput ? filterRightInput.value.trim() : "";
+  if (!validateExpression(left, "link")) {
     return;
   }
-  if (!validateExpression(right, 'recht')) {
+  if (!validateExpression(right, "recht")) {
     return;
   }
 
@@ -200,7 +201,7 @@ function addOrUpdateFilter() {
   var newFilter = {
     left: left,
     right: right,
-    active: true
+    active: true,
   };
 
   if (activeFilterIndex !== null && list[activeFilterIndex]) {
@@ -214,7 +215,7 @@ function addOrUpdateFilter() {
   activeFilterIndex = null;
   renderFilterList();
   resetComposer();
-  showMessage('Filter gespeichert', true);
+  showMessage("Filter gespeichert", true);
   createList();
 }
 
@@ -251,30 +252,32 @@ function setupFilterUI() {
   }
 
   if (filterToggleButton) {
-    filterToggleButton.addEventListener('click', function() {
-      var step = filterComposer.classList.contains('is-right') ? 'left' : 'right';
+    filterToggleButton.addEventListener("click", function () {
+      var step = filterComposer.classList.contains("is-right")
+        ? "left"
+        : "right";
       setComposerStep(step);
     });
   }
 
   if (filterAddButton) {
-    filterAddButton.addEventListener('click', function() {
+    filterAddButton.addEventListener("click", function () {
       addOrUpdateFilter();
     });
   }
 
   if (filterLeftInput) {
-    filterLeftInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
+    filterLeftInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
         event.preventDefault();
-        setComposerStep('right');
+        setComposerStep("right");
       }
     });
   }
 
   if (filterRightInput) {
-    filterRightInput.addEventListener('keydown', function(event) {
-      if (event.key === 'Enter') {
+    filterRightInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
         event.preventDefault();
         addOrUpdateFilter();
       }
@@ -282,32 +285,35 @@ function setupFilterUI() {
   }
 
   if (filterList) {
-    filterList.addEventListener('click', function(event) {
-      var removeButton = event.target.closest('.filter-remove');
+    filterList.addEventListener("click", function (event) {
+      var removeButton = event.target.closest(".filter-remove");
       if (removeButton) {
         event.stopPropagation();
-        var index = parseInt(removeButton.closest('.filter-card').dataset.index, 10);
+        var index = parseInt(
+          removeButton.closest(".filter-card").dataset.index,
+          10,
+        );
         removeFilter(index);
         return;
       }
 
-      var toggle = event.target.closest('.filter-toggle');
+      var toggle = event.target.closest(".filter-toggle");
       if (toggle) {
         event.stopPropagation();
         return;
       }
 
-      var card = event.target.closest('.filter-card');
+      var card = event.target.closest(".filter-card");
       if (card) {
         var idx = parseInt(card.dataset.index, 10);
         loadComposerForFilter(idx);
       }
     });
 
-    filterList.addEventListener('change', function(event) {
-      if (event.target && event.target.type === 'checkbox') {
+    filterList.addEventListener("change", function (event) {
+      if (event.target && event.target.type === "checkbox") {
         event.stopPropagation();
-        var card = event.target.closest('.filter-card');
+        var card = event.target.closest(".filter-card");
         if (!card) {
           return;
         }
@@ -322,19 +328,19 @@ function setupFilterUI() {
 }
 
 function createElementFromHTML(htmlString) {
-  var div = document.createElement('div');
+  var div = document.createElement("div");
   div.innerHTML = htmlString.trim();
   return div.firstChild;
 }
 
 //Nach Klick wird Liste gefiltert und ausgegeben
-function createList(){
+function createList() {
   var activeFilters = getActiveFiltersLocal();
   if (!checkInputs()) {
     return;
   }
   if (activeFilters.length > 0) {
-    showMessage("Filter wurden korrekt gesetzt!", true)
+    showMessage("Filter wurden korrekt gesetzt!", true);
     noFilter = false;
   } else {
     noFilter = true;
@@ -343,28 +349,34 @@ function createList(){
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
-  filterClimate()
-  showAll()
+  filterClimate();
+  showAll();
 }
 
 function showAll() {
-  listResults.children[0].classList.add("selected")
-  listResults.children[1].classList.remove("selected")
-  listResults.children[2].classList.remove("selected")
+  listResults.children[0].classList.add("selected");
+  listResults.children[1].classList.remove("selected");
+  listResults.children[2].classList.remove("selected");
   resultDescription.innerHTML = listResults.children[0].title;
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
   }
   displayedClimate = filteredClimate;
   for (let i = 0; i < displayedClimate.length; i++) {
-    climateList.appendChild(createListRow(displayedClimate[i]['name'], displayedClimate[i]['country'], displayedClimate[i]['fits']));
+    climateList.appendChild(
+      createListRow(
+        displayedClimate[i]["name"],
+        displayedClimate[i]["country"],
+        displayedClimate[i]["fits"],
+      ),
+    );
   }
 }
 
 function showCorrect() {
-  listResults.children[0].classList.remove("selected")
-  listResults.children[1].classList.add("selected")
-  listResults.children[2].classList.remove("selected")
+  listResults.children[0].classList.remove("selected");
+  listResults.children[1].classList.add("selected");
+  listResults.children[2].classList.remove("selected");
   resultDescription.innerHTML = listResults.children[1].title;
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
@@ -373,14 +385,20 @@ function showCorrect() {
     return el.fits == true;
   });
   for (let i = 0; i < displayedClimate.length; i++) {
-    climateList.appendChild(createListRow(displayedClimate[i]['name'], displayedClimate[i]['country'], displayedClimate[i]['fits']));
+    climateList.appendChild(
+      createListRow(
+        displayedClimate[i]["name"],
+        displayedClimate[i]["country"],
+        displayedClimate[i]["fits"],
+      ),
+    );
   }
 }
 
 function showIncorrect() {
-  listResults.children[0].classList.remove("selected")
-  listResults.children[1].classList.remove("selected")
-  listResults.children[2].classList.add("selected")
+  listResults.children[0].classList.remove("selected");
+  listResults.children[1].classList.remove("selected");
+  listResults.children[2].classList.add("selected");
   resultDescription.innerHTML = listResults.children[2].title;
   while (climateList.firstChild) {
     climateList.removeChild(climateList.firstChild);
@@ -389,94 +407,118 @@ function showIncorrect() {
     return el.fits == false;
   });
   for (let i = 0; i < displayedClimate.length; i++) {
-    climateList.appendChild(createListRow(displayedClimate[i]['name'], displayedClimate[i]['country'], displayedClimate[i]['fits']));
+    climateList.appendChild(
+      createListRow(
+        displayedClimate[i]["name"],
+        displayedClimate[i]["country"],
+        displayedClimate[i]["fits"],
+      ),
+    );
   }
 }
 
-function createInitialList(){
+function createInitialList() {
   filterData();
-  filterClimate()
+  filterClimate();
 }
 
-function createListRow(name, country, result){
-  const newEl = document.getElementsByClassName("climate-list-element")[0].cloneNode()
+function createListRow(name, country, result) {
+  const newEl = document
+    .getElementsByClassName("climate-list-element")[0]
+    .cloneNode();
   const newName = document.createTextNode(name + " ");
-  const newCountry = document.createElement('div');
-  newCountry.className = "country-name"
+  const newCountry = document.createElement("div");
+  newCountry.className = "country-name";
   newCountry.innerHTML = country;
   newEl.appendChild(newName);
-  if(result){
-    newEl.appendChild(createElementFromHTML('<i class="fa fa-check iconCheck"></i>'))
-    newEl.style.background = '#f3fcf4'
-    newEl.classList.add("climate-list-element-correct")
+  if (result) {
+    newEl.appendChild(
+      createElementFromHTML('<i class="fa fa-check iconCheck"></i>'),
+    );
+    newEl.style.background = "#f3fcf4";
+    newEl.classList.add("climate-list-element-correct");
   } else {
-    newEl.appendChild(createElementFromHTML('<i class="fa fa-times iconFalse"></i>)'))
-    newEl.style.background = '#fcf4fc'
-    newEl.classList.add("climate-list-element-incorrect")
+    newEl.appendChild(
+      createElementFromHTML('<i class="fa fa-times iconFalse"></i>)'),
+    );
+    newEl.style.background = "#fcf4fc";
+    newEl.classList.add("climate-list-element-incorrect");
   }
   newEl.appendChild(newCountry);
-  return newEl
+  return newEl;
 }
 
 //Nimmt Klimadaten von geklicktem Element und schreibt es ins Diagrammfeld
-function createDiagram(e){
+function createDiagram(e) {
   var el = e.currentTarget;
-  var elName = el.innerText.toString()
+  var elName = el.innerText.toString();
   var elParent = el.parentNode;
   var displayedIndex = Array.prototype.indexOf.call(elParent.children, el);
   var filteredIndex = filteredClimate.findIndex(
-    (element) => element.name === elName.split(/\r?\n|\r|\n/g)[0]
+    (element) => element.name === elName.split(/\r?\n|\r|\n/g)[0],
   );
-  if(document.getElementsByClassName("climate-list-element-selcted")[0]){
-    var oldEl = document.getElementsByClassName("climate-list-element-selcted")[0];
+  if (document.getElementsByClassName("climate-list-element-selcted")[0]) {
+    var oldEl = document.getElementsByClassName(
+      "climate-list-element-selcted",
+    )[0];
     oldEl.classList.remove("climate-list-element-selcted");
-  } 
+  }
   el.classList.add("climate-list-element-selcted");
 
   //Log the same text till there is a breakpoint
-  selectPin(filteredIndex)
+  selectPin(filteredIndex);
 
-  stationName.innerHTML = elName
+  stationName.innerHTML = elName;
 
-  for(let i = 0; i < 12; i++){
-    const temperature = displayedClimate[displayedIndex][tMonths[i]]
-    const precipitation = displayedClimate[displayedIndex][pMonths[i]]
-    data[i].temp = temperature
-    data[i].prec = precipitation
+  for (let i = 0; i < 12; i++) {
+    const temperature = displayedClimate[displayedIndex][tMonths[i]];
+    const precipitation = displayedClimate[displayedIndex][pMonths[i]];
+    data[i].temp = temperature;
+    data[i].prec = precipitation;
   }
-  showStationData(displayedIndex)
+  showStationData(displayedIndex);
   createNewGraph(data);
 }
 
-function deleteDiagram(){
-  stationName.innerHTML = "Keine Station ausgewählt"
-  stationHeight.innerHTML = ""
+function deleteDiagram() {
+  stationName.innerHTML = "Keine Station ausgewählt";
+  stationHeight.innerHTML = "";
   deleteGraph();
 }
 
 //Nimmt Stationsdaten von geklicktem Element und schreibt es ins Diagrammfeld
-function showStationData(i){
-  let newStation = displayedClimate[i]
-  let newLat = newStation['lat']
-  let newLon = newStation['long']
-  let newHeight = newStation['elevation']
-  stationHeight.innerHTML = "Koordinaten: " + '( ' + newLat + ' / ' + newLon + ' ) - Höhe: ' + newHeight + 'm';
+function showStationData(i) {
+  let newStation = displayedClimate[i];
+  let newLat = newStation["lat"];
+  let newLon = newStation["long"];
+  let newHeight = newStation["elevation"];
+  stationHeight.innerHTML =
+    "Koordinaten: " +
+    "( " +
+    newLat +
+    " / " +
+    newLon +
+    " ) - Höhe: " +
+    newHeight +
+    "m";
 }
 
-function showMessage(str,success){
+function showMessage(str, success) {
   // Get the snackbar DIV
   var x = document.getElementById("snackbar");
   x.innerHTML = str;
-  if(success){
-    x.style.background ="#3a4";
+  if (success) {
+    x.style.background = "#3a4";
   } else {
-    x.style.background ="#a34";
+    x.style.background = "#a34";
   }
   // Add the "show" class to DIV
   x.className = "show";
 
   // After 3 seconds, remove the show class from DIV
-  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  setTimeout(function () {
+    x.className = x.className.replace("show", "");
+  }, 3000);
 }
 
 // Task labels mapping
@@ -492,37 +534,23 @@ var taskLabels = [
   "Aufgabe 5",
   "Aufgabe 6",
   "Aufgabe 7",
-  "Aufgabe 8"
+  "Aufgabe 8",
 ];
 
 // Function to update the textfield with the current question
 function updateQuestion() {
-  document.getElementById("question").textContent = questions[currentQuestionIndex];
-  
+  document.getElementById("question").textContent =
+    questions[currentQuestionIndex];
+
   // Update task label
   if (taskLabel) {
     taskLabel.textContent = taskLabels[currentQuestionIndex] || "Aufgabe";
-  }
-  
-  switch (currentQuestionIndex) {
-    case 0: case 1: case 2: case 3:
-      if (varTable) varTable.style.display = "table";
-      break;
-    case 6:
-      if (disclaimerLabel) disclaimerLabel.innerHTML = densityDisclaimer1; 
-      break;
-    case 7:
-      if (disclaimerLabel) disclaimerLabel.innerHTML = densityDisclaimer2; 
-      break;
-    default: 
-      if (disclaimerLabel) disclaimerLabel.innerHTML = "";
-      if (varTable) varTable.style.display = "none";
   }
 }
 
 // Function to go to the previous question
 function previousQuestion() {
-  saveFilters()
+  saveFilters();
   if (currentQuestionIndex > 0) {
     currentQuestionIndex--;
     updateQuestion();
@@ -535,7 +563,7 @@ function previousQuestion() {
 
 // Function to go to the next question
 function nextQuestion() {
-  saveFilters()
+  saveFilters();
   if (currentQuestionIndex < questions.length - 1) {
     currentQuestionIndex++;
     updateQuestion();
@@ -550,15 +578,15 @@ function nextQuestion() {
 updateQuestion();
 
 function toggleTutorial() {
-  let tutorial = document.getElementById('tutorial');
-  let button = document.getElementById('toggle-button');
+  let tutorial = document.getElementById("tutorial");
+  let button = document.getElementById("toggle-button");
 
   if (tutorial.style.display === "none") {
     tutorial.style.display = "block";
-    button.classList.add('rotated');
+    button.classList.add("rotated");
   } else {
     tutorial.style.display = "none";
-    button.classList.remove('rotated');
+    button.classList.remove("rotated");
   }
 }
 
@@ -566,59 +594,59 @@ function toggleVarTable() {
   if (!varTableToggle || !varTableContent) {
     return;
   }
-  varTableToggle.classList.toggle('expanded');
-  varTableContent.classList.toggle('visible');
+  varTableToggle.classList.toggle("expanded");
+  varTableContent.classList.toggle("visible");
 }
 
 function setupVarTableToggle() {
   if (varTableToggle) {
-    varTableToggle.addEventListener('click', toggleVarTable);
+    varTableToggle.addEventListener("click", toggleVarTable);
   }
 }
 
 function setActiveView(view) {
-  document.body.setAttribute('data-view', view);
-  let buttons = document.querySelectorAll('.view-toggle-btn');
-  buttons.forEach(function(button) {
+  document.body.setAttribute("data-view", view);
+  let buttons = document.querySelectorAll(".view-toggle-btn");
+  buttons.forEach(function (button) {
     const isActive = button.dataset.view === view;
-    button.classList.toggle('active', isActive);
-    button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-selected", isActive ? "true" : "false");
   });
 }
 
 function setupViewToggle() {
-  let buttons = document.querySelectorAll('.view-toggle-btn');
+  let buttons = document.querySelectorAll(".view-toggle-btn");
   if (!buttons.length) {
     return;
   }
 
-  buttons.forEach(function(button) {
-    button.addEventListener('click', function() {
+  buttons.forEach(function (button) {
+    button.addEventListener("click", function () {
       setActiveView(button.dataset.view);
     });
   });
 
-  let mobileQuery = window.matchMedia('(max-width: 980px)');
+  let mobileQuery = window.matchMedia("(max-width: 980px)");
 
   function syncView() {
     if (mobileQuery.matches) {
       const currentView = document.body.dataset.view;
-      if (currentView === 'sidebar' || currentView === 'main') {
+      if (currentView === "sidebar" || currentView === "main") {
         setActiveView(currentView);
       } else {
-        setActiveView('main');
+        setActiveView("main");
       }
     } else {
-      document.body.setAttribute('data-view', 'all');
-      buttons.forEach(function(button) {
-        button.classList.remove('active');
+      document.body.setAttribute("data-view", "all");
+      buttons.forEach(function (button) {
+        button.classList.remove("active");
       });
     }
   }
 
-  if (typeof mobileQuery.addEventListener === 'function') {
-    mobileQuery.addEventListener('change', syncView);
-  } else if (typeof mobileQuery.addListener === 'function') {
+  if (typeof mobileQuery.addEventListener === "function") {
+    mobileQuery.addEventListener("change", syncView);
+  } else if (typeof mobileQuery.addListener === "function") {
     mobileQuery.addListener(syncView);
   }
   syncView();
@@ -630,8 +658,8 @@ function setupUI() {
   setupVarTableToggle();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupUI);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", setupUI);
 } else {
   setupUI();
 }

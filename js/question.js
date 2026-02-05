@@ -169,9 +169,11 @@ function annotateListHeader() {
       +numWholeIncorrectResults +
       " Orte außerhalb der gefragten Zone.";
     listResults.children[2].innerHTML = numWholeIncorrectResults;
-    filterResults.innerHTML = "";
-    filterResultsLabel.innerHTML = "";
+    filterResultsLabel.innerHTML = "Genauigkeit:";
+    filterResults.innerHTML = "—";
+    filterResults.classList.add("is-empty");
   } else {
+    filterResults.classList.remove("is-empty");
     if (numResults == 0) {
       deleteDiagram();
       console.log("no results");
