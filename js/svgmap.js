@@ -144,7 +144,7 @@
         y: BASE_VIEWBOX.y,
         width: MAP_WIDTH * 5,
         height: MAP_HEIGHT,
-        fill: "#ffffff",
+        fill: "#f5f7fa",
       });
       this.svg.appendChild(ocean);
 
@@ -235,10 +235,11 @@
       const tip = document.createElement("div");
       tip.className = "svgmap-tooltip";
       tip.style.cssText =
-        "position:absolute;pointer-events:none;background:rgba(31,42,47,0.92);" +
-        "color:#fff;padding:4px 8px;border-radius:4px;font-size:12px;" +
-        "font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;" +
-        "white-space:nowrap;opacity:0;transition:opacity 0.12s;z-index:10;";
+        "position:absolute;pointer-events:none;background:rgba(26,29,35,0.95);" +
+        "color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;font-weight:500;" +
+        "font-family:Sora,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;" +
+        "white-space:nowrap;opacity:0;transition:opacity 0.15s ease,transform 0.15s ease;" +
+        "z-index:10;box-shadow:0 4px 16px rgba(0,0,0,0.15);transform:translateY(4px);";
       this.container.style.position = "relative";
       this.container.appendChild(tip);
       this._tooltip = tip;
@@ -639,7 +640,7 @@
             cx: p.x,
             cy: p.y,
             r: r + 2,
-            fill: "rgba(150,150,150,1)",
+            fill: "rgba(107,114,128,0.8)",
             opacity: 1,
             "data-base-r": r + 2,
           });
@@ -699,7 +700,7 @@
           cx,
           cy,
           r: scaledR + 10 * scaleFactor,
-          fill: "rgba(240, 238, 242, 1)",
+          fill: "rgba(59, 130, 246, 0.2)",
           "pointer-events": "none",
         });
         const highlight2 = createSvgEl("circle");
@@ -707,7 +708,7 @@
           cx,
           cy,
           r: scaledR + 6 * scaleFactor,
-          fill: "rgba(42, 40, 44, 1)",
+          fill: "rgba(59, 130, 246, 1)",
           "pointer-events": "none",
         });
         group.appendChild(highlight);

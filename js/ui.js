@@ -432,15 +432,9 @@ function createListRow(name, country, result) {
   newCountry.innerHTML = country;
   newEl.appendChild(newName);
   if (result) {
-    newEl.appendChild(
-      createElementFromHTML('<i class="fa fa-check iconCheck"></i>'),
-    );
     newEl.style.background = "#f3fcf4";
     newEl.classList.add("climate-list-element-correct");
   } else {
-    newEl.appendChild(
-      createElementFromHTML('<i class="fa fa-times iconFalse"></i>)'),
-    );
     newEl.style.background = "#fcf4fc";
     newEl.classList.add("climate-list-element-incorrect");
   }
@@ -578,17 +572,26 @@ function nextQuestion() {
 updateQuestion();
 
 function toggleTutorial() {
-  let tutorial = document.getElementById("tutorial");
-  let button = document.getElementById("toggle-button");
-
-  if (tutorial.style.display === "none") {
-    tutorial.style.display = "block";
-    button.classList.add("rotated");
+  let modal = document.getElementById("help-modal");
+  
+  if (modal.classList.contains("active")) {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
   } else {
-    tutorial.style.display = "none";
-    button.classList.remove("rotated");
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
   }
 }
+
+// Close modal on Escape key
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    let modal = document.getElementById("help-modal");
+    if (modal && modal.classList.contains("active")) {
+      toggleTutorial();
+    }
+  }
+});
 
 function toggleVarTable() {
   if (!varTableToggle || !varTableContent) {

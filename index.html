@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/legal.css" />
 
-    <meta name="theme-color" content="#f6f2eb" />
+    <meta name="theme-color" content="#f8f9fc" />
   </head>
 
   <body data-view="main">
@@ -45,142 +45,15 @@
                   <p id="bar-header">Geofilter</p>
                 </div>
                 <div class="bar-actions">
-                  <p class="bar-help">Hilfe</p>
                   <button
-                    id="toggle-button"
-                    class="btn btn-ghost btn-icon"
+                    id="help-button"
+                    class="btn btn-ghost btn-help"
                     onclick="toggleTutorial()"
                   >
-                    <i class="fa fa-angle-up"></i>
+                    <span class="bar-help">Hilfe</span>
+                    <i class="fa fa-question-circle"></i>
                   </button>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div id="tutorial">
-            <div class="tutorial-shell">
-              <p class="tutorial-text">
-                Auf dieser Webseite haben wir viele Klimadaten von über 1000
-                verschiedenen Wetterstationenauf der ganzen Welt gesammelt.
-                Diese Daten helfen uns, das Klima und Wetter der verschiedenen
-                Gebiete besser zu verstehen. Ihr könnt verschiedene Filter
-                verwenden, um die Auswahl der Wetterstationen einzuschränken und
-                damit auf bestimmte Fragen gezielter einzugehen.
-              </p>
-              <p></p>
-              <p class="tutorial-text">
-                Die Filter, die ihr einstellen könnt, basieren auf
-                Durchschnittswerten von verschiedenen Klimadaten, wie zum
-                Beispiel Temperaturen und Niederschläge. Wir haben zwölf
-                Variablen für die Durchschnittstemperaturen von Januar bis
-                Dezember (t1 bis t12) und zwölf Variablen für die
-                Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12).
-                Außerdem gibt es zwei weitere Variablen: den alljährlichen
-                durchschnittlichen Niederschlag (N) und die
-                Durchschnittstemperatur (T).
-              </p>
-              <div class="table-scroll">
-                <table class="tutorial-table">
-                  <tr>
-                    <th></th>
-                    <th>Jährlich</th>
-                    <th>Jan</th>
-                    <th>Feb</th>
-                    <th>Mär</th>
-                    <th>Apr</th>
-                    <th>Mai</th>
-                    <th>Jun</th>
-                    <th>Jul</th>
-                    <th>Aug</th>
-                    <th>Sep</th>
-                    <th>Okt</th>
-                    <th>Nov</th>
-                    <th>Dez</th>
-                  </tr>
-                  <tr>
-                    <th>Gesamtniederschlag (in mm)</th>
-                    <td>N</td>
-                    <td>n1</td>
-                    <td>n2</td>
-                    <td>n3</td>
-                    <td>n4</td>
-                    <td>n5</td>
-                    <td>n6</td>
-                    <td>n7</td>
-                    <td>n8</td>
-                    <td>n9</td>
-                    <td>n10</td>
-                    <td>n11</td>
-                    <td>n12</td>
-                  </tr>
-                  <tr>
-                    <th>Durchschnittstemperatur (in C˚)</th>
-                    <td>T</td>
-                    <td>t1</td>
-                    <td>t2</td>
-                    <td>t3</td>
-                    <td>t4</td>
-                    <td>t5</td>
-                    <td>t6</td>
-                    <td>t7</td>
-                    <td>t8</td>
-                    <td>t9</td>
-                    <td>t10</td>
-                    <td>t11</td>
-                    <td>t12</td>
-                  </tr>
-                </table>
-              </div>
-              <p class="tutorial-text">
-                Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter
-                zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der
-                nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in
-                C˚ von Januar und Februar (t1 + t2) größer ist als der
-                Niederschlag im Januar (n1) in mm. Solche Filter helfen euch,
-                die Wetterstationen zu finden, die euren Kriterien entsprechen.
-              </p>
-              <img
-                class="tutorial-img"
-                src="img/exmFil.png"
-                alt="Beispiel Filter"
-              />
-              <p class="tutorial-text">
-                Wenn ihr die Filter angewendet habt, werden die Ergebnisse in
-                einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch
-                die Klimadiagramme der verschiedenen Stationen einsehen, um mehr
-                über das Klima und Wetter in diesen Gebieten zu erfahren.
-              </p>
-              <div class="img-row">
-                <img
-                  class="tutorial-img"
-                  src="img/exmMap.png"
-                  alt="Beispiel Karte"
-                />
-                <div class="img-spacer"></div>
-                <img
-                  class="tutorial-img"
-                  src="img/exmCha.png"
-                  alt="Beispiel Diagramm"
-                />
-              </div>
-              <p class="tutorial-text">
-                Denkt daran, dass ihr mit diesen Filtern und Daten viele
-                verschiedene Fragestellungen untersuchen könnt, also probiert
-                verschiedene Kombinationen aus und seht, was ihr herausfinden
-                könnt!
-              </p>
-              <div class="img-row">
-                <img
-                  class="tutorial-img"
-                  src="img/exmFil2.png"
-                  alt="Beispiel Filter 2"
-                />
-                <div class="img-spacer"></div>
-                <img
-                  class="tutorial-img"
-                  src="img/exmMap2.png"
-                  alt="Beispiel Karte 2"
-                />
               </div>
             </div>
           </div>
@@ -362,6 +235,143 @@
     </div>
 
     <div id="snackbar">Some text some message..</div>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="help-modal">
+      <div class="help-modal-overlay" onclick="toggleTutorial()"></div>
+      <div class="help-modal-content">
+        <div class="help-modal-header">
+          <h2 class="help-modal-title">Hilfe</h2>
+          <button class="help-modal-close" onclick="toggleTutorial()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        <div class="help-modal-body">
+          <p class="tutorial-text">
+            Auf dieser Webseite haben wir viele Klimadaten von über 1000
+            verschiedenen Wetterstationenauf der ganzen Welt gesammelt.
+            Diese Daten helfen uns, das Klima und Wetter der verschiedenen
+            Gebiete besser zu verstehen. Ihr könnt verschiedene Filter
+            verwenden, um die Auswahl der Wetterstationen einzuschränken und
+            damit auf bestimmte Fragen gezielter einzugehen.
+          </p>
+          <p class="tutorial-text">
+            Die Filter, die ihr einstellen könnt, basieren auf
+            Durchschnittswerten von verschiedenen Klimadaten, wie zum
+            Beispiel Temperaturen und Niederschläge. Wir haben zwölf
+            Variablen für die Durchschnittstemperaturen von Januar bis
+            Dezember (t1 bis t12) und zwölf Variablen für die
+            Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12).
+            Außerdem gibt es zwei weitere Variablen: den alljährlichen
+            durchschnittlichen Niederschlag (N) und die
+            Durchschnittstemperatur (T).
+          </p>
+          <div class="table-scroll">
+            <table class="tutorial-table">
+              <tr>
+                <th></th>
+                <th>Jährlich</th>
+                <th>Jan</th>
+                <th>Feb</th>
+                <th>Mär</th>
+                <th>Apr</th>
+                <th>Mai</th>
+                <th>Jun</th>
+                <th>Jul</th>
+                <th>Aug</th>
+                <th>Sep</th>
+                <th>Okt</th>
+                <th>Nov</th>
+                <th>Dez</th>
+              </tr>
+              <tr>
+                <th>Gesamtniederschlag (in mm)</th>
+                <td>N</td>
+                <td>n1</td>
+                <td>n2</td>
+                <td>n3</td>
+                <td>n4</td>
+                <td>n5</td>
+                <td>n6</td>
+                <td>n7</td>
+                <td>n8</td>
+                <td>n9</td>
+                <td>n10</td>
+                <td>n11</td>
+                <td>n12</td>
+              </tr>
+              <tr>
+                <th>Durchschnittstemperatur (in C˚)</th>
+                <td>T</td>
+                <td>t1</td>
+                <td>t2</td>
+                <td>t3</td>
+                <td>t4</td>
+                <td>t5</td>
+                <td>t6</td>
+                <td>t7</td>
+                <td>t8</td>
+                <td>t9</td>
+                <td>t10</td>
+                <td>t11</td>
+                <td>t12</td>
+              </tr>
+            </table>
+          </div>
+          <p class="tutorial-text">
+            Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter
+            zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der
+            nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in
+            C˚ von Januar und Februar (t1 + t2) größer ist als der
+            Niederschlag im Januar (n1) in mm. Solche Filter helfen euch,
+            die Wetterstationen zu finden, die euren Kriterien entsprechen.
+          </p>
+          <img
+            class="tutorial-img"
+            src="img/exmFil.png"
+            alt="Beispiel Filter"
+          />
+          <p class="tutorial-text">
+            Wenn ihr die Filter angewendet habt, werden die Ergebnisse in
+            einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch
+            die Klimadiagramme der verschiedenen Stationen einsehen, um mehr
+            über das Klima und Wetter in diesen Gebieten zu erfahren.
+          </p>
+          <div class="img-row">
+            <img
+              class="tutorial-img"
+              src="img/exmMap.png"
+              alt="Beispiel Karte"
+            />
+            <div class="img-spacer"></div>
+            <img
+              class="tutorial-img"
+              src="img/exmCha.png"
+              alt="Beispiel Diagramm"
+            />
+          </div>
+          <p class="tutorial-text">
+            Denkt daran, dass ihr mit diesen Filtern und Daten viele
+            verschiedene Fragestellungen untersuchen könnt, also probiert
+            verschiedene Kombinationen aus und seht, was ihr herausfinden
+            könnt!
+          </p>
+          <div class="img-row">
+            <img
+              class="tutorial-img"
+              src="img/exmFil2.png"
+              alt="Beispiel Filter 2"
+            />
+            <div class="img-spacer"></div>
+            <img
+              class="tutorial-img"
+              src="img/exmMap2.png"
+              alt="Beispiel Karte 2"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="js/vendor/modernizr-3.11.2.min.js"></script>
     <script src="js/plugins.js"></script>

@@ -147,7 +147,7 @@
 {
    opacity: 1;
    color: #000000;
-   fill:white;
+   fill:#f5f7fa;
    fill-opacity:1;
    fill-rule:nonzero;
    stroke:none;

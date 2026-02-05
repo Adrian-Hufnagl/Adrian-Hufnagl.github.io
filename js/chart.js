@@ -26,17 +26,17 @@ var data = [
   const CONFIG = {
     months: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
     colors: {
-      tempLine: '#dd2211',
-      tempLineCold: '#3377ff',
-      precBar: '#4084c8',
-      precBarDense: '#1f62ff',
-      wetFill: 'rgba(64, 132, 200, 0.35)',
-      dryFill: 'rgba(240, 177, 93, 0.5)',
-      freezeFill: 'rgba(0, 0, 0, 0.15)',
-      gridLine: '#e0e0e0',
-      axisLine: '#a1a5a9',
-      text: '#5b6a73',
-      textDark: '#1f2a2f'
+      tempLine: '#ef4444',
+      tempLineCold: '#3b82f6',
+      precBar: '#3b82f6',
+      precBarDense: '#2563eb',
+      wetFill: 'rgba(59, 130, 246, 0.3)',
+      dryFill: 'rgba(245, 158, 11, 0.4)',
+      freezeFill: 'rgba(107, 114, 128, 0.15)',
+      gridLine: '#e5e7eb',
+      axisLine: '#9ca3af',
+      text: '#6b7280',
+      textDark: '#1a1d23'
     },
     padding: { top: 30, right: 50, bottom: 40, left: 50 },
     tempMin: -50,
@@ -231,7 +231,7 @@ var data = [
         ctx.clip();
         
         // Hatching pattern
-        ctx.strokeStyle = 'rgba(51, 119, 255, 0.4)';
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.4)';
         ctx.lineWidth = 1;
         for (let j = -chartBounds.plotHeight; j < chartBounds.plotWidth; j += 6) {
           ctx.beginPath();
@@ -279,7 +279,7 @@ var data = [
    * Draw stipple pattern for dry periods
    */
   function drawStipple(x, y, width, height) {
-    ctx.fillStyle = 'rgba(180, 120, 50, 0.4)';
+    ctx.fillStyle = 'rgba(245, 158, 11, 0.35)';
     const spacing = 6;
     for (let px = x + 3; px < x + width; px += spacing) {
       for (let py = y + 3; py < y + height; py += spacing) {
@@ -531,7 +531,7 @@ var data = [
     const barWidth = chartBounds.plotWidth / 12;
     const x = chartBounds.plotLeft + barWidth * monthIndex;
     
-    ctx.fillStyle = 'rgba(46, 125, 107, 0.1)';
+    ctx.fillStyle = 'rgba(59, 130, 246, 0.08)';
     ctx.fillRect(x, chartBounds.plotTop, barWidth, chartBounds.plotHeight);
   }
 
