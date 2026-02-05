@@ -13,8 +13,9 @@
 
   // Equirectangular world map dimensions from viewBox
   // Using the BlankMap-World-Equirectangular.svg from Wikimedia Commons
-  const MAP_WIDTH = 2752.766;
-  const MAP_HEIGHT = 1537.631;
+  // ViewBox cropped to actual content bounds to eliminate margins
+  const MAP_WIDTH = 2724;
+  const MAP_HEIGHT = 1458;
 
   const BASE_VIEWBOX = {
     x: 0,
@@ -24,10 +25,10 @@
   };
 
   // Actual map content bounds within the SVG (analyzed from path data)
-  // The map content has padding within the viewBox
-  const CONTENT_X_MIN = 1.54;
-  const CONTENT_X_MAX = 2723.27;
-  const CONTENT_Y_MIN = 112.24; // Top of map (corresponds to +90° lat)
+  // These are absolute SVG coordinates where geographic content maps to
+  const CONTENT_X_MIN = -35.54;
+  const CONTENT_X_MAX = 2583.27;
+  const CONTENT_Y_MIN = 70.24; // Top of map (corresponds to +90° lat)
   const CONTENT_Y_MAX = 1457.56; // Bottom of map (corresponds to -90° lat)
   const CONTENT_WIDTH = CONTENT_X_MAX - CONTENT_X_MIN; // ~2721.73
   const CONTENT_HEIGHT = CONTENT_Y_MAX - CONTENT_Y_MIN; // ~1345.32
@@ -136,14 +137,14 @@
         style: "overflow: hidden;",
       });
 
-      // Ocean background (extends for wrapping)
+      // Ocean background (extends for wrapping) - matches SVG ocean color
       const ocean = createSvgEl("rect");
       setAttrs(ocean, {
         x: -MAP_WIDTH * 2,
         y: BASE_VIEWBOX.y,
         width: MAP_WIDTH * 5,
         height: MAP_HEIGHT,
-        fill: "#00000000",
+        fill: "#ffffff",
       });
       this.svg.appendChild(ocean);
 
@@ -224,8 +225,6 @@
         width: BASE_VIEWBOX.width - 1,
         height: BASE_VIEWBOX.height - 1,
         fill: "none",
-        stroke: "rgba(31, 42, 47, 0.14)",
-        "vector-effect": "non-scaling-stroke",
       });
       this.svg.appendChild(border);
 
@@ -291,6 +290,7 @@
             "transform",
             `matrix(${this._scale} 0 0 ${this._scale} ${this._tx} ${this._ty})`,
           );
+          this._updateMarkerSizes();
         });
         return;
       }
@@ -300,6 +300,26 @@
         "transform",
         `matrix(${this._scale} 0 0 ${this._scale} ${this._tx} ${this._ty})`,
       );
+      this._updateMarkerSizes();
+    }
+
+    _updateMarkerSizes() {
+      // Scale markers inversely to zoom: bigger when zoomed out, smaller when zoomed in
+      // Use sqrt for a more subtle effect
+      const scaleFactor = 1 / Math.sqrt(this._scale);
+
+      for (const group of this._markerGroups) {
+        const circles = group.querySelectorAll("circle[data-base-r]");
+        for (const circle of circles) {
+          const baseR = parseFloat(circle.getAttribute("data-base-r"));
+          if (Number.isFinite(baseR)) {
+            circle.setAttribute("r", baseR * scaleFactor);
+          }
+        }
+      }
+
+      // Also update selection circles
+      this._renderSelection();
     }
 
     _wheelDeltaPixels(e) {
@@ -326,25 +346,27 @@
     }
 
     _attachEvents() {
-      let hoverTimer = null;
-
       this.markerLayer.addEventListener("mouseover", (e) => {
         const t = e.target;
         if (!t || typeof t.getAttribute !== "function") return;
         const name = t.getAttribute("data-name");
-        const idxStr = t.getAttribute("data-i");
-        if (!name) return;
+        if (name === null) return;
 
-        this._tooltip.textContent = name;
-        this._tooltip.style.opacity = "1";
+        // Show tooltip
+        if (name) {
+          this._tooltip.textContent = name;
+          this._tooltip.style.opacity = "1";
+        }
 
-        if (hoverTimer) clearTimeout(hoverTimer);
-        hoverTimer = setTimeout(() => {
-          const idx = Number(idxStr);
-          if (Number.isFinite(idx)) {
-            this._handleMarkerClick(idx, name);
-          }
-        }, 300);
+        // Expand marker on hover - scale relative to current size
+        const baseR = t.getAttribute("data-base-r");
+        if (baseR) {
+          const cx = t.getAttribute("cx");
+          const cy = t.getAttribute("cy");
+          t.style.transformOrigin = `${cx}px ${cy}px`;
+          t.style.transform = "scale(2.5)";
+          t.style.opacity = "1";
+        }
       });
 
       this.markerLayer.addEventListener("mouseout", (e) => {
@@ -352,10 +374,9 @@
         if (!t || typeof t.getAttribute !== "function") return;
         if (t.getAttribute("data-name") !== null) {
           this._tooltip.style.opacity = "0";
-          if (hoverTimer) {
-            clearTimeout(hoverTimer);
-            hoverTimer = null;
-          }
+          // Reset marker size
+          t.style.transform = "scale(1)";
+          t.style.opacity = "0.7";
         }
       });
 
@@ -481,6 +502,7 @@
         this._pointerActive = true;
         this._pointerId = e.pointerId;
         this._didDrag = false;
+        this._pointerDownTarget = e.target; // Store the original target
         this.svg.setPointerCapture(e.pointerId);
 
         const p = this._clientToSvgPoint(e.clientX, e.clientY);
@@ -514,7 +536,7 @@
         if (this._pointerId !== e.pointerId) return;
 
         if (!this._didDrag) {
-          const t = e.target;
+          const t = this._pointerDownTarget; // Use the stored target
           if (t && typeof t.getAttribute === "function") {
             const idxStr = t.getAttribute("data-i");
             if (idxStr !== null) {
@@ -528,6 +550,7 @@
 
         this._pointerActive = false;
         this._pointerId = null;
+        this._pointerDownTarget = null;
       });
 
       this.svg.addEventListener("pointercancel", (e) => {
@@ -600,36 +623,31 @@
 
         // Add marker to all 3 groups for seamless wrapping
         for (const group of this._markerGroups) {
-          const halo = createSvgEl("circle");
-          setAttrs(halo, {
-            cx: p.x,
-            cy: p.y,
-            r: r + 3,
-            fill: "none",
-            stroke: "rgba(255,255,255,0.9)",
-            "stroke-width": 4,
-            "vector-effect": "non-scaling-stroke",
-            "pointer-events": "none",
-          });
-
           const core = createSvgEl("circle");
           setAttrs(core, {
             cx: p.x,
             cy: p.y,
             r: r,
             fill: color,
-            stroke: "rgba(0,0,0,0.55)",
-            "stroke-width": 1.5,
-            "vector-effect": "non-scaling-stroke",
-            opacity: 0.98,
+            opacity: 0.7,
             "data-i": i,
             "data-name": name,
+            "data-base-r": r,
+          });
+          const border = createSvgEl("circle");
+          setAttrs(border, {
+            cx: p.x,
+            cy: p.y,
+            r: r + 2,
+            fill: "rgba(150,150,150,1)",
+            opacity: 1,
+            "data-base-r": r + 2,
           });
           core.style.cursor = "pointer";
+          core.style.transition = "transform 0.15s ease-out";
 
-          group.appendChild(halo);
+          group.appendChild(border);
           group.appendChild(core);
-
           // Store reference to center group's marker
           if (group === this._markerGroups[1]) {
             this._markerElsByIndex.set(i, core);
@@ -638,7 +656,8 @@
         renderedCount++;
       }
 
-      this._renderSelection();
+      // Apply initial size scaling based on current zoom level
+      this._updateMarkerSizes();
 
       if (DEBUG && this._statusText) {
         this._statusText.textContent = `SVG markers: ${this._markers.length} received, ${renderedCount} rendered`;
@@ -667,21 +686,32 @@
 
       const cx = base.getAttribute("cx");
       const cy = base.getAttribute("cy");
+      const baseR = parseFloat(base.getAttribute("data-base-r")) || 6;
 
-      // Add selection ring to all groups for seamless wrapping
+      // Scale selection circles inversely to zoom like markers
+      const scaleFactor = 1 / Math.sqrt(this._scale);
+      const scaledR = baseR * scaleFactor;
+
+      // Add filled selection circle behind the marker
       for (const group of this._selectionGroups) {
-        const ring = createSvgEl("circle");
-        setAttrs(ring, {
+        const highlight = createSvgEl("circle");
+        setAttrs(highlight, {
           cx,
           cy,
-          r: 20,
-          fill: "none",
-          stroke: "#111",
-          "stroke-width": 3,
-          "vector-effect": "non-scaling-stroke",
-          opacity: 0.65,
+          r: scaledR + 10 * scaleFactor,
+          fill: "rgba(240, 238, 242, 1)",
+          "pointer-events": "none",
         });
-        group.appendChild(ring);
+        const highlight2 = createSvgEl("circle");
+        setAttrs(highlight2, {
+          cx,
+          cy,
+          r: scaledR + 6 * scaleFactor,
+          fill: "rgba(42, 40, 44, 1)",
+          "pointer-events": "none",
+        });
+        group.appendChild(highlight);
+        group.appendChild(highlight2);
       }
     }
 
