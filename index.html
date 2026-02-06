@@ -68,7 +68,13 @@
               >
                 ←
               </button>
-              <span id="task-label" class="task-label">Einführung</span>
+              <div class="task-center">
+                <label class="task-label-dropdown" for="task-select">
+                  <span id="task-label" class="task-label">Aufgabe 1</span>
+                  <i class="fa fa-caret-down task-label-caret"></i>
+                  <select id="task-select" class="task-select-overlay"></select>
+                </label>
+              </div>
               <button class="btn btn-qst btn-qst-next" onclick="nextQuestion()">
                 →
               </button>
@@ -89,29 +95,38 @@
             <div id="filter-composer" class="filter-composer">
               <p class="filter-label">Neuer Filter</p>
               <div class="filter-input-row">
-                <button
-                  id="filter-toggle"
-                  class="filter-toggle-btn"
-                  type="button"
-                >
-                  >=
-                </button>
-                <input
-                  id="filter-left"
-                  class="filter-input"
-                  type="text"
-                  placeholder="z.B. t1 + t2"
-                />
-                <input
-                  id="filter-right"
-                  class="filter-input"
-                  type="text"
-                  placeholder="z.B. 40"
-                />
-                <button id="filter-add" class="filter-add-btn" type="button">
-                  Add
-                </button>
+                <div class="filter-field">
+                  <label class="filter-field-label" for="filter-left">
+                    Linke Seite
+                  </label>
+                  <input
+                    id="filter-left"
+                    class="filter-input"
+                    type="text"
+                    placeholder="z.B. t1 + t2"
+                  />
+                </div>
+                <div class="filter-operator" aria-hidden="true">≥</div>
+                <div class="filter-field">
+                  <label class="filter-field-label" for="filter-right">
+                    Rechte Seite
+                  </label>
+                  <input
+                    id="filter-right"
+                    class="filter-input"
+                    type="text"
+                    placeholder="z.B. 40"
+                  />
+                </div>
               </div>
+              <button
+                id="filter-add"
+                class="filter-add-btn"
+                type="button"
+                disabled
+              >
+                Hinzufügen
+              </button>
               <p class="filter-hint">
                 Variablen: t1–t12 (Temp), n1–n12 (Niederschlag), T (Ø Temp), N
                 (jährl. Niederschlag)
@@ -120,7 +135,11 @@
 
             <!-- Variable Table (Vertical, Foldable) -->
             <div class="var-table-section">
-              <button id="var-table-toggle" class="var-table-toggle" type="button">
+              <button
+                id="var-table-toggle"
+                class="var-table-toggle"
+                type="button"
+              >
                 <span class="var-table-toggle-label">Variablen-Tabelle</span>
                 <i class="fa fa-angle-down var-table-toggle-icon"></i>
               </button>
@@ -134,19 +153,71 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr><th>Jährlich</th><td>N</td><td>T</td></tr>
-                    <tr><th>Januar</th><td>n1</td><td>t1</td></tr>
-                    <tr><th>Februar</th><td>n2</td><td>t2</td></tr>
-                    <tr><th>März</th><td>n3</td><td>t3</td></tr>
-                    <tr><th>April</th><td>n4</td><td>t4</td></tr>
-                    <tr><th>Mai</th><td>n5</td><td>t5</td></tr>
-                    <tr><th>Juni</th><td>n6</td><td>t6</td></tr>
-                    <tr><th>Juli</th><td>n7</td><td>t7</td></tr>
-                    <tr><th>August</th><td>n8</td><td>t8</td></tr>
-                    <tr><th>September</th><td>n9</td><td>t9</td></tr>
-                    <tr><th>Oktober</th><td>n10</td><td>t10</td></tr>
-                    <tr><th>November</th><td>n11</td><td>t11</td></tr>
-                    <tr><th>Dezember</th><td>n12</td><td>t12</td></tr>
+                    <tr>
+                      <th>Jährlich</th>
+                      <td>N</td>
+                      <td>T</td>
+                    </tr>
+                    <tr>
+                      <th>Januar</th>
+                      <td>n1</td>
+                      <td>t1</td>
+                    </tr>
+                    <tr>
+                      <th>Februar</th>
+                      <td>n2</td>
+                      <td>t2</td>
+                    </tr>
+                    <tr>
+                      <th>März</th>
+                      <td>n3</td>
+                      <td>t3</td>
+                    </tr>
+                    <tr>
+                      <th>April</th>
+                      <td>n4</td>
+                      <td>t4</td>
+                    </tr>
+                    <tr>
+                      <th>Mai</th>
+                      <td>n5</td>
+                      <td>t5</td>
+                    </tr>
+                    <tr>
+                      <th>Juni</th>
+                      <td>n6</td>
+                      <td>t6</td>
+                    </tr>
+                    <tr>
+                      <th>Juli</th>
+                      <td>n7</td>
+                      <td>t7</td>
+                    </tr>
+                    <tr>
+                      <th>August</th>
+                      <td>n8</td>
+                      <td>t8</td>
+                    </tr>
+                    <tr>
+                      <th>September</th>
+                      <td>n9</td>
+                      <td>t9</td>
+                    </tr>
+                    <tr>
+                      <th>Oktober</th>
+                      <td>n10</td>
+                      <td>t10</td>
+                    </tr>
+                    <tr>
+                      <th>November</th>
+                      <td>n11</td>
+                      <td>t11</td>
+                    </tr>
+                    <tr>
+                      <th>Dezember</th>
+                      <td>n12</td>
+                      <td>t12</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -173,6 +244,16 @@
               aria-label="Interactive world map"
             ></div>
           </div>
+          <div class="map-legend" aria-label="Legende">
+            <div class="legend-item">
+              <span class="legend-dot legend-dot--correct"></span>
+              <span>Grün (größer) = passt zur Aufgabe</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-dot legend-dot--incorrect"></span>
+              <span>Rot (kleiner) = passt nicht</span>
+            </div>
+          </div>
         </section>
 
         <section class="list-diagram-inner">
@@ -182,17 +263,26 @@
                 id="result-whole"
                 class="result-btn selected"
                 onclick="showAll()"
-              ></button>
+              >
+                <span class="result-label">Alle</span>
+                <span class="result-count"></span>
+              </button>
               <button
                 id="result-correct"
                 class="result-btn"
                 onclick="showCorrect()"
-              ></button>
+              >
+                <span class="result-label">Treffer</span>
+                <span class="result-count"></span>
+              </button>
               <button
                 id="result-incorrect"
                 class="result-btn"
                 onclick="showIncorrect()"
-              ></button>
+              >
+                <span class="result-label">Nicht Treffer</span>
+                <span class="result-count"></span>
+              </button>
             </div>
             <div id="result-description">
               Insgesamt gibt es 1514 verfügbaren Orte.
@@ -249,21 +339,20 @@
         <div class="help-modal-body">
           <p class="tutorial-text">
             Auf dieser Webseite haben wir viele Klimadaten von über 1000
-            verschiedenen Wetterstationenauf der ganzen Welt gesammelt.
-            Diese Daten helfen uns, das Klima und Wetter der verschiedenen
-            Gebiete besser zu verstehen. Ihr könnt verschiedene Filter
-            verwenden, um die Auswahl der Wetterstationen einzuschränken und
-            damit auf bestimmte Fragen gezielter einzugehen.
+            verschiedenen Wetterstationenauf der ganzen Welt gesammelt. Diese
+            Daten helfen uns, das Klima und Wetter der verschiedenen Gebiete
+            besser zu verstehen. Ihr könnt verschiedene Filter verwenden, um die
+            Auswahl der Wetterstationen einzuschränken und damit auf bestimmte
+            Fragen gezielter einzugehen.
           </p>
           <p class="tutorial-text">
             Die Filter, die ihr einstellen könnt, basieren auf
-            Durchschnittswerten von verschiedenen Klimadaten, wie zum
-            Beispiel Temperaturen und Niederschläge. Wir haben zwölf
-            Variablen für die Durchschnittstemperaturen von Januar bis
-            Dezember (t1 bis t12) und zwölf Variablen für die
-            Durchschnittsniederschläge von Januar bis Dezember (n1 bis n12).
-            Außerdem gibt es zwei weitere Variablen: den alljährlichen
-            durchschnittlichen Niederschlag (N) und die
+            Durchschnittswerten von verschiedenen Klimadaten, wie zum Beispiel
+            Temperaturen und Niederschläge. Wir haben zwölf Variablen für die
+            Durchschnittstemperaturen von Januar bis Dezember (t1 bis t12) und
+            zwölf Variablen für die Durchschnittsniederschläge von Januar bis
+            Dezember (n1 bis n12). Außerdem gibt es zwei weitere Variablen: den
+            alljährlichen durchschnittlichen Niederschlag (N) und die
             Durchschnittstemperatur (T).
           </p>
           <div class="table-scroll">
@@ -319,12 +408,12 @@
             </table>
           </div>
           <p class="tutorial-text">
-            Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter
-            zu erstellen. Zum Beispiel könntet ihr einen Filter setzen, der
-            nur die Ergebnisse anzeigt, bei denen die addierte Temperatur in
-            C˚ von Januar und Februar (t1 + t2) größer ist als der
-            Niederschlag im Januar (n1) in mm. Solche Filter helfen euch,
-            die Wetterstationen zu finden, die euren Kriterien entsprechen.
+            Mit diesen Variablen könnt ihr Rechnungen aufstellen, um Filter zu
+            erstellen. Zum Beispiel könntet ihr einen Filter setzen, der nur die
+            Ergebnisse anzeigt, bei denen die addierte Temperatur in C˚ von
+            Januar und Februar (t1 + t2) größer ist als der Niederschlag im
+            Januar (n1) in mm. Solche Filter helfen euch, die Wetterstationen zu
+            finden, die euren Kriterien entsprechen.
           </p>
           <img
             class="tutorial-img"
@@ -332,10 +421,10 @@
             alt="Beispiel Filter"
           />
           <p class="tutorial-text">
-            Wenn ihr die Filter angewendet habt, werden die Ergebnisse in
-            einer Liste und auf einer Weltkarte angezeigt. Ihr könnt auch
-            die Klimadiagramme der verschiedenen Stationen einsehen, um mehr
-            über das Klima und Wetter in diesen Gebieten zu erfahren.
+            Wenn ihr die Filter angewendet habt, werden die Ergebnisse in einer
+            Liste und auf einer Weltkarte angezeigt. Ihr könnt auch die
+            Klimadiagramme der verschiedenen Stationen einsehen, um mehr über
+            das Klima und Wetter in diesen Gebieten zu erfahren.
           </p>
           <div class="img-row">
             <img
@@ -353,8 +442,7 @@
           <p class="tutorial-text">
             Denkt daran, dass ihr mit diesen Filtern und Daten viele
             verschiedene Fragestellungen untersuchen könnt, also probiert
-            verschiedene Kombinationen aus und seht, was ihr herausfinden
-            könnt!
+            verschiedene Kombinationen aus und seht, was ihr herausfinden könnt!
           </p>
           <div class="img-row">
             <img

@@ -9,6 +9,7 @@ var stationHeight = document.getElementById("chart-height");
 var disclaimerLabel = document.getElementById("disclaimer");
 var varTable = document.getElementById("var-table");
 var taskLabel = document.getElementById("task-label");
+var taskSelect = document.getElementById("task-select");
 var varTableToggle = document.getElementById("var-table-toggle");
 var varTableContent = document.getElementById("var-table-content");
 
@@ -16,7 +17,6 @@ var filterList = document.getElementById("filter-list");
 var filterComposer = document.getElementById("filter-composer");
 var filterLeftInput = document.getElementById("filter-left");
 var filterRightInput = document.getElementById("filter-right");
-var filterToggleButton = document.getElementById("filter-toggle");
 var filterAddButton = document.getElementById("filter-add");
 var filterCountBadge = document.getElementById("filter-count");
 
@@ -49,26 +49,22 @@ function updateFilterCount() {
   }
 }
 
-function setComposerStep(step) {
-  if (!filterComposer) {
+function setComposerStep(step, shouldFocus) {
+  if (shouldFocus === false) {
     return;
   }
   if (step === "right") {
-    filterComposer.classList.add("is-right");
-    filterComposer.dataset.step = "right";
     if (filterRightInput) {
       filterRightInput.focus();
     }
   } else {
-    filterComposer.classList.remove("is-right");
-    filterComposer.dataset.step = "left";
     if (filterLeftInput) {
       filterLeftInput.focus();
     }
   }
 }
 
-function resetComposer() {
+function resetComposer(shouldFocus) {
   if (filterLeftInput) {
     filterLeftInput.value = "";
   }
@@ -76,10 +72,11 @@ function resetComposer() {
     filterRightInput.value = "";
   }
   activeFilterIndex = null;
-  setComposerStep("left");
+  setComposerStep("left", shouldFocus);
   if (filterAddButton) {
-    filterAddButton.textContent = "Add";
+    filterAddButton.textContent = "Hinzufügen";
   }
+  updateComposerValidity();
 }
 
 function loadComposerForFilter(index) {
@@ -96,9 +93,10 @@ function loadComposerForFilter(index) {
     filterRightInput.value = filter.right || "";
   }
   if (filterAddButton) {
-    filterAddButton.textContent = "Update";
+    filterAddButton.textContent = "Aktualisieren";
   }
   setComposerStep("left");
+  updateComposerValidity();
   renderFilterList();
 }
 
@@ -187,6 +185,44 @@ function validateExpression(value, sideLabel) {
   return true;
 }
 
+function isExpressionValid(value) {
+  if (!value) {
+    return false;
+  }
+  if (!checkSyntax(value)) {
+    return false;
+  }
+  if (!testCalc(value)) {
+    return false;
+  }
+  return true;
+}
+
+function updateComposerValidity() {
+  var leftValue = filterLeftInput ? filterLeftInput.value.trim() : "";
+  var rightValue = filterRightInput ? filterRightInput.value.trim() : "";
+  var leftValid = isExpressionValid(leftValue);
+  var rightValid = isExpressionValid(rightValue);
+  if (filterLeftInput) {
+    filterLeftInput.classList.toggle(
+      "is-invalid",
+      leftValue.length > 0 && !leftValid,
+    );
+  }
+  if (filterRightInput) {
+    filterRightInput.classList.toggle(
+      "is-invalid",
+      rightValue.length > 0 && !rightValid,
+    );
+  }
+  var isValid = leftValid && rightValid;
+  if (filterAddButton) {
+    filterAddButton.disabled = !isValid;
+    filterAddButton.setAttribute("aria-disabled", isValid ? "false" : "true");
+  }
+  return isValid;
+}
+
 function addOrUpdateFilter() {
   var left = filterLeftInput ? filterLeftInput.value.trim() : "";
   var right = filterRightInput ? filterRightInput.value.trim() : "";
@@ -251,15 +287,6 @@ function setupFilterUI() {
     return;
   }
 
-  if (filterToggleButton) {
-    filterToggleButton.addEventListener("click", function () {
-      var step = filterComposer.classList.contains("is-right")
-        ? "left"
-        : "right";
-      setComposerStep(step);
-    });
-  }
-
   if (filterAddButton) {
     filterAddButton.addEventListener("click", function () {
       addOrUpdateFilter();
@@ -267,6 +294,9 @@ function setupFilterUI() {
   }
 
   if (filterLeftInput) {
+    filterLeftInput.addEventListener("input", function () {
+      updateComposerValidity();
+    });
     filterLeftInput.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -276,6 +306,9 @@ function setupFilterUI() {
   }
 
   if (filterRightInput) {
+    filterRightInput.addEventListener("input", function () {
+      updateComposerValidity();
+    });
     filterRightInput.addEventListener("keydown", function (event) {
       if (event.key === "Enter") {
         event.preventDefault();
@@ -331,6 +364,21 @@ function createElementFromHTML(htmlString) {
   var div = document.createElement("div");
   div.innerHTML = htmlString.trim();
   return div.firstChild;
+}
+
+function setResultButtonData(button, countText, titleText) {
+  if (!button) {
+    return;
+  }
+  if (typeof titleText === "string") {
+    button.title = titleText;
+  }
+  var countEl = button.querySelector(".result-count");
+  if (countEl) {
+    countEl.textContent = countText;
+  } else {
+    button.textContent = countText;
+  }
 }
 
 //Nach Klick wird Liste gefiltert und ausgegeben
@@ -426,18 +474,15 @@ function createListRow(name, country, result) {
   const newEl = document
     .getElementsByClassName("climate-list-element")[0]
     .cloneNode();
+  var dot = document.createElement("span");
+  dot.className = result ? "list-dot list-dot--correct" : "list-dot list-dot--incorrect";
+  newEl.appendChild(dot);
   const newName = document.createTextNode(name + " ");
   const newCountry = document.createElement("div");
   newCountry.className = "country-name";
   newCountry.innerHTML = country;
   newEl.appendChild(newName);
-  if (result) {
-    newEl.style.background = "#f3fcf4";
-    newEl.classList.add("climate-list-element-correct");
-  } else {
-    newEl.style.background = "#fcf4fc";
-    newEl.classList.add("climate-list-element-incorrect");
-  }
+  newEl.classList.add(result ? "climate-list-element-correct" : "climate-list-element-incorrect");
   newEl.appendChild(newCountry);
   return newEl;
 }
@@ -517,11 +562,7 @@ function showMessage(str, success) {
 
 // Task labels mapping
 var taskLabels = [
-  "Einführung",
-  "Aufgabe 1a",
-  "Aufgabe 1b",
-  "Aufgabe 1c",
-  "Aufgabe 1d",
+  "Aufgabe 1",
   "Aufgabe 2",
   "Aufgabe 3",
   "Aufgabe 4",
@@ -529,6 +570,14 @@ var taskLabels = [
   "Aufgabe 6",
   "Aufgabe 7",
   "Aufgabe 8",
+  "Aufgabe 9",
+  "Aufgabe 10",
+  "Aufgabe 11",
+  "Aufgabe 12",
+  "Aufgabe 13",
+  "Aufgabe 14",
+  "Aufgabe 15",
+  "Aufgabe 16",
 ];
 
 // Function to update the textfield with the current question
@@ -539,6 +588,9 @@ function updateQuestion() {
   // Update task label
   if (taskLabel) {
     taskLabel.textContent = taskLabels[currentQuestionIndex] || "Aufgabe";
+  }
+  if (taskSelect) {
+    taskSelect.value = String(currentQuestionIndex);
   }
 }
 
@@ -573,7 +625,7 @@ updateQuestion();
 
 function toggleTutorial() {
   let modal = document.getElementById("help-modal");
-  
+
   if (modal.classList.contains("active")) {
     modal.classList.remove("active");
     document.body.style.overflow = "";
@@ -584,7 +636,7 @@ function toggleTutorial() {
 }
 
 // Close modal on Escape key
-document.addEventListener("keydown", function(e) {
+document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
     let modal = document.getElementById("help-modal");
     if (modal && modal.classList.contains("active")) {
@@ -605,6 +657,31 @@ function setupVarTableToggle() {
   if (varTableToggle) {
     varTableToggle.addEventListener("click", toggleVarTable);
   }
+}
+
+function setupTaskSelect() {
+  if (!taskSelect) {
+    return;
+  }
+  taskSelect.innerHTML = "";
+  questions.forEach(function (question, index) {
+    var option = document.createElement("option");
+    var label = taskLabels[index] || "Aufgabe " + (index + 1);
+    option.value = String(index);
+    option.textContent = label + " – " + question;
+    taskSelect.appendChild(option);
+  });
+  taskSelect.value = String(currentQuestionIndex);
+  taskSelect.addEventListener("change", function () {
+    var nextIndex = parseInt(taskSelect.value, 10);
+    if (Number.isNaN(nextIndex)) {
+      return;
+    }
+    saveFilters();
+    currentQuestionIndex = nextIndex;
+    updateQuestion();
+    switchFilters();
+  });
 }
 
 function setActiveView(view) {
@@ -659,6 +736,7 @@ function setupUI() {
   setupViewToggle();
   setupFilterUI();
   setupVarTableToggle();
+  setupTaskSelect();
 }
 
 if (document.readyState === "loading") {

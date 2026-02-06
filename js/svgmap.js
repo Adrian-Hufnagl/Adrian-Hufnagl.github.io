@@ -570,6 +570,11 @@
     _handleMarkerClick(idx, name) {
       this.setSelected(idx);
 
+      // Always switch to "Alle" list first so every element is visible
+      if (typeof window.showAll === "function") {
+        window.showAll();
+      }
+
       const list = document.getElementById("climate-list");
       if (list && name) {
         for (const child of list.children) {
@@ -689,26 +694,30 @@
       const cy = base.getAttribute("cy");
       const baseR = parseFloat(base.getAttribute("data-base-r")) || 6;
 
+      // Use the marker's own color for the selection highlight
+      const markerColor = base.getAttribute("fill") || "#111";
+
       // Scale selection circles inversely to zoom like markers
       const scaleFactor = 1 / Math.sqrt(this._scale);
       const scaledR = baseR * scaleFactor;
 
-      // Add filled selection circle behind the marker
+      // Add filled selection circle behind the marker using its own color
       for (const group of this._selectionGroups) {
         const highlight = createSvgEl("circle");
         setAttrs(highlight, {
           cx,
           cy,
-          r: scaledR + 10 * scaleFactor,
-          fill: "rgba(59, 130, 246, 0.2)",
+          r: scaledR + 20 * scaleFactor,
+          fill: "rgba(37,44,58,0.8)",
+          opacity: 0.2,
           "pointer-events": "none",
         });
         const highlight2 = createSvgEl("circle");
         setAttrs(highlight2, {
           cx,
           cy,
-          r: scaledR + 6 * scaleFactor,
-          fill: "rgba(59, 130, 246, 1)",
+          r: scaledR + 12 * scaleFactor,
+          fill: markerColor,
           "pointer-events": "none",
         });
         group.appendChild(highlight);
