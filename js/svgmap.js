@@ -707,9 +707,9 @@
         setAttrs(highlight, {
           cx,
           cy,
-          r: scaledR + 20 * scaleFactor,
-          fill: "rgba(37,44,58,0.8)",
-          opacity: 0.2,
+          r: scaledR + 18 * scaleFactor,
+          fill: "rgba(0,0,0,1)",
+          opacity: 0.6,
           "pointer-events": "none",
         });
         const highlight2 = createSvgEl("circle");

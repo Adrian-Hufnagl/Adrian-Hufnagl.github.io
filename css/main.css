@@ -78,24 +78,14 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
   font-family: var(--font-sans);
-  background:
-    radial-gradient(
-      ellipse 80% 50% at 20% -20%,
-      rgba(59, 130, 246, 0.08),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 60% 40% at 80% -10%,
-      rgba(139, 92, 246, 0.06),
-      transparent
-    ),
-    linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+  background: var(--bg);
   color: var(--ink);
 }
 
@@ -563,7 +553,8 @@ p {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   overflow-y: auto;
-  border-right: 1px solid var(--line-light);
+  overscroll-behavior-y: contain;
+  border-right: 1px solid var(--line);
 }
 
 .sidebar::-webkit-scrollbar {
@@ -616,14 +607,13 @@ p {
    ============================================ */
 .card {
   position: relative;
-  border: 1px solid var(--line-light);
+  border: 1px solid var(--line);
   background: var(--surface);
   padding: 24px;
   border-radius: var(--radius);
   overflow: hidden;
   width: 100%;
   min-width: 0;
-  box-shadow: var(--shadow-sm);
   transition:
     box-shadow var(--duration-normal) var(--ease-out),
     border-color var(--duration-normal) var(--ease-out),
@@ -1586,44 +1576,54 @@ p {
 }
 
 #list-results {
-  display: flex;
-  align-items: stretch;
-  gap: 4px;
-  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 6px;
   border-radius: var(--radius-pill);
   border: 1px solid var(--line);
   background: var(--surface-alt);
+  width: 100%;
 }
 
 .result-btn {
-  flex: 1;
   border-radius: var(--radius-pill);
-  padding: 8px 10px;
+  padding: 6px 8px;
   border: none;
   background: transparent;
   color: var(--muted);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
-  display: inline-flex;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
   text-align: center;
+  width: 100%;
+  min-width: 0;
   transition: all var(--duration-fast) var(--ease-out);
 }
 
 .result-label {
-  font-size: 10px;
+  font-size: 11px;
+  line-height: 1.1;
 }
 
 .result-count {
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  color: var(--muted);
-  padding: 2px 8px;
-  border-radius: var(--radius-pill);
-  background: var(--line-light);
+  color: var(--muted-light);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .result-btn:hover {
@@ -1638,8 +1638,7 @@ p {
 }
 
 .result-btn.selected .result-count {
-  background: rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.8);
 }
 
 #result-whole.selected {
@@ -2021,11 +2020,6 @@ p {
   .img-spacer {
     display: none;
   }
-
-  #var-table,
-  .tutorial-table {
-    min-width: 640px;
-  }
 }
 
 @media (max-width: 720px) {
@@ -2054,12 +2048,17 @@ p {
     justify-self: center;
   }
 
-  .task-nav {
-    flex-wrap: wrap;
+  #list-results {
+    grid-template-columns: 1fr;
   }
 
-  .task-label-dropdown {
-    padding: 3px 8px;
+  .result-btn {
+    align-items: center;
+    text-align: center;
+  }
+
+  .task-nav {
+    flex-wrap: wrap;
   }
 
   #chartdiv-2 {
@@ -2100,10 +2099,6 @@ p {
 
   .result-score-container {
     min-width: 120px;
-  }
-
-  #list-results {
-    flex-wrap: wrap;
   }
 
   #climate-list {
