@@ -489,14 +489,16 @@ var data = [
       const data = currentData[monthIndex];
       
       // Show tooltip
+      const tempVar = 't' + (monthIndex + 1);
+      const precVar = 'n' + (monthIndex + 1);
       tooltip.innerHTML = `
         <div class="tooltip-header">${CONFIG.months[monthIndex]}</div>
         <div class="tooltip-row">
-          <span class="tooltip-label">Temperatur:</span>
+          <span class="tooltip-label">Temperatur <span class="tooltip-var">(${tempVar})</span>:</span>
           <span class="tooltip-value tooltip-temp">${data.temp.toFixed(1)}°C</span>
         </div>
         <div class="tooltip-row">
-          <span class="tooltip-label">Niederschlag:</span>
+          <span class="tooltip-label">Niederschlag <span class="tooltip-var">(${precVar})</span>:</span>
           <span class="tooltip-value tooltip-prec">${data.prec.toFixed(0)} mm</span>
         </div>
       `;

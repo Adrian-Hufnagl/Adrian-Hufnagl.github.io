@@ -522,6 +522,8 @@ function createDiagram(e) {
 function deleteDiagram() {
   stationName.innerHTML = "Keine Station ausgewählt";
   stationHeight.innerHTML = "";
+  var chartStats = document.getElementById("chart-stats");
+  if (chartStats) chartStats.innerHTML = "";
   deleteGraph();
 }
 
@@ -540,6 +542,25 @@ function showStationData(i) {
     " ) - Höhe: " +
     newHeight +
     "m";
+
+  // Show average temperature (T) and cumulative precipitation (N)
+  var chartStats = document.getElementById("chart-stats");
+  if (chartStats) {
+    var avgTemp = newStation["T"];
+    var cumPrec = newStation["N"];
+    chartStats.innerHTML =
+      '<span class="chart-stat">' +
+      '<span class="chart-stat-label">Ø Temperatur</span> ' +
+      '<span class="chart-stat-var">(T)</span>: ' +
+      '<span class="chart-stat-value chart-stat-temp">' + avgTemp + '°C</span>' +
+      '</span>' +
+      '<span class="chart-stat-separator">|</span>' +
+      '<span class="chart-stat">' +
+      '<span class="chart-stat-label">Σ Niederschlag</span> ' +
+      '<span class="chart-stat-var">(N)</span>: ' +
+      '<span class="chart-stat-value chart-stat-prec">' + cumPrec + ' mm</span>' +
+      '</span>';
+  }
 }
 
 function showMessage(str, success) {
