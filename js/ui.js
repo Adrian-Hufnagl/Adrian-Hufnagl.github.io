@@ -11,6 +11,19 @@ var taskLabel = document.getElementById("task-label");
 var taskSelect = document.getElementById("task-select");
 var varTableToggle = document.getElementById("var-table-toggle");
 var varTableContent = document.getElementById("var-table-content");
+var helpModal = document.getElementById("help-modal");
+var helpChoiceCards = document.querySelectorAll(".help-choice-card");
+var helpDismissButtons = document.querySelectorAll("[data-help-dismiss]");
+var tourOverlay = document.getElementById("tour-overlay");
+var tourTooltip = document.querySelector(".tour-tooltip");
+var tourTitle = document.querySelector(".tour-title");
+var tourText = document.querySelector(".tour-text");
+var tourProgress = document.querySelector(".tour-progress");
+var tourPrev = document.querySelector(".tour-prev");
+var tourNext = document.querySelector(".tour-next");
+var tourClose = document.querySelector(".tour-close");
+var tourShield = document.querySelector(".tour-shield");
+var tourSpotlight = document.querySelector(".tour-spotlight");
 
 var resultDock = document.getElementById("result-dock");
 var resultDockPanel = document.getElementById("result-dock-panel");
@@ -579,7 +592,9 @@ function updateResultDock(stats, options) {
     ? 1 - prev.queryIncorrect / prev.queryTotal
     : 1;
   var intermediateBar = clampValue(
-    Math.round(correctShare * prevCleanFactor * 100), 0, 100
+    Math.round(correctShare * prevCleanFactor * 100),
+    0,
+    100,
   );
 
   if (resultTargetValue) {
@@ -601,14 +616,18 @@ function updateResultDock(stats, options) {
     }
     if (resultCorrectCount) {
       resultCorrectCount.textContent =
-        formatCount(stats.queryCorrect) + " / " + formatCount(stats.totalCorrect);
+        formatCount(stats.queryCorrect) +
+        " / " +
+        formatCount(stats.totalCorrect);
     }
     if (resultCorrectShare) {
       resultCorrectShare.textContent = correctPct + "%";
     }
     if (resultIncorrectCount) {
       resultIncorrectCount.textContent =
-        formatCount(stats.queryIncorrect) + " / " + formatCount(stats.totalIncorrect);
+        formatCount(stats.queryIncorrect) +
+        " / " +
+        formatCount(stats.totalIncorrect);
     }
     if (resultIncorrectShare) {
       resultIncorrectShare.textContent = incorrectPct + "%";
@@ -633,15 +652,19 @@ function updateResultDock(stats, options) {
       stats.queryCorrect,
       600,
       function (v) {
-        return formatCount(Math.round(v)) + " / " + formatCount(stats.totalCorrect);
-      }
+        return (
+          formatCount(Math.round(v)) + " / " + formatCount(stats.totalCorrect)
+        );
+      },
     );
     animateNumber(
       resultCorrectShare,
       formatPercentRatio(prevCorrectShare),
       correctPct,
       600,
-      function (v) { return Math.round(v) + "%"; }
+      function (v) {
+        return Math.round(v) + "%";
+      },
     );
   }, t1);
 
@@ -650,9 +673,15 @@ function updateResultDock(stats, options) {
   var s2 = setTimeout(function () {
     setBarProgress(resultScoreBar, prevScore, intermediateBar, true);
     if (resultFinalScore) {
-      animateNumber(resultFinalScore, prevScore, intermediateBar, 700, function (v) {
-        return Math.round(v) + " %";
-      });
+      animateNumber(
+        resultFinalScore,
+        prevScore,
+        intermediateBar,
+        700,
+        function (v) {
+          return Math.round(v) + " %";
+        },
+      );
     }
   }, t2);
 
@@ -666,15 +695,19 @@ function updateResultDock(stats, options) {
       stats.queryIncorrect,
       600,
       function (v) {
-        return formatCount(Math.round(v)) + " / " + formatCount(stats.totalIncorrect);
-      }
+        return (
+          formatCount(Math.round(v)) + " / " + formatCount(stats.totalIncorrect)
+        );
+      },
     );
     animateNumber(
       resultIncorrectShare,
       formatPercentRatio(prevIncorrectShare),
       incorrectPct,
       600,
-      function (v) { return Math.round(v) + "%"; }
+      function (v) {
+        return Math.round(v) + "%";
+      },
     );
   }, t3);
 
@@ -684,9 +717,15 @@ function updateResultDock(stats, options) {
     setActiveStep(null);
     setBarProgress(resultScoreBar, intermediateBar, scoreValue, true);
     if (resultFinalScore) {
-      animateNumber(resultFinalScore, intermediateBar, scoreValue, 700, function (v) {
-        return Math.round(v) + " %";
-      });
+      animateNumber(
+        resultFinalScore,
+        intermediateBar,
+        scoreValue,
+        700,
+        function (v) {
+          return Math.round(v) + " %";
+        },
+      );
     }
   }, t4);
 
@@ -787,14 +826,18 @@ function createListRow(name, country, result) {
     .getElementsByClassName("climate-list-element")[0]
     .cloneNode();
   var dot = document.createElement("span");
-  dot.className = result ? "list-dot list-dot--correct" : "list-dot list-dot--incorrect";
+  dot.className = result
+    ? "list-dot list-dot--correct"
+    : "list-dot list-dot--incorrect";
   newEl.appendChild(dot);
   const newName = document.createTextNode(name + " ");
   const newCountry = document.createElement("div");
   newCountry.className = "country-name";
   newCountry.innerHTML = country;
   newEl.appendChild(newName);
-  newEl.classList.add(result ? "climate-list-element-correct" : "climate-list-element-incorrect");
+  newEl.classList.add(
+    result ? "climate-list-element-correct" : "climate-list-element-incorrect",
+  );
   newEl.appendChild(newCountry);
   return newEl;
 }
@@ -864,14 +907,18 @@ function showStationData(i) {
       '<span class="chart-stat">' +
       '<span class="chart-stat-label">Ø Temperatur</span> ' +
       '<span class="chart-stat-var">(T)</span>: ' +
-      '<span class="chart-stat-value chart-stat-temp">' + avgTemp + '°C</span>' +
-      '</span>' +
+      '<span class="chart-stat-value chart-stat-temp">' +
+      avgTemp +
+      "°C</span>" +
+      "</span>" +
       '<span class="chart-stat-separator">|</span>' +
       '<span class="chart-stat">' +
       '<span class="chart-stat-label">Σ Niederschlag</span> ' +
       '<span class="chart-stat-var">(N)</span>: ' +
-      '<span class="chart-stat-value chart-stat-prec">' + cumPrec + ' mm</span>' +
-      '</span>';
+      '<span class="chart-stat-value chart-stat-prec">' +
+      cumPrec +
+      " mm</span>" +
+      "</span>";
   }
 }
 
@@ -956,24 +1003,421 @@ function nextQuestion() {
 // Initialize the textfield with the first question
 updateQuestion();
 
-function toggleTutorial() {
-  let modal = document.getElementById("help-modal");
+var tourState = {
+  mode: null,
+  index: 0,
+  activeTarget: null,
+  previousView: null,
+  wasMobile: false,
+};
 
-  if (modal.classList.contains("active")) {
-    modal.classList.remove("active");
-    document.body.style.overflow = "";
+var studentTourSteps = [
+  {
+    title: "Aufgabe verstehen",
+    text: "Lies die Aufgabe oben <strong>genau</strong>. Nutze die Pfeile oder das Dropdown, um die Aufgabe zu wechseln.",
+    target: ".task-description-box",
+    view: "sidebar",
+  },
+  {
+    title: "Variablen-Tabelle öffnen",
+    text: "Hier stehen die Variablen, die in den Diagrammen dargestellt werden. <strong>t1–t12</strong> = Monats‑Temperaturen, <strong>n1–n12</strong> = Monats‑Niederschläge, <strong>T</strong> = Jahresmittel‑Temperatur, <strong>N</strong> = Jahresniederschlag.",
+    target: ".var-table-section",
+    view: "sidebar",
+  },
+  {
+    title: "Filterformel bauen",
+    text: "Links und Rechts können <strong>Formeln</strong> eingegeben werden (z.B. <strong>t1 + t2</strong>) und rechts (z.B. <strong>40</strong>). So entsteht eine Bedingung, die jede Station erfüllen muss, um als Treffer zu gelten. Klicken Sie auf Hinzufügen, um die Bedingung zu speichern.",
+    target: "#filter-composer",
+    view: "sidebar",
+  },
+  {
+    title: "Filterliste steuern",
+    text: "Klicke <strong>Hinzufügen</strong> und Filter werden hier in einer Liste gespeichert. Mehrere Filter wirken gemeinsam als <strong>Gesamtbedingung</strong> – nur Stationen, die alles erfüllen, bleiben.",
+    target: ".filter-panel",
+    view: "sidebar",
+  },
+  {
+    title: "Karte lesen",
+    text: "Auf der <strong>Karte</strong> zeigen <strong>grüne</strong> Punkte passende Stationen, <strong>rote</strong> passen nicht. Achte auf räumliche Muster.",
+    target: ".map-section",
+    view: "main",
+  },
+  {
+    title: "Ergebnisse filtern",
+    text: "Wechsle in der Liste zwischen <strong>Alle</strong>, <strong>Treffer</strong> und <strong>Nicht Treffer</strong>. Wähle eine Station, um das Diagramm und die Details zu aktualisieren.",
+    target: ".list-container",
+    view: "main",
+  },
+  {
+    title: "Klimadiagramm lesen",
+    text: "Im <strong>Klimadiagramm</strong> siehst du den Monatsverlauf von Temperatur und Niederschlag. Vergleiche Höhen, Tiefen und Jahreszeiten.",
+    target: "#diagram",
+    view: "main",
+  },
+  {
+    title: "Ergebnisziel prüfen",
+    text: "Das <strong>Ergebnis‑Dock</strong> zeigt <strong>Treffer</strong>, <strong>Nicht Treffer</strong> und den <strong>Zielwert</strong>. Passe Filter an, bis du das Ziel erreichst.",
+    target: "#result-dock",
+    view: "main",
+  },
+  {
+    title: "Auf dem Handy umschalten",
+    text: "Auf kleinen Bildschirmen wechselst du unten zwischen <strong>Filter</strong> und <strong>Karte & Liste</strong>. So bleibt alles gut lesbar.",
+    target: ".view-toggle-dock",
+    view: "main",
+  },
+];
+
+var teacherTourSteps = [
+  {
+    title: "Lernziel & Leitfrage",
+    text: "Formulieren Sie das <strong>Lernziel</strong> und lesen Sie die <strong>Aufgabe</strong> gemeinsam. Mit den Pfeilen oder dem Dropdown wechseln Sie Aufgaben und Vergleichsziele.",
+    target: ".task-description-box",
+    view: "sidebar",
+  },
+  {
+    title: "Variablen klären",
+    text: "Erklären Sie die Bedeutung von <strong>t1–t12</strong>, <strong>n1–n12</strong>, <strong>T</strong> und <strong>N</strong> als Klimamittelwerte, wie sie auch in Diagrammen dargestellt werden.",
+    target: ".var-table-section",
+    view: "sidebar",
+  },
+  {
+    title: "Hypothesen als Filter",
+    text: "Die Filter werden mit einem Größer-Gleich-Operator definiert. Überführen Sie die Fragestellung in <strong>Filterregeln</strong> (z.B. <strong>t1 + t2 ≥ 40</strong>). Nutzen Sie einfache Beispiele, bevor Sie komplexe Bedingungen kombinieren. In einer Zeile können beliebige mathematische Konstrukte verwendet werden.",
+    target: "#filter-composer",
+    view: "sidebar",
+  },
+  {
+    title: "Vergleichen & justieren",
+    text: "Hier werden Filter hinterlegt, damit Sie <strong>kombiniert</strong> und <strong>verändert</strong> werden können.",
+    target: ".filter-panel",
+    view: "sidebar",
+  },
+  {
+    title: "Räumliche Muster",
+    text: "Nutzen Sie die <strong>Karte</strong>, um passende  <strong>Klimadiagramme</strong> zu öffnen. Schauen Sie auch auf unterschiede nachdem ein Filter angewendet wurde.",
+    target: ".map-section",
+    view: "main",
+  },
+  {
+    title: "Ergebnisse fokussieren",
+    text: "Hier werden die Wetterstationen aufgelistet. Wechseln Sie zwischen <strong>Alle</strong>, <strong>Treffer</strong> und <strong>Nicht Treffer</strong>, um zu sehen, was deren klimatische Eigenschaften sind.",
+    target: ".list-container",
+    view: "main",
+  },
+  {
+    title: "Klimadiagramm interpretieren",
+    text: "Lesen Sie im <strong>Klimadiagramm</strong> den Jahresverlauf und lassen Sie Aussagen mit Daten belegen. Wenn die Maus über die Diagramme gehovered wird, sehen Sie welche welche Daten welche Variablen darstellen.",
+    target: "#diagram",
+    view: "main",
+  },
+  {
+    title: "Zielwert & Reflexion",
+    text: "Prüfen Sie den <strong>Zielwert</strong> im <strong>Ergebnis‑Dock</strong>. Lassen Sie Lernende begründen, warum Filter passen oder nicht.",
+    target: "#result-dock",
+    view: "main",
+  },
+  {
+    title: "Arbeitsform mobil",
+    text: "Auf Tablets/Handys wechseln Sie unten zwischen <strong>Filter</strong> und <strong>Karte & Liste</strong> – ideal für Gruppenarbeit.",
+    target: ".view-toggle-dock",
+    view: "main",
+  },
+];
+
+function getTourSteps(mode) {
+  return mode === "teacher" ? teacherTourSteps : studentTourSteps;
+}
+
+function clearTourHighlight() {
+  tourState.activeTarget = null;
+  if (tourSpotlight) {
+    tourSpotlight.style.display = "none";
+  }
+}
+
+function applyTourView(view) {
+  if (!view) {
+    return;
+  }
+  var mobileQuery = window.matchMedia("(max-width: 980px)");
+  if (mobileQuery.matches) {
+    setActiveView(view);
+  }
+}
+
+function positionTourSpotlight(target) {
+  if (!tourSpotlight) {
+    return;
+  }
+  if (!target) {
+    tourSpotlight.style.display = "none";
+    return;
+  }
+
+  var rect = target.getBoundingClientRect();
+  var padding = 12;
+  var minEdge = 8;
+  var top = rect.top - padding;
+  var left = rect.left - padding;
+  var width = rect.width + padding * 2;
+  var height = rect.height + padding * 2;
+
+  top = Math.max(minEdge, top);
+  left = Math.max(minEdge, left);
+  width = Math.max(0, Math.min(width, window.innerWidth - left - minEdge));
+  height = Math.max(0, Math.min(height, window.innerHeight - top - minEdge));
+
+  tourSpotlight.style.display = "block";
+  tourSpotlight.style.top = top + "px";
+  tourSpotlight.style.left = left + "px";
+  tourSpotlight.style.width = width + "px";
+  tourSpotlight.style.height = height + "px";
+}
+
+function positionTourTooltip(target) {
+  if (!tourTooltip) {
+    return;
+  }
+  var resolvedTarget =
+    target && typeof target.getBoundingClientRect === "function"
+      ? target
+      : tourState.activeTarget;
+  positionTourSpotlight(resolvedTarget);
+  var padding = 16;
+  var gap = 14;
+  var viewportWidth = window.innerWidth;
+  var viewportHeight = window.innerHeight;
+  var tooltipRect = tourTooltip.getBoundingClientRect();
+  var top = (viewportHeight - tooltipRect.height) / 2;
+  var left = (viewportWidth - tooltipRect.width) / 2;
+
+  if (resolvedTarget) {
+    var rect = resolvedTarget.getBoundingClientRect();
+    var placeBottom = rect.top < viewportHeight / 2;
+    if (placeBottom) {
+      top = rect.bottom + gap;
+    } else {
+      top = rect.top - tooltipRect.height - gap;
+    }
+    left = rect.left + rect.width / 2 - tooltipRect.width / 2;
+  }
+
+  left = Math.max(
+    padding,
+    Math.min(left, viewportWidth - tooltipRect.width - padding),
+  );
+  top = Math.max(
+    padding,
+    Math.min(top, viewportHeight - tooltipRect.height - padding),
+  );
+
+  tourTooltip.style.left = left + "px";
+  tourTooltip.style.top = top + "px";
+}
+
+function renderTourStep() {
+  var steps = getTourSteps(tourState.mode);
+  if (!steps || !steps.length) {
+    return;
+  }
+
+  var index = Math.max(0, Math.min(tourState.index, steps.length - 1));
+  tourState.index = index;
+  var step = steps[index];
+
+  if (tourTitle) {
+    tourTitle.textContent = step.title;
+  }
+  if (tourText) {
+    tourText.innerHTML = step.text;
+  }
+  if (tourProgress) {
+    tourProgress.textContent = "Schritt " + (index + 1) + " / " + steps.length;
+  }
+  if (tourPrev) {
+    tourPrev.disabled = index === 0;
+  }
+  if (tourNext) {
+    tourNext.textContent = index === steps.length - 1 ? "Fertig" : "Weiter";
+  }
+
+  applyTourView(step.view);
+
+  window.requestAnimationFrame(function () {
+    clearTourHighlight();
+    var target = step.target ? document.querySelector(step.target) : null;
+    if (target && typeof target.scrollIntoView === "function") {
+      target.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+    tourState.activeTarget = target;
+    positionTourTooltip(target);
+  });
+}
+
+function startTour(mode) {
+  if (!tourOverlay) {
+    return;
+  }
+
+  if (tourOverlay.classList.contains("active")) {
+    closeTour();
+  }
+
+  if (helpModal && helpModal.classList.contains("active")) {
+    closeHelpModal();
+  }
+
+  tourState.mode = mode;
+  tourState.index = 0;
+  tourState.wasMobile = window.matchMedia("(max-width: 980px)").matches;
+  tourState.previousView = document.body.dataset.view || null;
+
+  tourOverlay.classList.add("active");
+  tourOverlay.setAttribute("aria-hidden", "false");
+  renderTourStep();
+
+  window.addEventListener("resize", positionTourTooltip);
+  window.addEventListener("scroll", positionTourTooltip, true);
+}
+
+function closeTour() {
+  if (!tourOverlay) {
+    return;
+  }
+  tourOverlay.classList.remove("active");
+  tourOverlay.setAttribute("aria-hidden", "true");
+  clearTourHighlight();
+
+  window.removeEventListener("resize", positionTourTooltip);
+  window.removeEventListener("scroll", positionTourTooltip, true);
+
+  if (
+    tourState.wasMobile &&
+    (tourState.previousView === "sidebar" || tourState.previousView === "main")
+  ) {
+    setActiveView(tourState.previousView);
+  }
+}
+
+function setupTour() {
+  if (!tourOverlay) {
+    return;
+  }
+
+  if (tourPrev) {
+    tourPrev.addEventListener("click", function () {
+      tourState.index = Math.max(0, tourState.index - 1);
+      renderTourStep();
+    });
+  }
+
+  if (tourNext) {
+    tourNext.addEventListener("click", function () {
+      var steps = getTourSteps(tourState.mode);
+      if (!steps || !steps.length) {
+        return;
+      }
+      if (tourState.index >= steps.length - 1) {
+        closeTour();
+      } else {
+        tourState.index += 1;
+        renderTourStep();
+      }
+    });
+  }
+
+  if (tourClose) {
+    tourClose.addEventListener("click", closeTour);
+  }
+
+  if (tourShield) {
+    tourShield.addEventListener("click", closeTour);
+  }
+}
+
+function openHelpModal() {
+  if (!helpModal) {
+    return;
+  }
+  if (helpModal.classList.contains("active")) {
+    return;
+  }
+  helpModal.classList.add("active");
+  helpModal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  var firstChoice = helpModal.querySelector(".help-choice-card");
+  if (firstChoice) {
+    firstChoice.focus();
+  }
+}
+
+function closeHelpModal() {
+  if (!helpModal) {
+    return;
+  }
+  if (!helpModal.classList.contains("active")) {
+    return;
+  }
+  helpModal.classList.remove("active");
+  helpModal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+function setupHelpModal() {
+  if (!helpModal) {
+    return;
+  }
+
+  helpChoiceCards.forEach(function (card) {
+    card.addEventListener("click", function () {
+      var mode = card.dataset.helpTarget || "student";
+      startTour(mode);
+    });
+  });
+
+  helpDismissButtons.forEach(function (button) {
+    button.addEventListener("click", function () {
+      closeHelpModal();
+    });
+  });
+}
+
+function toggleTutorial() {
+  if (!helpModal) {
+    return;
+  }
+
+  if (helpModal.classList.contains("active")) {
+    closeHelpModal();
   } else {
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
+    openHelpModal();
   }
 }
 
 // Close modal on Escape key
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
+    if (tourOverlay && tourOverlay.classList.contains("active")) {
+      closeTour();
+      return;
+    }
     let modal = document.getElementById("help-modal");
     if (modal && modal.classList.contains("active")) {
       toggleTutorial();
+    }
+  }
+
+  if (tourOverlay && tourOverlay.classList.contains("active")) {
+    if (e.key === "ArrowRight") {
+      if (tourNext) {
+        tourNext.click();
+      }
+    }
+    if (e.key === "ArrowLeft") {
+      if (tourPrev) {
+        tourPrev.click();
+      }
     }
   }
 });
@@ -1070,6 +1514,9 @@ function setupUI() {
   setupFilterUI();
   setupVarTableToggle();
   setupTaskSelect();
+  setupHelpModal();
+  setupTour();
+  openHelpModal();
 }
 
 if (document.readyState === "loading") {
