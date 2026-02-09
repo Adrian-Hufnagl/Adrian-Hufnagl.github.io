@@ -61,33 +61,35 @@
         <section class="content-container">
           <div class="card card-hero" id="iCard">
             <!-- Task Navigation: Label with arrows -->
-            <div class="task-nav">
-              <button
-                class="btn btn-qst btn-qst-prev"
-                onclick="previousQuestion()"
-              >
-                ←
-              </button>
-              <div class="task-center">
-                <label class="task-label-dropdown" for="task-select">
-                  <span id="task-label" class="task-label">Aufgabe 1</span>
-                  <i class="fa fa-caret-down task-label-caret"></i>
-                  <select id="task-select" class="task-select-overlay"></select>
-                </label>
-              </div>
-              <button class="btn btn-qst btn-qst-next" onclick="nextQuestion()">
-                →
-              </button>
-            </div>
 
             <!-- Task Description with fixed height -->
             <div class="task-description-box">
+              <div class="task-nav">
+                <button
+                  class="btn btn-qst btn-qst-prev"
+                  onclick="previousQuestion()"
+                >
+                  ←
+                </button>
+                <div class="task-center">
+                  <label class="task-label-dropdown" for="task-select">
+                    <span id="task-label" class="task-label">Aufgabe 1</span>
+                    <i class="fa fa-caret-down task-label-caret"></i>
+                    <select
+                      id="task-select"
+                      class="task-select-overlay"
+                    ></select>
+                  </label>
+                </div>
+                <button
+                  class="btn btn-qst btn-qst-next"
+                  onclick="nextQuestion()"
+                >
+                  →
+                </button>
+              </div>
               <div class="task-description-content">
                 <span id="question"></span>
-              </div>
-              <div class="task-accuracy">
-                <span id="result-score-label"></span>
-                <span id="result-score"></span>
               </div>
             </div>
 
@@ -457,6 +459,53 @@
               src="img/exmMap2.png"
               alt="Beispiel Karte 2"
             />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-dock" class="result-dock" aria-live="polite">
+      <div class="result-dock-header">
+        <div class="result-dock-score">
+          <span class="result-dock-score-label">Ergebnis</span>
+          <span id="result-final-score" class="result-dock-score-value">—</span>
+        </div>
+        <div class="result-dock-target">
+          Ziel <span id="result-target-value">—</span>
+        </div>
+      </div>
+
+      <div class="result-dock-bar">
+        <div class="result-dock-bar-track">
+          <div id="result-score-bar" class="result-dock-bar-fill"></div>
+          <div id="result-score-target" class="result-dock-bar-target"></div>
+        </div>
+      </div>
+
+      <div id="result-dock-panel" class="result-dock-panel">
+        <div class="result-step" data-step="correct">
+          <div class="result-step-header">
+            <span class="result-step-label">Treffer</span>
+            <span
+              id="result-correct-share"
+              class="result-step-badge result-step-badge--correct"
+            ></span>
+          </div>
+          <div class="result-step-detail">
+            <span id="result-correct-count" class="result-step-count"></span>
+          </div>
+        </div>
+
+        <div class="result-step" data-step="incorrect">
+          <div class="result-step-header">
+            <span class="result-step-label">Nicht Treffer</span>
+            <span
+              id="result-incorrect-share"
+              class="result-step-badge result-step-badge--incorrect"
+            ></span>
+          </div>
+          <div class="result-step-detail">
+            <span id="result-incorrect-count" class="result-step-count"></span>
           </div>
         </div>
       </div>

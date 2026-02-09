@@ -39,7 +39,6 @@ var questionThresholds = [
 ];
 var currentQuestionIndex = 0;
 
-var filterResultsLabel = document.getElementById("result-score-label");
 
 var filters = new Array(questions.length);
 for (let i = 0; i < questions.length; i++) {
@@ -50,7 +49,10 @@ function saveFilters() {
   // Filters are stored live; no action needed here.
 }
 
+var _switchingTask = false;
+
 function switchFilters() {
+  _switchingTask = true;
   if (typeof renderFilterList === "function") {
     renderFilterList();
   }
@@ -60,6 +62,7 @@ function switchFilters() {
   if (typeof createList === "function") {
     createList();
   }
+  _switchingTask = false;
 }
 
 function annotateList() {
@@ -235,11 +238,14 @@ function annotateListHeader() {
   let numIncorrectResults = numResults - numCorrectResults;
   let numWholeIncorrectResults = numWholeResults - numWholeCorrectResults;
   // multiplies the share of correct answers with the share of incorrect answers
-  let score = parseInt(
-    (numCorrectResults / numWholeCorrectResults) *
-      (1 - numIncorrectResults / numResults) *
-      100,
-  );
+  let score = 0;
+  if (numResults > 0 && numWholeCorrectResults > 0) {
+    score = parseInt(
+      (numCorrectResults / numWholeCorrectResults) *
+        (1 - numIncorrectResults / numResults) *
+        100,
+    );
+  }
   let wholeButton = listResults ? listResults.children[0] : null;
   let correctButton = listResults ? listResults.children[1] : null;
   let incorrectButton = listResults ? listResults.children[2] : null;
@@ -272,20 +278,10 @@ function annotateListHeader() {
         numWholeIncorrectResults +
         " Orte außerhalb der gefragten Zone.",
     );
-    filterResultsLabel.innerHTML = "Genauigkeit:";
-    filterResults.innerHTML = "—";
-    filterResults.classList.add("is-empty");
-    filterResults.classList.remove("score-good");
-    filterResults.classList.remove("score-bad");
   } else {
-    filterResults.classList.remove("is-empty");
     if (numResults == 0) {
       deleteDiagram();
       console.log("no results");
-      filterResultsLabel.innerHTML = "Kein Treffer:";
-      filterResults.innerHTML = " 0 %";
-      filterResults.classList.add("score-bad");
-      filterResults.classList.remove("score-good");
     } else {
       console.log("schon results");
       setButton(
@@ -315,16 +311,27 @@ function annotateListHeader() {
           numIncorrectResults +
           " davon.",
       );
-      var threshold = questionThresholds[currentQuestionIndex] || 0;
-      filterResultsLabel.innerHTML = "Genauigkeit (Ziel: " + threshold + " %):";
-      filterResults.innerHTML = score + " %";
-      if (score >= threshold) {
-        filterResults.classList.add("score-good");
-        filterResults.classList.remove("score-bad");
-      } else {
-        filterResults.classList.add("score-bad");
-        filterResults.classList.remove("score-good");
-      }
+    }
+  }
+
+  var thresholdValue = questionThresholds[currentQuestionIndex] || 0;
+  var hasScore = !noFilter;
+  var stats = {
+    total: numWholeResults,
+    totalCorrect: numWholeCorrectResults,
+    totalIncorrect: numWholeIncorrectResults,
+    queryTotal: numResults,
+    queryCorrect: numCorrectResults,
+    queryIncorrect: numIncorrectResults,
+    score: score,
+    threshold: thresholdValue,
+    hasScore: hasScore,
+  };
+  if (typeof updateResultDock === "function") {
+    if (_switchingTask) {
+      updateResultDock(stats, { animate: false, expand: false });
+    } else {
+      updateResultDock(stats, { expand: true });
     }
   }
 }

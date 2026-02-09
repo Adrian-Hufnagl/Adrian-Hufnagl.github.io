@@ -1,6 +1,5 @@
 var climateList = document.getElementById("climate-list");
 var listResults = document.getElementById("list-results");
-var filterResults = document.getElementById("result-score");
 var resultDescription = document.getElementById("result-description");
 var diagramContainer = document.getElementById("diagram");
 var inputCard = document.getElementById("iCard");
@@ -12,6 +11,24 @@ var taskLabel = document.getElementById("task-label");
 var taskSelect = document.getElementById("task-select");
 var varTableToggle = document.getElementById("var-table-toggle");
 var varTableContent = document.getElementById("var-table-content");
+
+var resultDock = document.getElementById("result-dock");
+var resultDockPanel = document.getElementById("result-dock-panel");
+var resultTargetValue = document.getElementById("result-target-value");
+var resultScoreBar = document.getElementById("result-score-bar");
+var resultScoreTarget = document.getElementById("result-score-target");
+var resultCorrectCount = document.getElementById("result-correct-count");
+var resultCorrectShare = document.getElementById("result-correct-share");
+var resultIncorrectCount = document.getElementById("result-incorrect-count");
+var resultIncorrectShare = document.getElementById("result-incorrect-share");
+var resultFinalScore = document.getElementById("result-final-score");
+
+var resultDockState = {
+  lastStats: null,
+  stepTimers: [],
+  collapseTimer: null,
+  hasInitialized: false,
+};
 
 var filterList = document.getElementById("filter-list");
 var filterComposer = document.getElementById("filter-composer");
@@ -379,6 +396,301 @@ function setResultButtonData(button, countText, titleText) {
   } else {
     button.textContent = countText;
   }
+}
+
+function clampValue(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function formatCount(value) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return "0";
+  }
+  return value.toLocaleString("de-DE");
+}
+
+function formatPercentRatio(value) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return 0;
+  }
+  return Math.round(value * 100);
+}
+
+function animateNumber(el, fromValue, toValue, duration, formatter) {
+  if (!el) {
+    return;
+  }
+  var start = null;
+  var startValue = typeof fromValue === "number" ? fromValue : 0;
+  var endValue = typeof toValue === "number" ? toValue : 0;
+  var totalDuration = duration || 600;
+  var animId = (parseInt(el.dataset.animId || "0", 10) || 0) + 1;
+  el.dataset.animId = String(animId);
+
+  function step(timestamp) {
+    if (el.dataset.animId !== String(animId)) {
+      return;
+    }
+    if (!start) {
+      start = timestamp;
+    }
+    var progress = Math.min((timestamp - start) / totalDuration, 1);
+    var currentValue = startValue + (endValue - startValue) * progress;
+    if (typeof formatter === "function") {
+      el.textContent = formatter(currentValue, endValue);
+    } else {
+      el.textContent = Math.round(currentValue);
+    }
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function setBarProgress(el, fromPercent, toPercent, animate) {
+  if (!el) {
+    return;
+  }
+  var startValue = clampValue(fromPercent || 0, 0, 100);
+  var endValue = clampValue(toPercent || 0, 0, 100);
+  if (!animate) {
+    el.style.transition = "none";
+    el.style.width = endValue + "%";
+    return;
+  }
+  el.style.transition = "none";
+  el.style.width = startValue + "%";
+  requestAnimationFrame(function () {
+    el.style.transition = "width 700ms var(--ease-out)";
+    el.style.width = endValue + "%";
+  });
+}
+
+function clearStepTimers() {
+  if (!resultDockState.stepTimers) {
+    return;
+  }
+  resultDockState.stepTimers.forEach(function (timer) {
+    clearTimeout(timer);
+  });
+  resultDockState.stepTimers = [];
+}
+
+function setActiveStep(stepKey) {
+  if (!resultDockPanel) {
+    return;
+  }
+  var stepOrder = ["correct", "incorrect"];
+  var activeIdx = stepKey ? stepOrder.indexOf(stepKey) : stepOrder.length;
+  var steps = resultDockPanel.querySelectorAll(".result-step");
+  steps.forEach(function (step) {
+    var idx = stepOrder.indexOf(step.dataset.step);
+    step.classList.toggle("is-active", step.dataset.step === stepKey);
+    step.classList.toggle("is-done", idx >= 0 && idx < activeIdx);
+  });
+}
+
+function expandResultDock() {
+  if (!resultDock) {
+    return;
+  }
+  resultDock.classList.add("is-expanded");
+  if (resultDockState.collapseTimer) {
+    clearTimeout(resultDockState.collapseTimer);
+  }
+  resultDockState.collapseTimer = setTimeout(function () {
+    if (resultDock && !resultDock.matches(":hover")) {
+      resultDock.classList.remove("is-expanded");
+    }
+  }, 6000);
+}
+
+if (resultDock) {
+  resultDock.addEventListener("mouseenter", function () {
+    if (resultDockState.collapseTimer) {
+      clearTimeout(resultDockState.collapseTimer);
+    }
+    resultDock.classList.add("is-expanded");
+  });
+  resultDock.addEventListener("mouseleave", function () {
+    if (resultDockState.collapseTimer) {
+      clearTimeout(resultDockState.collapseTimer);
+    }
+    resultDockState.collapseTimer = setTimeout(function () {
+      if (resultDock) {
+        resultDock.classList.remove("is-expanded");
+      }
+    }, 2000);
+  });
+}
+
+function updateResultDock(stats, options) {
+  if (!resultDock || !stats) {
+    return;
+  }
+
+  var prev = resultDockState.lastStats || stats;
+  resultDockState.lastStats = stats;
+  var shouldAnimate = !(options && options.animate === false);
+  var shouldExpand = resultDockState.hasInitialized;
+
+  if (options && options.expand === false) {
+    shouldExpand = false;
+  }
+  if (options && options.expand === true) {
+    shouldExpand = true;
+  }
+
+  if (!resultDockState.hasInitialized) {
+    shouldAnimate = false;
+  }
+
+  if (shouldExpand) {
+    expandResultDock();
+  }
+
+  resultDockState.hasInitialized = true;
+
+  var scoreValue = clampValue(stats.score || 0, 0, 100);
+  var thresholdValue = clampValue(stats.threshold || 0, 0, 100);
+  var prevScore = clampValue(prev.score || 0, 0, 100);
+
+  // Compute share values
+  var correctShare = stats.totalCorrect
+    ? stats.queryCorrect / stats.totalCorrect
+    : 0;
+  var incorrectShare = stats.totalIncorrect
+    ? stats.queryIncorrect / stats.totalIncorrect
+    : 0;
+  var correctPct = formatPercentRatio(correctShare);
+  var incorrectPct = formatPercentRatio(incorrectShare);
+
+  var prevCorrectShare = prev.totalCorrect
+    ? prev.queryCorrect / prev.totalCorrect
+    : 0;
+  var prevIncorrectShare = prev.totalIncorrect
+    ? prev.queryIncorrect / prev.totalIncorrect
+    : 0;
+
+  // The bar intermediate position: new Treffer + old Nicht Treffer penalty
+  var prevCleanFactor = prev.queryTotal
+    ? 1 - prev.queryIncorrect / prev.queryTotal
+    : 1;
+  var intermediateBar = clampValue(
+    Math.round(correctShare * prevCleanFactor * 100), 0, 100
+  );
+
+  if (resultTargetValue) {
+    resultTargetValue.textContent = thresholdValue + " %";
+  }
+  if (resultScoreTarget) {
+    resultScoreTarget.style.left = thresholdValue + "%";
+  }
+
+  clearStepTimers();
+
+  // --- No animation: set everything immediately ---
+  if (!shouldAnimate) {
+    if (resultFinalScore) {
+      resultFinalScore.textContent = stats.hasScore ? scoreValue + " %" : "—";
+    }
+    if (resultScoreBar) {
+      setBarProgress(resultScoreBar, 0, scoreValue, false);
+    }
+    if (resultCorrectCount) {
+      resultCorrectCount.textContent =
+        formatCount(stats.queryCorrect) + " / " + formatCount(stats.totalCorrect);
+    }
+    if (resultCorrectShare) {
+      resultCorrectShare.textContent = correctPct + "%";
+    }
+    if (resultIncorrectCount) {
+      resultIncorrectCount.textContent =
+        formatCount(stats.queryIncorrect) + " / " + formatCount(stats.totalIncorrect);
+    }
+    if (resultIncorrectShare) {
+      resultIncorrectShare.textContent = incorrectPct + "%";
+    }
+    return;
+  }
+
+  // --- Animated sequence ---
+  // Timeline:
+  //   t1  200ms  – highlight "Treffer", animate share numbers
+  //   t2  700ms  – bar moves to intermediate (correctShare%), score counts up
+  //   t3 1600ms  – highlight "Nicht Treffer", animate share numbers
+  //   t4 2100ms  – bar moves to final score, score counts to final
+
+  // Step 1: Treffer share
+  var t1 = 200;
+  var s1 = setTimeout(function () {
+    setActiveStep("correct");
+    animateNumber(
+      resultCorrectCount,
+      prev.queryCorrect || 0,
+      stats.queryCorrect,
+      600,
+      function (v) {
+        return formatCount(Math.round(v)) + " / " + formatCount(stats.totalCorrect);
+      }
+    );
+    animateNumber(
+      resultCorrectShare,
+      formatPercentRatio(prevCorrectShare),
+      correctPct,
+      600,
+      function (v) { return Math.round(v) + "%"; }
+    );
+  }, t1);
+
+  // Step 2: bar moves to intermediate, score animates to intermediate
+  var t2 = t1 + 500;
+  var s2 = setTimeout(function () {
+    setBarProgress(resultScoreBar, prevScore, intermediateBar, true);
+    if (resultFinalScore) {
+      animateNumber(resultFinalScore, prevScore, intermediateBar, 700, function (v) {
+        return Math.round(v) + " %";
+      });
+    }
+  }, t2);
+
+  // Step 3: Nicht Treffer share
+  var t3 = t2 + 900;
+  var s3 = setTimeout(function () {
+    setActiveStep("incorrect");
+    animateNumber(
+      resultIncorrectCount,
+      prev.queryIncorrect || 0,
+      stats.queryIncorrect,
+      600,
+      function (v) {
+        return formatCount(Math.round(v)) + " / " + formatCount(stats.totalIncorrect);
+      }
+    );
+    animateNumber(
+      resultIncorrectShare,
+      formatPercentRatio(prevIncorrectShare),
+      incorrectPct,
+      600,
+      function (v) { return Math.round(v) + "%"; }
+    );
+  }, t3);
+
+  // Step 4: bar moves to final score, score animates to final
+  var t4 = t3 + 500;
+  var s4 = setTimeout(function () {
+    setActiveStep(null);
+    setBarProgress(resultScoreBar, intermediateBar, scoreValue, true);
+    if (resultFinalScore) {
+      animateNumber(resultFinalScore, intermediateBar, scoreValue, 700, function (v) {
+        return Math.round(v) + " %";
+      });
+    }
+  }, t4);
+
+  resultDockState.stepTimers.push(s1, s2, s3, s4);
 }
 
 //Nach Klick wird Liste gefiltert und ausgegeben
