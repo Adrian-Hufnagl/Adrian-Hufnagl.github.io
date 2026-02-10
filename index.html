@@ -16,16 +16,7 @@
 
     <link rel="manifest" href="site.webmanifest" />
     <link rel="shortcut icon" href="img/logo.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;700&family=Sora:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="css/fonts.css" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/legal.css" />
@@ -51,7 +42,6 @@
                     onclick="toggleTutorial()"
                   >
                     <span class="bar-help">Hilfe</span>
-                    <i class="fa fa-question-circle"></i>
                   </button>
                 </div>
               </div>
@@ -74,7 +64,13 @@
                 <div class="task-center">
                   <label class="task-label-dropdown" for="task-select">
                     <span id="task-label" class="task-label">Aufgabe 1</span>
-                    <i class="fa fa-caret-down task-label-caret"></i>
+                    <svg
+                      class="icon task-label-caret"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <use href="img/icons.svg#icon-caret-down"></use>
+                    </svg>
                     <select
                       id="task-select"
                       class="task-select-overlay"
@@ -143,7 +139,13 @@
                 type="button"
               >
                 <span class="var-table-toggle-label">Variablen-Tabelle</span>
-                <i class="fa fa-angle-down var-table-toggle-icon"></i>
+                <svg
+                  class="icon var-table-toggle-icon"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <use href="img/icons.svg#icon-angle-down"></use>
+                </svg>
               </button>
               <div id="var-table-content" class="var-table-content">
                 <table id="var-table" class="var-table-vertical">
@@ -239,13 +241,6 @@
 
       <section class="main-panel">
         <section class="map-section">
-          <div class="map-container card">
-            <div
-              id="svgmap"
-              class="map-visual map-visual--svg"
-              aria-label="Interactive world map"
-            ></div>
-          </div>
           <div class="map-legend" aria-label="Legende">
             <div class="legend-item">
               <span class="legend-dot legend-dot--correct"></span>
@@ -255,6 +250,13 @@
               <span class="legend-dot legend-dot--incorrect"></span>
               <span>Rot (kleiner) = passt nicht</span>
             </div>
+          </div>
+          <div class="map-container card">
+            <div
+              id="svgmap"
+              class="map-visual map-visual--svg"
+              aria-label="Interactive world map"
+            ></div>
           </div>
         </section>
 
@@ -318,11 +320,15 @@
 
     <div class="view-toggle-dock" role="tablist" aria-label="Ansicht wechseln">
       <button class="view-toggle-btn" type="button" data-view="sidebar">
-        <i class="fa fa-filter"></i>
+        <svg class="icon" aria-hidden="true" focusable="false">
+          <use href="img/icons.svg#icon-filter"></use>
+        </svg>
         <span>Filter</span>
       </button>
       <button class="view-toggle-btn" type="button" data-view="main">
-        <i class="fa fa-map"></i>
+        <svg class="icon" aria-hidden="true" focusable="false">
+          <use href="img/icons.svg#icon-map"></use>
+        </svg>
         <span>Karte & Liste</span>
       </button>
     </div>
@@ -340,7 +346,6 @@
       >
         <img class="help-modal-logo" src="img/logo.png" alt="Geofilter Logo" />
         <div class="help-modal-header help-modal-header--center">
-          <div class="help-modal-spacer" aria-hidden="true"></div>
           <div class="help-modal-brand">
             <div class="help-modal-brand-text">
               <span class="help-modal-brand-name" id="help-modal-title">
@@ -370,9 +375,10 @@
                 type="button"
                 data-help-target="teacher"
               >
-                <span class="help-choice-title">Lehrer</span>
+                <span class="help-choice-title">Lehrperson</span>
                 <span class="help-choice-text">
-                  Didaktische Führung mit Fokus auf Lernziele und Auswertung.
+                  Einordnung der Anwendung und danach Schritt-für-Schritt durch
+                  Auswertung und Unterrichtseinsatz.
                 </span>
               </button>
             </div>
@@ -408,11 +414,21 @@
         <div class="tour-header">
           <span class="tour-progress">Schritt 1 / 1</span>
           <button class="tour-close" type="button" aria-label="Tour schließen">
-            <i class="fa fa-times"></i>
+            <svg class="icon" aria-hidden="true" focusable="false">
+              <use href="img/icons.svg#icon-times"></use>
+            </svg>
           </button>
         </div>
-        <h3 class="tour-title"></h3>
-        <p class="tour-text"></p>
+        <div class="tour-reading-layout">
+          <div class="tour-reading-main">
+            <h3 class="tour-title"></h3>
+            <div class="tour-text"></div>
+          </div>
+          <aside class="tour-reading-nav" aria-label="Themenauswahl">
+            <p class="tour-reading-nav-label">Themen</p>
+            <ul class="tour-reading-nav-list"></ul>
+          </aside>
+        </div>
         <div class="tour-actions">
           <button class="btn btn-secondary tour-prev" type="button">
             Zurück
@@ -480,20 +496,6 @@
     <script src="js/svgmap.js"></script>
     <script src="js/chart.js"></script>
     <script src="js/filter.js"></script>
-
-    <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
-    <script>
-      window.ga = function () {
-        ga.q.push(arguments);
-      };
-      ga.q = [];
-      ga.l = +new Date();
-      ga("create", "UA-XXXXX-Y", "auto");
-      ga("set", "anonymizeIp", true);
-      ga("set", "transport", "beacon");
-      ga("send", "pageview");
-    </script>
-    <script src="https://www.google-analytics.com/analytics.js" async></script>
 
     <div style="display: none">
       <div class="climate-list-element" onclick="createDiagram(event)"></div>

@@ -19,6 +19,8 @@ var tourTooltip = document.querySelector(".tour-tooltip");
 var tourTitle = document.querySelector(".tour-title");
 var tourText = document.querySelector(".tour-text");
 var tourProgress = document.querySelector(".tour-progress");
+var tourReadingNav = document.querySelector(".tour-reading-nav");
+var tourReadingNavList = document.querySelector(".tour-reading-nav-list");
 var tourPrev = document.querySelector(".tour-prev");
 var tourNext = document.querySelector(".tour-next");
 var tourClose = document.querySelector(".tour-close");
@@ -280,7 +282,7 @@ function addOrUpdateFilter() {
   filters[currentQuestionIndex] = list;
   activeFilterIndex = null;
   renderFilterList();
-  resetComposer();
+  resetComposer(false);
   showMessage("Filter gespeichert", true);
   createList();
 }
@@ -386,7 +388,7 @@ function setupFilterUI() {
     });
   }
 
-  resetComposer();
+  resetComposer(false);
   renderFilterList();
 }
 
@@ -513,11 +515,17 @@ function expandResultDock() {
   if (resultDockState.collapseTimer) {
     clearTimeout(resultDockState.collapseTimer);
   }
+}
+
+function scheduleCollapse(delay) {
+  if (resultDockState.collapseTimer) {
+    clearTimeout(resultDockState.collapseTimer);
+  }
   resultDockState.collapseTimer = setTimeout(function () {
     if (resultDock && !resultDock.matches(":hover")) {
       resultDock.classList.remove("is-expanded");
     }
-  }, 6000);
+  }, delay);
 }
 
 if (resultDock) {
@@ -632,6 +640,9 @@ function updateResultDock(stats, options) {
     if (resultIncorrectShare) {
       resultIncorrectShare.textContent = incorrectPct + "%";
     }
+    if (shouldExpand) {
+      scheduleCollapse(2000);
+    }
     return;
   }
 
@@ -730,6 +741,11 @@ function updateResultDock(stats, options) {
   }, t4);
 
   resultDockState.stepTimers.push(s1, s2, s3, s4);
+
+  // Schedule collapse after the last animation finishes (~700ms) + a short viewing buffer
+  if (shouldExpand) {
+    scheduleCollapse(t4 + 700 + 1500);
+  }
 }
 
 //Nach Klick wird Liste gefiltert und ausgegeben
@@ -1070,63 +1086,233 @@ var studentTourSteps = [
 
 var teacherTourSteps = [
   {
+    title: "Geofilter",
+    buzzword: "Geofilter",
+    text: "<p>Die Anwendung ist ein <strong>Arbeitswerkzeug</strong>, mit dem Schülerinnen und Schüler <strong>Klimazonen</strong> anhand realer <strong>Klimadaten</strong> untersuchen und begründen können.</p>",
+    view: "sidebar",
+  },
+  {
+    title: "Anwendung",
+    buzzword: "Anwendung",
+    text: "<p>Geofilter stellt eine Sammlung von Orten mit zugehörigen <strong>Klimadaten</strong> bereit: <strong>Temperatur-</strong> und <strong>Niederschlagswerte</strong> über das Jahr.</p><p>Schülerinnen und Schüler formulieren <strong>Kriterien</strong> und prüfen, auf welche Orte diese zutreffen.</p>",
+    view: "sidebar",
+  },
+  {
+    title: "Beispielfragen",
+    buzzword: "Beispielfragen",
+    text: '<ul class="tour-reading-list"><li>Wo herrscht ganzjährig viel <strong>Niederschlag</strong>?</li><li>Welche Orte haben ausgeprägte <strong>Trockenzeiten</strong>?</li><li>Welche Orte passen zu einer bestimmten <strong>Klimazone</strong>?</li></ul><p>Zu jedem Ort kann ein <strong>Klimadiagramm</strong> angezeigt werden. Ergebnisse können dadurch überprüft und fachlich begründet werden.</p><p>Ziel ist nicht das schnelle Finden der "richtigen Lösung", sondern das Nachvollziehen von Zusammenhängen zwischen <strong>Daten</strong> und <strong>geografischer Einordnung</strong>.</p>',
+    view: "sidebar",
+  },
+  {
+    title: "Lernziel",
+    buzzword: "Lernziel",
+    text: "<p>Die Anwendung unterstützt vor allem folgende fachliche Kompetenzen:</p><ul class=\"tour-reading-list\"><li><strong>Klimadiagramme</strong> lesen und interpretieren</li><li><strong>Temperatur-</strong> und <strong>Niederschlagsverläufe</strong> vergleichen</li><li><strong>Klimazonen</strong> anhand von Merkmalen begründen</li><li>Aussagen über <strong>Regionen</strong> mit <strong>Daten</strong> belegen</li></ul><p>Schüler arbeiten damit mit denselben Informationen wie im Buch, jedoch nicht nur beschreibend, sondern <strong>untersuchend</strong>.</p>",
+    view: "sidebar",
+  },
+  {
+    title: "Lehrperson",
+    buzzword: "Lehrperson",
+    text: "<p>Die Lehrperson bleibt ein zentraler Bestandteil des Unterrichts.</p><ul class=\"tour-reading-list\"><li>Sie stellt die <strong>Aufgabenstellung</strong>.</li><li>Sie begleitet die <strong>Bearbeitung</strong>.</li><li>Sie bespricht die <strong>Ergebnisse</strong> im Anschluss gemeinsam.</li></ul><p>Die Anwendung dient dabei als Arbeitsmaterial, vergleichbar mit <strong>Karte</strong>, <strong>Atlas</strong> oder <strong>Experiment</strong> im naturwissenschaftlichen Unterricht.</p>",
+    view: "sidebar",
+  },
+  {
+    title: "Einsatz",
+    buzzword: "Einsatz",
+    text: "<p>Der Einsatz bietet sich besonders an:</p><ul class=\"tour-reading-list\"><li>nach einer Einführung in <strong>Klimadiagramme</strong>,</li><li>bei der Festigung von <strong>Klimazonen</strong>,</li><li>oder als <strong>Übungs-</strong> bzw. <strong>Vertiefungsphase</strong>.</li></ul><p>Er ist nicht als alleinstehende Unterrichtsstunde gedacht, sondern als Teil einer <strong>Unterrichtssequenz</strong>.</p>",
+    view: "sidebar",
+  },
+  {
+    title: "Arbeitsweise",
+    buzzword: "Arbeitsweise",
+    text: "<ul class=\"tour-reading-list\"><li>Die Klasse erhält eine <strong>Fragestellung</strong>.</li><li>Schüler probieren <strong>Kriterien</strong> aus und prüfen verschiedene Orte.</li><li>Sie vergleichen <strong>Klimadiagramme</strong>.</li><li>Ergebnisse werden anschließend gemeinsam besprochen.</li></ul><p>Die Anwendung bietet damit eine Möglichkeit, Inhalte aktiv zu bearbeiten, während die fachliche <strong>Einordnung</strong> im Unterrichtsgespräch erfolgt.</p><p><strong>Im nächsten Schritt startet der Walkthrough durch die Oberfläche.</strong></p>",
+    view: "sidebar",
+  },
+  {
     title: "Lernziel & Leitfrage",
+    buzzword: "Lernziel",
     text: "Formulieren Sie das <strong>Lernziel</strong> und lesen Sie die <strong>Aufgabe</strong> gemeinsam. Mit den Pfeilen oder dem Dropdown wechseln Sie Aufgaben und Vergleichsziele.",
     target: ".task-description-box",
     view: "sidebar",
   },
   {
     title: "Variablen klären",
+    buzzword: "Variablen",
     text: "Erklären Sie die Bedeutung von <strong>t1–t12</strong>, <strong>n1–n12</strong>, <strong>T</strong> und <strong>N</strong> als Klimamittelwerte, wie sie auch in Diagrammen dargestellt werden.",
     target: ".var-table-section",
     view: "sidebar",
   },
   {
     title: "Hypothesen als Filter",
+    buzzword: "Filterregeln",
     text: "Die Filter werden mit einem Größer-Gleich-Operator definiert. Überführen Sie die Fragestellung in <strong>Filterregeln</strong> (z.B. <strong>t1 + t2 ≥ 40</strong>). Nutzen Sie einfache Beispiele, bevor Sie komplexe Bedingungen kombinieren. In einer Zeile können beliebige mathematische Konstrukte verwendet werden.",
     target: "#filter-composer",
     view: "sidebar",
   },
   {
     title: "Vergleichen & justieren",
+    buzzword: "Vergleich",
     text: "Hier werden Filter hinterlegt, damit Sie <strong>kombiniert</strong> und <strong>verändert</strong> werden können.",
     target: ".filter-panel",
     view: "sidebar",
   },
   {
     title: "Räumliche Muster",
-    text: "Nutzen Sie die <strong>Karte</strong>, um passende  <strong>Klimadiagramme</strong> zu öffnen. Schauen Sie auch auf unterschiede nachdem ein Filter angewendet wurde.",
+    buzzword: "Muster",
+    text: "Nutzen Sie die <strong>Karte</strong>, um passende <strong>Klimadiagramme</strong> zu öffnen. Achten Sie auf Unterschiede, nachdem Filter angewendet wurden.",
     target: ".map-section",
     view: "main",
   },
   {
     title: "Ergebnisse fokussieren",
+    buzzword: "Ergebnisse",
     text: "Hier werden die Wetterstationen aufgelistet. Wechseln Sie zwischen <strong>Alle</strong>, <strong>Treffer</strong> und <strong>Nicht Treffer</strong>, um zu sehen, was deren klimatische Eigenschaften sind.",
     target: ".list-container",
     view: "main",
   },
   {
     title: "Klimadiagramm interpretieren",
-    text: "Lesen Sie im <strong>Klimadiagramm</strong> den Jahresverlauf und lassen Sie Aussagen mit Daten belegen. Wenn die Maus über die Diagramme gehovered wird, sehen Sie welche welche Daten welche Variablen darstellen.",
+    buzzword: "Klimadiagramm",
+    text: "Lesen Sie im <strong>Klimadiagramm</strong> den Jahresverlauf und lassen Sie Aussagen mit Daten belegen. Beim Überfahren des Diagramms mit der Maus werden die zugehörigen Variablenwerte sichtbar.",
     target: "#diagram",
     view: "main",
   },
   {
     title: "Zielwert & Reflexion",
+    buzzword: "Reflexion",
     text: "Prüfen Sie den <strong>Zielwert</strong> im <strong>Ergebnis‑Dock</strong>. Lassen Sie Lernende begründen, warum Filter passen oder nicht.",
     target: "#result-dock",
     view: "main",
   },
   {
     title: "Arbeitsform mobil",
+    buzzword: "Mobil",
     text: "Auf Tablets/Handys wechseln Sie unten zwischen <strong>Filter</strong> und <strong>Karte & Liste</strong> – ideal für Gruppenarbeit.",
     target: ".view-toggle-dock",
     view: "main",
   },
 ];
 
+function getAutoBuzzword(title) {
+  if (!title) {
+    return "Weiter";
+  }
+  var words = title
+    .replace(/[^\wÄÖÜäöüß\s-]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+  var ignore = {
+    was: true,
+    wie: true,
+    ist: true,
+    die: true,
+    der: true,
+    das: true,
+    im: true,
+    in: true,
+    und: true,
+    mit: true,
+    für: true,
+    fur: true,
+    zur: true,
+    zum: true,
+    den: true,
+    des: true,
+    als: true,
+  };
+  for (var i = 0; i < words.length; i++) {
+    var word = words[i];
+    if (ignore[word.toLowerCase()]) {
+      continue;
+    }
+    return word;
+  }
+  return words[0] || "Weiter";
+}
+
+function getNextStepButtonLabel(steps, index) {
+  return "Weiter";
+}
+
+function getTourProgressLabel(mode, steps, index, step) {
+  if (mode === "teacher") {
+    if (!step.target) {
+      return "";
+    }
+    var walkthroughTotal = 0;
+    var walkthroughCurrent = 0;
+    for (var i = 0; i < steps.length; i++) {
+      if (!steps[i].target) {
+        continue;
+      }
+      walkthroughTotal += 1;
+      if (i <= index) {
+        walkthroughCurrent += 1;
+      }
+    }
+    return "Schritt " + walkthroughCurrent + " / " + walkthroughTotal;
+  }
+  return "Schritt " + (index + 1) + " / " + steps.length;
+}
+
 function getTourSteps(mode) {
   return mode === "teacher" ? teacherTourSteps : studentTourSteps;
+}
+
+function getTeacherIntroStepIndexes(steps) {
+  var indexes = [];
+  if (!steps || !steps.length) {
+    return indexes;
+  }
+  for (var i = 0; i < steps.length; i++) {
+    if (steps[i].target) {
+      break;
+    }
+    indexes.push(i);
+  }
+  return indexes;
+}
+
+function renderTeacherIntroNavigation(steps, index, isReadingStep) {
+  if (!tourReadingNav || !tourReadingNavList) {
+    return;
+  }
+
+  var shouldShow = tourState.mode === "teacher" && isReadingStep;
+  tourReadingNav.classList.toggle("is-visible", shouldShow);
+
+  if (!shouldShow) {
+    tourReadingNavList.innerHTML = "";
+    return;
+  }
+
+  var introIndexes = getTeacherIntroStepIndexes(steps);
+  tourReadingNavList.innerHTML = "";
+
+  introIndexes.forEach(function (stepIndex, itemIndex) {
+    var item = document.createElement("li");
+    item.className = "tour-reading-nav-item";
+    if (stepIndex < index) {
+      item.classList.add("is-done");
+    }
+    if (stepIndex === index) {
+      item.classList.add("is-active");
+    }
+
+    var button = document.createElement("button");
+    button.type = "button";
+    button.className = "tour-reading-nav-btn";
+    button.textContent = steps[stepIndex].title || "Thema " + (itemIndex + 1);
+    if (stepIndex === index) {
+      button.setAttribute("aria-current", "step");
+    }
+    button.addEventListener("click", function () {
+      tourState.index = stepIndex;
+      renderTourStep();
+    });
+
+    item.appendChild(button);
+    tourReadingNavList.appendChild(item);
+  });
 }
 
 function clearTourHighlight() {
@@ -1225,6 +1411,16 @@ function renderTourStep() {
   var index = Math.max(0, Math.min(tourState.index, steps.length - 1));
   tourState.index = index;
   var step = steps[index];
+  var isReadingStep = !step.target;
+
+  if (tourOverlay) {
+    tourOverlay.classList.toggle("tour-overlay--reading", isReadingStep);
+  }
+
+  if (tourTooltip) {
+    tourTooltip.classList.toggle("tour-tooltip--reading", isReadingStep);
+  }
+  renderTeacherIntroNavigation(steps, index, isReadingStep);
 
   if (tourTitle) {
     tourTitle.textContent = step.title;
@@ -1233,13 +1429,20 @@ function renderTourStep() {
     tourText.innerHTML = step.text;
   }
   if (tourProgress) {
-    tourProgress.textContent = "Schritt " + (index + 1) + " / " + steps.length;
+    var progressLabel = getTourProgressLabel(
+      tourState.mode,
+      steps,
+      index,
+      step,
+    );
+    tourProgress.textContent = progressLabel;
+    tourProgress.classList.toggle("is-hidden", !progressLabel);
   }
   if (tourPrev) {
     tourPrev.disabled = index === 0;
   }
   if (tourNext) {
-    tourNext.textContent = index === steps.length - 1 ? "Fertig" : "Weiter";
+    tourNext.textContent = getNextStepButtonLabel(steps, index);
   }
 
   applyTourView(step.view);
@@ -1286,6 +1489,7 @@ function closeTour() {
     return;
   }
   tourOverlay.classList.remove("active");
+  tourOverlay.classList.remove("tour-overlay--reading");
   tourOverlay.setAttribute("aria-hidden", "true");
   clearTourHighlight();
 
@@ -1346,10 +1550,6 @@ function openHelpModal() {
   helpModal.classList.add("active");
   helpModal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
-  var firstChoice = helpModal.querySelector(".help-choice-card");
-  if (firstChoice) {
-    firstChoice.focus();
-  }
 }
 
 function closeHelpModal() {
@@ -1509,6 +1709,30 @@ function setupViewToggle() {
   syncView();
 }
 
+function syncListDiagramHeight() {
+  var diagram = document.getElementById("diagram");
+  var listCard = document.querySelector(".list-card");
+  if (!diagram || !listCard) return;
+
+  var isDesktop = window.matchMedia("(min-width: 1101px)").matches;
+  if (!isDesktop) {
+    listCard.style.height = "";
+    listCard.classList.remove("height-synced");
+    return;
+  }
+
+  var diagramHeight = diagram.offsetHeight;
+  if (diagramHeight > 0) {
+    listCard.style.height = diagramHeight + "px";
+    listCard.classList.add("height-synced");
+  }
+}
+
+function setupListDiagramSync() {
+  syncListDiagramHeight();
+  window.addEventListener("resize", syncListDiagramHeight);
+}
+
 function setupUI() {
   setupViewToggle();
   setupFilterUI();
@@ -1516,6 +1740,7 @@ function setupUI() {
   setupTaskSelect();
   setupHelpModal();
   setupTour();
+  setupListDiagramSync();
   openHelpModal();
 }
 

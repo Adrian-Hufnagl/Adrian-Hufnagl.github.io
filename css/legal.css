@@ -171,12 +171,13 @@
   transform: translateX(-4px);
 }
 
-.back-link i {
-  font-size: 12px;
+.back-link .icon {
+  width: 12px;
+  height: 12px;
   transition: transform var(--duration-fast) var(--ease-out);
 }
 
-.back-link:hover i {
+.back-link:hover .icon {
   transform: translateX(-4px);
 }
 
