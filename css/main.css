@@ -248,7 +248,7 @@ p {
   font-size: 22px;
   font-weight: 700;
   margin: 0;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   background: linear-gradient(135deg, var(--ink) 0%, var(--ink-light) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

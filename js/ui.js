@@ -1086,15 +1086,15 @@ var studentTourSteps = [
 
 var teacherTourSteps = [
   {
-    title: "Geofilter",
-    buzzword: "Geofilter",
+    title: "GeoLesson",
+    buzzword: "GeoLesson",
     text: "<p>Die Anwendung ist ein <strong>Arbeitswerkzeug</strong>, mit dem Schülerinnen und Schüler <strong>Klimazonen</strong> anhand realer <strong>Klimadaten</strong> untersuchen und begründen können.</p>",
     view: "sidebar",
   },
   {
     title: "Anwendung",
     buzzword: "Anwendung",
-    text: "<p>Geofilter stellt eine Sammlung von Orten mit zugehörigen <strong>Klimadaten</strong> bereit: <strong>Temperatur-</strong> und <strong>Niederschlagswerte</strong> über das Jahr.</p><p>Schülerinnen und Schüler formulieren <strong>Kriterien</strong> und prüfen, auf welche Orte diese zutreffen.</p>",
+    text: "<p>GeoLesson stellt eine Sammlung von Orten mit zugehörigen <strong>Klimadaten</strong> bereit: <strong>Temperatur-</strong> und <strong>Niederschlagswerte</strong> über das Jahr.</p><p>Schülerinnen und Schüler formulieren <strong>Kriterien</strong> und prüfen, auf welche Orte diese zutreffen.</p>",
     view: "sidebar",
   },
   {
@@ -1106,25 +1106,25 @@ var teacherTourSteps = [
   {
     title: "Lernziel",
     buzzword: "Lernziel",
-    text: "<p>Die Anwendung unterstützt vor allem folgende fachliche Kompetenzen:</p><ul class=\"tour-reading-list\"><li><strong>Klimadiagramme</strong> lesen und interpretieren</li><li><strong>Temperatur-</strong> und <strong>Niederschlagsverläufe</strong> vergleichen</li><li><strong>Klimazonen</strong> anhand von Merkmalen begründen</li><li>Aussagen über <strong>Regionen</strong> mit <strong>Daten</strong> belegen</li></ul><p>Schüler arbeiten damit mit denselben Informationen wie im Buch, jedoch nicht nur beschreibend, sondern <strong>untersuchend</strong>.</p>",
+    text: '<p>Die Anwendung unterstützt vor allem folgende fachliche Kompetenzen:</p><ul class="tour-reading-list"><li><strong>Klimadiagramme</strong> lesen und interpretieren</li><li><strong>Temperatur-</strong> und <strong>Niederschlagsverläufe</strong> vergleichen</li><li><strong>Klimazonen</strong> anhand von Merkmalen begründen</li><li>Aussagen über <strong>Regionen</strong> mit <strong>Daten</strong> belegen</li></ul><p>Schüler arbeiten damit mit denselben Informationen wie im Buch, jedoch nicht nur beschreibend, sondern <strong>untersuchend</strong>.</p>',
     view: "sidebar",
   },
   {
     title: "Lehrperson",
     buzzword: "Lehrperson",
-    text: "<p>Die Lehrperson bleibt ein zentraler Bestandteil des Unterrichts.</p><ul class=\"tour-reading-list\"><li>Sie stellt die <strong>Aufgabenstellung</strong>.</li><li>Sie begleitet die <strong>Bearbeitung</strong>.</li><li>Sie bespricht die <strong>Ergebnisse</strong> im Anschluss gemeinsam.</li></ul><p>Die Anwendung dient dabei als Arbeitsmaterial, vergleichbar mit <strong>Karte</strong>, <strong>Atlas</strong> oder <strong>Experiment</strong> im naturwissenschaftlichen Unterricht.</p>",
+    text: '<p>Die Lehrperson bleibt ein zentraler Bestandteil des Unterrichts.</p><ul class="tour-reading-list"><li>Sie stellt die <strong>Aufgabenstellung</strong>.</li><li>Sie begleitet die <strong>Bearbeitung</strong>.</li><li>Sie bespricht die <strong>Ergebnisse</strong> im Anschluss gemeinsam.</li></ul><p>Die Anwendung dient dabei als Arbeitsmaterial, vergleichbar mit <strong>Karte</strong>, <strong>Atlas</strong> oder <strong>Experiment</strong> im naturwissenschaftlichen Unterricht.</p>',
     view: "sidebar",
   },
   {
     title: "Einsatz",
     buzzword: "Einsatz",
-    text: "<p>Der Einsatz bietet sich besonders an:</p><ul class=\"tour-reading-list\"><li>nach einer Einführung in <strong>Klimadiagramme</strong>,</li><li>bei der Festigung von <strong>Klimazonen</strong>,</li><li>oder als <strong>Übungs-</strong> bzw. <strong>Vertiefungsphase</strong>.</li></ul><p>Er ist nicht als alleinstehende Unterrichtsstunde gedacht, sondern als Teil einer <strong>Unterrichtssequenz</strong>.</p>",
+    text: '<p>Der Einsatz bietet sich besonders an:</p><ul class="tour-reading-list"><li>nach einer Einführung in <strong>Klimadiagramme</strong>,</li><li>bei der Festigung von <strong>Klimazonen</strong>,</li><li>oder als <strong>Übungs-</strong> bzw. <strong>Vertiefungsphase</strong>.</li></ul><p>Er ist nicht als alleinstehende Unterrichtsstunde gedacht, sondern als Teil einer <strong>Unterrichtssequenz</strong>.</p>',
     view: "sidebar",
   },
   {
     title: "Arbeitsweise",
     buzzword: "Arbeitsweise",
-    text: "<ul class=\"tour-reading-list\"><li>Die Klasse erhält eine <strong>Fragestellung</strong>.</li><li>Schüler probieren <strong>Kriterien</strong> aus und prüfen verschiedene Orte.</li><li>Sie vergleichen <strong>Klimadiagramme</strong>.</li><li>Ergebnisse werden anschließend gemeinsam besprochen.</li></ul><p>Die Anwendung bietet damit eine Möglichkeit, Inhalte aktiv zu bearbeiten, während die fachliche <strong>Einordnung</strong> im Unterrichtsgespräch erfolgt.</p><p><strong>Im nächsten Schritt startet der Walkthrough durch die Oberfläche.</strong></p>",
+    text: '<ul class="tour-reading-list"><li>Die Klasse erhält eine <strong>Fragestellung</strong>.</li><li>Schüler probieren <strong>Kriterien</strong> aus und prüfen verschiedene Orte.</li><li>Sie vergleichen <strong>Klimadiagramme</strong>.</li><li>Ergebnisse werden anschließend gemeinsam besprochen.</li></ul><p>Die Anwendung bietet damit eine Möglichkeit, Inhalte aktiv zu bearbeiten, während die fachliche <strong>Einordnung</strong> im Unterrichtsgespräch erfolgt.</p><p><strong>Im nächsten Schritt startet der Walkthrough durch die Oberfläche.</strong></p>',
     view: "sidebar",
   },
   {
